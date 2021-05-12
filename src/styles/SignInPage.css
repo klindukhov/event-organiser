@@ -1,0 +1,47 @@
+.signIn-page-content{
+    background-color: #e5e5e5;
+    height: 970px;
+    text-align: center;
+  }
+  .sign-in-rect{
+    position:absolute;
+    left: 550px;
+    top: 200px;
+    height: 700px;
+    width: 800px;
+    background-color: white;  
+    color: #47525e;
+  }
+  .sign-in-h1{
+    font-size: 50px;
+    color: #47525e;
+    margin-top: 50px;
+    margin-bottom: 30px;
+  }
+  p{
+    margin-top: 45px;
+    margin-bottom: 0;
+
+  }
+  .input-login{
+    height: 50px;
+    border-radius: 5px;
+    width: 400px; 
+    font-size: 30px;
+  }
+  .input-login-button{
+    margin-top: 50px;
+    height: fit-content;
+    border-radius: 5px;
+    width:200px; 
+    background-color: #47525e;
+    color: white;
+    font-size: 30px;
+  }
+  .register-text-button{
+    color: #47525e;
+    margin-bottom: 50px;
+  }
+  .forgot-pass-text-button{
+    color: #47525e;
+  }

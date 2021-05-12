@@ -1,0 +1,21 @@
+Header{
+    background-color: white;
+    display:flex;
+    height: 100px;
+  }
+  .cap-margin{
+    width: 1200px;
+  }
+  .logo{
+    color: #ff0000;
+    margin: 20px;
+    text-decoration: none;
+  }
+  .accountIcon{
+    height: 60px;
+    width: 60px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+  }
