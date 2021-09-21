@@ -23,13 +23,18 @@ function SignInPageContent(){
                 <input className="input-login" type="text">
                 </input>
                 <br></br>
-                <Link to="/customerHome">
+                {/* <Link to="/customerHome"> */}
                 <button className="input-login-button" 
                         onMouseEnter={e => {e.target.style.cursor = "pointer";}}
-                        onMouseLeave={e => {e.target.style.cursor = "default";}}>
+                        onMouseLeave={e => {e.target.style.cursor = "default";}}
+                        onClick={e => fetch('http://localhost:8080/api/login', {  
+                            "email" : "admin@gmail.com",
+                            "password": "admin"
+                        }).then(data => console.log(data.status))}
+                        >
                     Sign in
                 </button>
-                </Link>
+                {/* </Link> */}
                 <br></br>
                 Dont have an account?  
                 <Link to="/SignUp">Register</Link>
