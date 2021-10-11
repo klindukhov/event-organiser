@@ -45,3 +45,8 @@
   .forgot-pass-text-button{
     color: #47525e;
   }
+  .show-password-button{
+    background-color:#47525e;
+    color: white;
+    border-radius: 5px;
+  }
