@@ -1,20 +1,45 @@
 .home-page-content {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("../images/backgroundImage.png");
-    height: 970px;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("../images/backgroundImage.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 600px;
     text-align: center;
     align-items: center;
-  }
-  h1{
-    color: #ffffff;
-    font-size: 70px;
   }
   h2{
     color: #ffffff;
     font-size: 50px;
   }
-  .new-event-button{
-    background-color: #ff0000;
+  p{
     color: #ffffff;
-    font-size: 70px;
-    border-radius: 15px;
+    font-size: 20px;
+  }
+  .new-event-button{
+    background-color: #E63946;
+    width: 600px;
+    color: #ffffff;
+    font-size: 30px;
+  }
+  input, select{
+    height: 40px;
+    width: 200px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  h1{
+    text-align: center;
+    color: #47525E;
+  }
+  .p{
+    color: #47525E;
+  }
+  .explore-grid{
+    text-align: center;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-column-gap: 40px;
+  }
+  .explore-imgs{
+    height: 250px;
   }

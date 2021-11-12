@@ -11,9 +11,6 @@ export default function Sidebar() {
       <a className="menu-item" href="/signIn">
         My account
       </a>
-      <a className="menu-item" href="/FetchTest">
-        Services
-      </a>
 
       
     </Menu>
