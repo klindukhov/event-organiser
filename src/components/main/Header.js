@@ -6,6 +6,7 @@ import '../../styles/Header.css';
 
 const Header = () => {
 return (
+  <div className="main">
     <header>
       <Sidebar/>
           <Link to='/' className="logo">
@@ -18,6 +19,7 @@ return (
             <img src={acc} className="accountIcon" alt="accountIcon"/>
           </Link>
     </header>
+  </div>
     );
 };
 

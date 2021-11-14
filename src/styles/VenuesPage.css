@@ -1,0 +1,21 @@
+.filter-rect{
+    background-color: white;
+    position: absolute;
+    width: 1400px;
+    left: 200px;
+    top: 150px;
+    padding: 15px;
+}
+.main{
+    background-color: #e5e5e5;
+    color: #47525e;
+    height: 970px;
+}
+input, select{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.must-haves{
+    display: grid;
+    grid-template-columns: auto auto;
+}
