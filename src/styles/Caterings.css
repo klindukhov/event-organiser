@@ -1,0 +1,16 @@
+div.list-elements {
+    float: left;
+    margin: 0 20px;
+    position: relative;
+    top: 10px;
+    width: 400px;
+    height: 200px;
+    color: blue;
+    border: 3px solid #73AD21;
+  }
+  p{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: black;
+
+  }

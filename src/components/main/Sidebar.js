@@ -11,10 +11,12 @@ export default function Sidebar() {
       <a className="menu-item" href="/signIn">
         My account
       </a>
-      <a className="menu-item" href="/FetchTest">
-        Services
+      <a className="menu-item" href="/users">
+        Show users
       </a>
-
+      <a className="menu-item" href="/caterings">
+        Show caterings
+      </a>
       
     </Menu>
   );
