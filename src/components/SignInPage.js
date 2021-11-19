@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { useHistory, Link} from 'react-router-dom'
 import { useState } from 'react/cjs/react.development';
 import '../styles/SignInPage.css';
 
@@ -9,6 +9,9 @@ function SignInPageContent() {
     const [passwordField, setPasswordField] = useState('');
     const [showInput, setShowInput] = useState(false);
     const [passButtonText, setPassButtonText] = useState('Show password');
+    const [loginMessage, setLoginMessage] = useState(' ');
+    let history = useHistory();
+
 
     const handleLoginInput = (event) => setLoginField(event.target.value);
 
@@ -33,7 +36,13 @@ function SignInPageContent() {
         };
 
         fetch("http://localhost:8080/api/login", requestOptions)
-            .then(response => console.log(response.status))
+            .then(response => {
+                console.log(response.status);
+                if(response.status !== 200){
+                    setLoginMessage('Login or password is incorrect');
+                }else{
+                    history.push('/customerHome')
+                }})
             .catch(error => console.log('error', error));
     }
 
@@ -63,19 +72,20 @@ function SignInPageContent() {
                     }}>{passButtonText}</button>
                 <br></br>
                 {/* <Link to="/customerHome"> */}
+                <p style={{color : 'red'}}>{loginMessage}</p>
                 <button className="input-login-button"
                     onMouseEnter={e => { e.target.style.cursor = "pointer"; }}
                     onMouseLeave={e => { e.target.style.cursor = "default"; }}
-                    onClick={handleLogIn}
-                >
+                    onClick={handleLogIn}>
                     Sign in
                 </button>
                 {/* </Link> */}
                 <br></br>
-                Dont have an account?
+                Don't have an account?
                 <Link to="/SignUp">Register</Link>
                 <br></br>
                 <Link to="/SignUp">Forgot password?</Link>
+
 
 
             </div>

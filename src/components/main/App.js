@@ -16,6 +16,7 @@ import FetchTest from '../FetchTest'
 import Users from '../Users'
 import Caterings from '../Caterings'
 import Review from '../Review'
+import VenuesPage from '../VenuesPage'
 
 export default function App() {
 
@@ -34,6 +35,7 @@ export default function App() {
       <Route path='/users' component={Users} />
       <Route path='/caterings' component={Caterings} />
       <Route path='/review' component={Review} />
+      <Route path='/VenuesPage' component={VenuesPage} />
       
     </Switch>
   )

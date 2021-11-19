@@ -1,7 +1,9 @@
 Header{
+    position: fixed;
     background-color: white;
     display:flex;
     height: 100px;
+    width: 100%;
   }
   .cap-margin{
     width: 1200px;
@@ -18,4 +20,7 @@ Header{
     margin-bottom: 20px;
     margin-right: 20px;
     margin-left: 20px;
+  }
+  .main{
+    height: 100px;
   }

@@ -16,6 +16,9 @@ export default function Sidebar() {
       </a>
       <a className="menu-item" href="/caterings">
         Show caterings
+        </a>
+      <a className="menu-item" href="/VenuesPage">
+        Venues
       </a>
       
     </Menu>
