@@ -1,7 +1,15 @@
+.users-page-content{
+  background-color: white;
+    position: absolute;
+    width: 1400px;
+    left: 50px;
+    top: 150px;
+    padding: 15px;
+}
 div.list-elements {
     float: left;
     margin: 0 20px;
-    position: relative;
+    position: absolute;
     top: 10px;
     width: 400px;
     height: 200px;

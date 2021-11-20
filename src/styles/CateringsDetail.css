@@ -1,0 +1,74 @@
+div.list-elements {
+    float: left;
+    margin: 0 20px;
+    position: relative;
+    top: 10px;
+    width: 400px;
+    height: 200px;
+    color: blue;
+    border: 3px solid #73AD21;
+  }
+  p{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: black;
+
+  }.review-page-content{
+    background-color: #ffffff;
+    height: 2000px;
+    text-align: center;
+  }
+  .details-rect{
+    position:relative;
+    left: 550px;
+    top: 100px;
+    height: 900px;
+    width: 800px;
+    background-color: rgba(190, 190, 190, 0.774);  
+    color: #3b834d;
+  }
+  .review-rect{
+    position:relative;
+    left: 550px;
+    top: 100px;
+    height: 900px;
+    width: 800px;
+    background-color: white;  
+    color: #47525e;
+  }
+  .review-div2{
+    font-size: 50px;
+    color: #47525e;
+    margin-top: 50px;
+    margin-bottom: 30px;
+  }
+  .input-title{
+    height: 50px;
+    border-radius: 5px;
+    width: 400px; 
+    font-size: 30px;
+  }
+  .input-comment{
+    height: 200px;
+    border-radius: 5px;
+    width: 500px; 
+    font-size: 30px;
+  }
+  .input-rating{
+    /* float: left;
+    margin: 0 20px;
+    position: relative; */
+    height: 50px;
+    border-radius: 5px;
+    width: 50px; 
+    font-size: 30px;
+  }
+  .handle-rev{
+    margin-top: 50px;
+    height: fit-content;
+    border-radius: 5px;
+    width:200px; 
+    background-color: #47525e;
+    color: white;
+    font-size: 30px;
+  }
