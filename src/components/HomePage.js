@@ -17,7 +17,7 @@ export default function HomePage() {
         <h2>
           Create your unique event experience
         </h2>
-        <p>Organize and customize events so that they fit your needs <br />
+        <p className="hpText">Organize and customize events so that they fit your needs <br />
           while having a full control over guest lists, invitations and entertainment</p>
         <br></br>
         <br></br>
@@ -34,7 +34,6 @@ export default function HomePage() {
         <input type="date" placeholder="dd/mm/yyyy"></input>
         <br></br>
         <br></br>
-
         <Link to='/signIn'>
           <button className="new-event-button"
             onMouseEnter={e => { e.target.style.cursor = "pointer"; }}
@@ -67,9 +66,8 @@ export default function HomePage() {
             <p className="p">Invite entertainers like DJs, musicians to help create an unique <br />atmosphere at your event as well as important additions to your <br />seminars llike enterpreters or DI’s </p>
           </div>
         </div>
-        <br/>
-        <br/>
-
+        <br />
+        <br />
       </div>
     </div>
   )

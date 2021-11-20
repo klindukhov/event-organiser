@@ -6,7 +6,7 @@ import '../../styles/Header.css';
 
 const Header = () => {
 return (
-  <div className="main">
+  <div className="mainH">
     <header>
       <Sidebar/>
           <Link to='/' className="logo">
