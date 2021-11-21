@@ -1,17 +1,18 @@
 .filter-rect{
     background-color: white;
-    position: absolute;
+    color: #47525e;
+    height: fit-content;
+    margin-top: 30px;
     width: 1400px;
-    left: 200px;
-    top: 150px;
     padding: 15px;
 }
-.main{
+.venues-main{
     background-color: #e5e5e5;
-    color: #47525e;
     height: 970px;
+    display: grid;
+    justify-content: center;
 }
-input, select{
+select{
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -19,6 +20,30 @@ input, select{
     display: grid;
     grid-template-columns: auto auto;
 }
-.venues-input-1{
+.event-date{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.venue-input-1{
     width:300px;
+    height: 30px;
+    margin-left: 20px;
+    color: #47525e;
+}
+.venue-input-number{
+    width: 60px;
+    margin-left: 20px;
+}
+.venue-input-seat{
+    color: #47525e;
+    margin-left: 20px;
+    margin-right: 10px;
+}
+.venue-input-date{
+    color: #47525e;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.venue-input-musts{
+    margin-right: 10px;
 }

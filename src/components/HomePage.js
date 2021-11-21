@@ -35,7 +35,7 @@ export default function HomePage() {
         <br />
         <br />
 
-        <Link to='/signIn'>
+        <Link to='/VenuesPage'>
           <button className="new-event-button"
             onMouseEnter={e => { e.target.style.cursor = "pointer"; }}
             onMouseLeave={e => { e.target.style.cursor = "default"; }}>
