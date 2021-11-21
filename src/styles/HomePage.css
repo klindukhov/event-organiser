@@ -7,11 +7,11 @@
     text-align: center;
     align-items: center;
   }
-  h2{
+  .HP-heading{
     color: #ffffff;
     font-size: 50px;
   }
-  p{
+  .HP-subheading{
     color: #ffffff;
     font-size: 20px;
   }
@@ -21,18 +21,23 @@
     color: #ffffff;
     font-size: 30px;
   }
-  input, select{
+  .HP-input{
     height: 40px;
     width: 200px;
     margin-left: 10px;
     margin-right: 10px;
   }
-  h1{
+  .Explore-heading{
     text-align: center;
     color: #47525E;
   }
-  .p{
+  .Explore-par{
     color: #47525E;
+    font-size: 16pt;
+  }
+  .Explore-subheading{
+    color: #47525E;
+    font-size: 20pt;
   }
   .explore-grid{
     text-align: center;
