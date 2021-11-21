@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, Link} from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import { useState } from 'react/cjs/react.development';
 import '../styles/SignInPage.css';
 
@@ -24,7 +24,7 @@ function SignInPageContent() {
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Cookie", "JSESSIONID=088915B51FBD8E6B1513CA42BF2476D7");
 
-  //      let raw = JSON.stringify({ "email": "admin@gmail.com", "password": "admin" });
+        //      let raw = JSON.stringify({ "email": "admin@gmail.com", "password": "admin" });
 
         let raw = JSON.stringify({ "email": loginField, "password": passwordField });
 
@@ -38,41 +38,38 @@ function SignInPageContent() {
         fetch("http://localhost:8080/api/login", requestOptions)
             .then(response => {
                 console.log(response.status);
-                if(response.status !== 200){
+                if (response.status !== 200) {
                     setLoginMessage('Login or password is incorrect');
-                }else{
+                } else {
                     history.push('/customerHome')
-                }})
+                }
+            })
             .catch(error => console.log('error', error));
     }
 
 
     return (
         <div className="signIn-page-content">
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
 
             <div className="sign-in-rect">
                 <div className="sign-in-h1">
                     Sign in
                 </div>
-                <p>Email</p>
+                <p className='login-input-label'>Email</p>
                 <input className="input-login" type="text" onChange={handleLoginInput}>
                 </input>
-                <br></br>
-                <p>Password</p>
-                <input className="input-login" type={showInput?'text':'password'} onChange={handlePasswordInput}>
+                <br />
+                <p className='login-input-label'>Password</p>
+                <input className="input-login" type={showInput ? 'text' : 'password'} onChange={handlePasswordInput}>
                 </input>
-                <br></br>
+                <br />
                 <button className='show-password-button' onClick={() => {
-                    setShowInput(showInput?false : true)
-                    setPassButtonText(showInput? 'Show password' : 'Hide password');
-                    }}>{passButtonText}</button>
-                <br></br>
+                    setShowInput(showInput ? false : true)
+                    setPassButtonText(showInput ? 'Show password' : 'Hide password');
+                }}>{passButtonText}</button>
+                <br />
                 {/* <Link to="/customerHome"> */}
-                <p style={{color : 'red'}}>{loginMessage}</p>
+                <p style={{ color: 'red' }}>{loginMessage}</p>
                 <button className="input-login-button"
                     onMouseEnter={e => { e.target.style.cursor = "pointer"; }}
                     onMouseLeave={e => { e.target.style.cursor = "default"; }}
@@ -80,14 +77,11 @@ function SignInPageContent() {
                     Sign in
                 </button>
                 {/* </Link> */}
-                <br></br>
+                <br />
                 Don't have an account?
                 <Link to="/SignUp">Register</Link>
-                <br></br>
+                <br />
                 <Link to="/SignUp">Forgot password?</Link>
-
-
-
             </div>
 
         </div>

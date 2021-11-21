@@ -1,4 +1,4 @@
-Header{
+.header{
     position: fixed;
     background-color: white;
     display:flex;
@@ -21,6 +21,6 @@ Header{
     margin-right: 20px;
     margin-left: 20px;
   }
-  .mainH{
+  .header-main{
     height: 100px;
   }

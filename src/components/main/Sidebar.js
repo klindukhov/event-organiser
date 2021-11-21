@@ -15,7 +15,7 @@ export default function Sidebar() {
         Venues
       </a>
 
-      
+
     </Menu>
   );
 };

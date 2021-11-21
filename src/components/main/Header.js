@@ -5,22 +5,22 @@ import Sidebar from './Sidebar';
 import '../../styles/Header.css';
 
 const Header = () => {
-return (
-  <div className="mainH">
-    <header>
-      <Sidebar/>
-          <Link to='/' className="logo">
-            <h2 className="logo">
-              *LOGO*
-            </h2>
-          </Link>
-          <div className="cap-margin"></div>
-          <Link to='/SignIn'>
-            <img src={acc} className="accountIcon" alt="accountIcon"/>
-          </Link>
-    </header>
-  </div>
-    );
+  return (
+    <div className="header-main">
+      <header className='header'>
+        <Sidebar />
+        <Link to='/' className="logo">
+          <h2 className="logo">
+            *LOGO*
+          </h2>
+        </Link>
+        <div className="cap-margin"></div>
+        <Link to='/SignIn'>
+          <img src={acc} className="accountIcon" alt="accountIcon" />
+        </Link>
+      </header>
+    </div>
+  );
 };
 
 export default Header;
