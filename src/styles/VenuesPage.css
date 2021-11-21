@@ -19,3 +19,6 @@ input, select{
     display: grid;
     grid-template-columns: auto auto;
 }
+.venues-input-1{
+    width:300px;
+}

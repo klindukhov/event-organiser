@@ -5,19 +5,28 @@ import Sidebar from './Sidebar';
 import '../../styles/Header.css';
 
 const Header = () => {
+
+  const addHeaderText = (text) =>{
+    return text;
+  }
+
   return (
     <div className="header-main">
       <header className='header'>
         <Sidebar />
         <Link to='/' className="logo">
-          <h2 className="logo">
+          <p className="logo">
             *LOGO*
-          </h2>
+          </p>
         </Link>
-        <div className="cap-margin"></div>
-        <Link to='/SignIn'>
-          <img src={acc} className="accountIcon" alt="accountIcon" />
-        </Link>
+        <div className="cap-margin">{addHeaderText}</div>
+        <div className='user-logo-div'>
+          <Link to='/SignIn' className='user-logo-div'>
+            <img src={acc} className="accountIcon" alt="accountIcon" />
+            <p className='user-logo-text'>Sign in</p>
+          </Link>
+        </div>
+
       </header>
     </div>
   );

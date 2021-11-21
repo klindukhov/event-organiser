@@ -1,26 +1,37 @@
 .header{
     position: fixed;
     background-color: white;
-    display:flex;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
     height: 100px;
     width: 100%;
   }
   .cap-margin{
-    width: 1200px;
+    width: 1000px;
+    font-size: 24pt;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    height: 100px
   }
   .logo{
     color: #ff0000;
-    margin: 20px;
+    margin: 15px;
     text-decoration: none;
+    font-size: 24pt;
   }
   .accountIcon{
     height: 60px;
     width: 60px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-right: 20px;
-    margin-left: 20px;
+    margin-top: 10px;
   }
   .header-main{
     height: 100px;
+    
+  }
+  .user-logo-div{
+    text-decoration: none;
+    display: grid;
+    justify-content: center;
+    width: 300px;
   }

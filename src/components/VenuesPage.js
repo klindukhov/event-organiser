@@ -1,12 +1,14 @@
 import React from 'react'
 import '../styles/VenuesPage.css';
+import Header from './main/Header';
 
-export default function VenuesPage(){
+export default function VenuesPage(props){
+
     return(
         <div className="main">
             <div className="filter-rect">
                 Location
-                <input placeholder="Country, city, district"></input>
+                <input placeholder="Country, city, district" className='venue-input-1'></input>
                 <br/>
                 Event Type
                 <select name="Event type" id="event-type">
