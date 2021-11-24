@@ -14,6 +14,12 @@ export default function Sidebar() {
       <a className="menu-item" href="/VenuesPage">
         Venues
       </a>
+      <a className="menu-item" href="/CustomerProfilePage">
+        Customer Profile
+      </a>
+      <a className="menu-item" href="/BusinessProfilePage">
+        Business Profile
+      </a>
 
 
     </Menu>
