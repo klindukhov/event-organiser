@@ -1,0 +1,26 @@
+.new-event-main{
+    background-color: #e5e5e5;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: auto;
+    justify-content: center;
+    align-content: start;
+}
+.venue-choice-rect, .guest-choice-rect{
+    width: 1520px;
+    height: 200px;
+    background-color: white;
+    color: #47525E;
+    margin-top: 30px;
+}
+.venue-choice-heading, .guest-choice-heading{
+    font-size: 16pt;
+    margin: 30px;
+}
+.add-button{
+    font-size: 40pt;
+    background-color: white;
+    border-color: transparent;
+    color: #47525E;
+    margin-left: 30px;
+}

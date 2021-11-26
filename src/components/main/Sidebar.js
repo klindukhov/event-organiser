@@ -23,7 +23,9 @@ export default function Sidebar() {
       <a className="menu-item" href="/ContactFormPage">
         Report a problem
       </a>
-
+      <a className="menu-item" href="/NewEventPage">
+        New event
+      </a>
 
     </Menu>
   );

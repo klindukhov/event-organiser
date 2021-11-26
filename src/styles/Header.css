@@ -1,5 +1,6 @@
 .header{
     position: fixed;
+    z-index: 10;
     background-color: white;
     display: grid;
     grid-template-columns: auto auto auto auto;

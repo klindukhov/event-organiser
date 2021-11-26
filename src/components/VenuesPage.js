@@ -1,6 +1,11 @@
 import React, { useState } from 'react'
 import '../styles/VenuesPage.css';
 
+import image1 from '../images/image1.png';
+import image2 from '../images/image2.png';
+import image3 from '../images/image3.png';
+import pplIcon from '../images/pplIcon.png';
+
 export default function VenuesPage(props) {
     const [singleDay, setSingleDay] = useState(false);
 
@@ -70,6 +75,59 @@ export default function VenuesPage(props) {
                     </div><div>
                         <input className='venue-input-musts' id="own-food" type="checkbox"></input>Can bring own food
                     </div>
+                </div>
+            </div>
+            <div className='venue-sorting-rect'>
+                <p className='displaying-info'>Displaying 1-20 results out of 50</p>
+                <div className='select-venue-sorting'>
+                    Sort by:
+                    <select className='select-venue-sorting'>
+                        <option value='default'>Deafault</option>
+                        <option value='priceLow'>Price: lowest first</option>
+                        <option value='priceHigh'>Price: highest first</option>
+                        <option value='priceHigh'>Rating: lowest first</option>
+                        <option value='priceHigh'>Rating: highest first</option>
+                    </select>
+                </div>
+            </div>
+
+            <div className='restaurant-listing'>
+                <div className='overlay-listing'>
+                    <div className='overlay-listing-left'>
+                        Restaurant 1, address <br />
+                        Cuisine, description 
+                        <img className='ppl-icon' alt='ppl-icon' src={pplIcon}/>
+                        70
+                    </div>
+                    <div className='overlay-listing-right'>
+                        &#9733; &#9733; &#9733; <br />
+                        From 75pln/h
+                    </div>
+                </div>
+                <div className='rest-listing-pics'>
+                    <img alt='rest-pic' className='rest-listing-pic' src={image1} />
+                    <img alt='rest-pic' className='rest-listing-pic' src={image2} />
+                    <img alt='rest-pic' className='rest-listing-pic' src={image3} />
+                </div>
+            </div>
+
+            <div className='restaurant-listing'>
+                <div className='overlay-listing'>
+                    <div className='overlay-listing-left'>
+                        Restaurant 2, address <br />
+                        Cuisine, description
+                        <img className='ppl-icon' alt='ppl-icon' src={pplIcon}/>
+                        30
+                    </div>
+                    <div className='overlay-listing-right'>
+                        &#9733; &#9733; &#9733; &#9733; <br />
+                        From 100pln/h
+                    </div>
+                </div>
+                <div className='rest-listing-pics'>
+                    <img alt='rest-pic' className='rest-listing-pic' src={image3} />
+                    <img alt='rest-pic' className='rest-listing-pic' src={image2} />
+                    <img alt='rest-pic' className='rest-listing-pic' src={image1} />
                 </div>
             </div>
         </div>

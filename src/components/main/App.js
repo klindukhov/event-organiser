@@ -16,6 +16,7 @@ import VenuesPage from '../VenuesPage'
 import CustomerProfile from '../CustomerProfilePage'
 import BusinessProfile from '../BusinessProfilePage';
 import ContactFormPage from '../ContactFormPage';
+import NewEventPage from '../NewEventPage';
 
 export default function App() {
 
@@ -34,6 +35,7 @@ export default function App() {
       <Route path='/CustomerProfilePage' component={CustomerProfile} />
       <Route path='/BusinessProfilePage' component={BusinessProfile} />
       <Route path='/ContactFormPage' component={ContactFormPage} />
+      <Route path='/NewEventPage' component={NewEventPage} />
       
     </Switch>
   )
