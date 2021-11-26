@@ -20,6 +20,9 @@ export default function Sidebar() {
       <a className="menu-item" href="/BusinessProfilePage">
         Business Profile
       </a>
+      <a className="menu-item" href="/ContactFormPage">
+        Report a problem
+      </a>
 
 
     </Menu>
