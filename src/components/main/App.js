@@ -19,25 +19,26 @@ import ContactFormPage from '../ContactFormPage';
 import NewEventPage from '../NewEventPage';
 import RestaurantPage from '../RestaurantPage';
 
-export default function App() {
+export default function App(props) {
+
 
   return (
-    <Switch>
-      <Route exact path='/' component={HomePage} />
+    <Switch >
+      <Route exact path='/'  render={() => <HomePage {...props.myProps}/>} />
       <Route exact path='/' component={Header} />
 
-      <Route path='/signIn' component={SignIn} />
-      <Route path='/signUp' component={SignUp} />
-      <Route path='/createPersonalAccount' component={CreatePersonal} />
-      <Route path='/createBusinessAccount' component={CreateBusiness} />
-      <Route path='/createEvent' component={CreateEvent} />
-      <Route path='/customerHome' component={CustomerHomePage} />
-      <Route path='/VenuesPage' component={VenuesPage} />
-      <Route path='/CustomerProfilePage' component={CustomerProfile} />
-      <Route path='/BusinessProfilePage' component={BusinessProfile} />
-      <Route path='/ContactFormPage' component={ContactFormPage} />
-      <Route path='/NewEventPage' component={NewEventPage} />
-      <Route path='/RestaurantPage' component={RestaurantPage} />
+      <Route path='/signIn' render={() => <SignIn {...props.myProps}/>} />
+      <Route path='/signUp' render={() => <SignUp {...props.myProps}/>} />
+      <Route path='/createPersonalAccount' render={() => <CreatePersonal {...props.myProps}/>} />
+      <Route path='/createBusinessAccount' render={() => <CreateBusiness {...props.myProps}/>} />
+      <Route path='/createEvent' render={() => <CreateEvent {...props.myProps}/>} />
+      <Route path='/customerHome' render={() => <CustomerHomePage {...props.myProps}/>} />
+      <Route path='/VenuesPage'  render={() => <VenuesPage {...props.myProps}/>}/>
+      <Route path='/CustomerProfilePage' render={() => <CustomerProfile {...props.myProps}/>} />
+      <Route path='/BusinessProfilePage' render={() => <BusinessProfile {...props.myProps}/>} />
+      <Route path='/ContactFormPage' render={() => <ContactFormPage {...props.myProps}/>} />
+      <Route path='/NewEventPage' render={() => <NewEventPage {...props.myProps}/>} />
+      <Route path='/RestaurantPage' render={() => <RestaurantPage {...props.myProps}/>} />
       
     </Switch>
   )

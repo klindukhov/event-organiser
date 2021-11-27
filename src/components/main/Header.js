@@ -4,12 +4,7 @@ import acc from '../../images/accIcon.png';
 import Sidebar from './Sidebar';
 import '../../styles/Header.css';
 
-const Header = () => {
-
-  const addHeaderText = (text) =>{
-    return text;
-  }
-
+const Header = (props) => {
   return (
     <div className="header-main">
       <header className='header'>
@@ -19,7 +14,9 @@ const Header = () => {
             *LOGO*
           </p>
         </Link>
-        <div className="cap-margin">{addHeaderText}</div>
+        <div className="cap-margin">
+          {props.myProps.headerMessage}
+          </div>
         <div className='user-logo-div'>
           <Link to='/SignIn' className='user-logo-div'>
             <img src={acc} className="accountIcon" alt="accountIcon" />

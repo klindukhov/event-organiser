@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../styles/VenuesPage.css';
 
 import image1 from '../images/image1.png';
@@ -9,10 +9,13 @@ import pplIcon from '../images/pplIcon.png';
 export default function VenuesPage(props) {
     const [singleDay, setSingleDay] = useState(false);
 
+    useEffect(() => {props.setHeaderMessage('Venues')});
+
     const handleSingleDay = () => {
         setSingleDay(!singleDay);
     }
 
+    
 
     return (
         <div className="venues-main">

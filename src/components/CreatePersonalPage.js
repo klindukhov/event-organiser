@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 
 function SignUpPageContent() {
+
     return (
         <div className="create-account-page-content">
 

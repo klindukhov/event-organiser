@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/BusinessProfilePage.css';
 import accIcon from '../images/accIcon250.png'
 import { Link } from 'react-router-dom'
 
-export default function BusinessProfilePage() {
+export default function BusinessProfilePage(props) {
     const [changes, setChanges] = useState(true);
+
+    useEffect(() => {props.setHeaderMessage('Profile')});
 
     const handleInput = () => {
         setChanges(false);

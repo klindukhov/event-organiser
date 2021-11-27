@@ -4,9 +4,12 @@ import '../styles/HomePage.css';
 import venues from '../images/venues.png';
 import entertainment from '../images/entertainment.png';
 import catering from '../images/catering.png';
+import { useEffect } from 'react';
 
 
-export default function HomePage() {
+export default function HomePage(props) {
+  useEffect(() => {props.setHeaderMessage('')});
+  
   return (
     <div>
       <div className="home-page-content">

@@ -1,7 +1,9 @@
 import React from 'react'
 import '../styles/NewEventPage.css';
+import { useEffect } from 'react';
 
-export default function NewEventPage() {
+export default function NewEventPage(props) {
+    useEffect(() => { props.setHeaderMessage('New event') });
     return (
         <div className='new-event-main'>
             <div className='venue-choice-rect'>
