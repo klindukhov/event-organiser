@@ -26,6 +26,9 @@ export default function Sidebar() {
       <a className="menu-item" href="/NewEventPage">
         New event
       </a>
+      <a className="menu-item" href="/RestaurantPage">
+        RestaurantDemo
+      </a>
 
     </Menu>
   );
