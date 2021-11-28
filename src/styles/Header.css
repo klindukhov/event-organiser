@@ -13,7 +13,8 @@
     display: grid;
     justify-content: center;
     align-content: center;
-    height: 100px
+    height: 100px;
+    color: #47525E;
   }
   .logo{
     color: #ff0000;
