@@ -20,7 +20,11 @@ import NewEventPage from '../NewEventPage';
 import RestaurantPage from '../RestaurantPage';
 
 export default function App(props) {
+  const setProps = (p) =>{
+    props.myProps.cach=p;
+  }
 
+  props.myProps.setProps = setProps;
 
   return (
     <Switch >

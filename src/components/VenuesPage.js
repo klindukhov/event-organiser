@@ -9,23 +9,38 @@ import pplIcon from '../images/pplIcon.png';
 export default function VenuesPage(props) {
     const [singleDay, setSingleDay] = useState(false);
 
-    useEffect(() => {props.setHeaderMessage('Venues')});
+    const [eventType, setEventType] = useState('');
+    const [guestNum, setGuestNum] = useState('');
+    const [location, setLocation] = useState('');
+    const [date, setDate] = useState('');
+
+    useEffect(() => { props.setHeaderMessage('Venues') });
+    useEffect(() => {
+        try {
+            if (props.cach.location) { setLocation(props.cach.location) }
+            if (props.cach.eventType) { setEventType(props.cach.eventType) }
+            if (props.cach.guestNum) { setGuestNum(props.cach.guestNum) }
+            if (props.cach.date) { setDate(props.cach.date) }
+
+        } catch (error) { }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleSingleDay = () => {
         setSingleDay(!singleDay);
     }
 
-    
+
 
     return (
         <div className="venues-main">
             <div className="filter-rect">
                 Location
-                <input placeholder="Country, city, district" className='venue-input-1'></input>
+                <input placeholder='Location' defaultValue={location} className='venue-input-1'></input>
                 <br />
                 Event Type
-                <select name="Event type" className='venue-input-1' id="event-type">
-                    <option value=" ">Event type</option>
+                <select name="Event type"  className='venue-input-1' id="event-type">
+                    <option value=" ">{eventType}</option>
                     <option value="wedding">wedding</option>
                     <option value="party">party</option>
                     <option value="birthday">birthday</option>
@@ -42,7 +57,7 @@ export default function VenuesPage(props) {
                 </select>
                 <div className="guests-choice">
                     Number of guests
-                    <input type="text" className='venue-input-number' />
+                    <input type="text" className='venue-input-number' defaultValue={guestNum} contentEditable />
                     <input type="checkbox" className='venue-input-seat' />
                     Seated
                     <input type="checkbox" className='venue-input-seat' />
@@ -50,7 +65,7 @@ export default function VenuesPage(props) {
                 </div>
 
                 <div className="event-date">
-                    <input placeholder="dd/mm/yyyy" type="date" className='venue-input-date' />
+                    <input defaultValue={date} type="date" className='venue-input-date' />
                     to
                     <input placeholder="dd/mm/yyyy" type="date" className='venue-input-date' disabled={singleDay} />
                     <input type="checkbox" className='venue-input-date' onClick={handleSingleDay} />
@@ -98,8 +113,8 @@ export default function VenuesPage(props) {
                 <div className='overlay-listing'>
                     <div className='overlay-listing-left'>
                         Restaurant 1, address <br />
-                        Cuisine, description 
-                        <img className='ppl-icon' alt='ppl-icon' src={pplIcon}/>
+                        Cuisine, description
+                        <img className='ppl-icon' alt='ppl-icon' src={pplIcon} />
                         70
                     </div>
                     <div className='overlay-listing-right'>
@@ -119,7 +134,7 @@ export default function VenuesPage(props) {
                     <div className='overlay-listing-left'>
                         Restaurant 2, address <br />
                         Cuisine, description
-                        <img className='ppl-icon' alt='ppl-icon' src={pplIcon}/>
+                        <img className='ppl-icon' alt='ppl-icon' src={pplIcon} />
                         30
                     </div>
                     <div className='overlay-listing-right'>

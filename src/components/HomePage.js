@@ -5,11 +5,27 @@ import venues from '../images/venues.png';
 import entertainment from '../images/entertainment.png';
 import catering from '../images/catering.png';
 import { useEffect } from 'react';
+import { useState } from 'react/cjs/react.development';
 
 
 export default function HomePage(props) {
+  const [eventType, setEventType] = useState('');
+  const [guestNum, setGuestNum] = useState('');
+  const [location, setLocation] = useState('');
+  const [date, setDate] = useState('');
+
+
   useEffect(() => {props.setHeaderMessage('')});
-  
+
+  const getProps = () =>{
+    return{
+      eventType: eventType,
+      guestNum: guestNum,
+      location: location,
+      date: date
+    }
+  }  
+
   return (
     <div>
       <div className="home-page-content">
@@ -25,23 +41,24 @@ export default function HomePage(props) {
         <br />
         <br />
         <br />
-        <select name="Event type" id="event-type" className='HP-input'>
+        <select name="Event type" id="event-type" className='HP-input' onChange={(event) => setEventType(event.target.value)}>
           <option value=" ">Event type</option>
           <option value="wedding">wedding</option>
           <option value="party">party</option>
           <option value="birthday">birthday</option>
           <option value="meeting">meeting</option>
         </select>
-        <input placeholder="Number of guests" className='HP-input'></input>
-        <input placeholder="City" className='HP-input'></input>
-        <input type="date" placeholder="dd/mm/yyyy" className='HP-input'></input>
+        <input placeholder="Number of guests" className='HP-input' onChange={(event) => setGuestNum(event.target.value)}/>
+        <input placeholder="City" className='HP-input' onChange={(event) => setLocation(event.target.value)} />
+        <input type="date" placeholder="dd/mm/yyyy" className='HP-input' onChange={(event) => setDate(event.target.value)} />
         <br />
         <br />
 
         <Link to='/VenuesPage'>
           <button className="new-event-button"
             onMouseEnter={e => { e.target.style.cursor = "pointer"; }}
-            onMouseLeave={e => { e.target.style.cursor = "default"; }}>
+            onMouseLeave={e => { e.target.style.cursor = "default"; }}
+            onClick={()=>{props.setProps(getProps())}}>
             Search
           </button>
         </Link>
