@@ -9,6 +9,7 @@ import Header from './components/main/Header';
 const Main = () => {
   const [headerMessage, setHeaderMessage] = useState('');
   const [authorized, setAuthorized] = useState(false);
+  const [userId, setUserId] = useState();
 
   useEffect(() => {
     if (window.localStorage.getItem('auth')) {
@@ -20,9 +21,12 @@ const Main = () => {
   }, []);
 
 
-  const setAuth = () => {
+
+  const setAuth = (resBody) => {
+    setUserId(resBody.id);
     setAuthorized(true);
     window.localStorage.setItem('auth', true);
+    window.localStorage.setItem('userId', userId);
   }
 
   const setUnauth = () => {
@@ -43,6 +47,7 @@ const Main = () => {
 
   const myProps = {
     authorized: authorized,
+    userId: userId,
     setAuth: setAuth,
     setUnauth: setUnauth,
     setHeaderMessage: setHeaderMessage,

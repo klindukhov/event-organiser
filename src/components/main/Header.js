@@ -7,28 +7,37 @@ import { useState } from 'react/cjs/react.development';
 
 const Header = (props) => {
   const [userPageLink, setUserPageLink] = useState('/SignIn');
+  const [userName, setUserName] = useState('Sign in');
+
   useEffect(() => {
     if (props.myProps.authorized === true) {
       setUserPageLink('/CustomerProfilePage');
-      console.log(props.myProps.authorized)
-    }else{
-      setUserPageLink('/SignIn');
-      console.log('i dont like debugger' + props.myProps.authorized)
-    }
-  },[props.myProps.authorized]);
 
-  const getUserName = () => {
-    if (props.myProps.authorized === true) {
-      return 'userName';
+      var myHeaders = new Headers();
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+        credentials: 'include'
+      };
+
+      fetch(`http://localhost:8080/api/customers?id=${props.myProps.userId}`, requestOptions)
+        .then(response => response.json())
+        .then(res => setUserName(res.firstName + ' ' + res.lastName))
+        .catch(error => console.log('error', error));
     } else {
-      return 'Sign in';
+      setUserPageLink('/SignIn');
+      setUserName('Sign in');
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.myProps.authorized]);
+
 
   return (
     <div className="header-main">
       <header className='header'>
-        <Sidebar props={props.myProps}/>
+        <Sidebar props={props.myProps} />
         <Link to='/' className="logo">
           <p className="logo">
             *LOGO*
@@ -40,7 +49,7 @@ const Header = (props) => {
         <div className='user-logo-div'>
           <Link to={userPageLink} className='user-logo-div'>
             <img src={acc} className="accountIcon" alt="accountIcon" />
-            <p className='user-logo-text'>{getUserName()}</p>
+            <p className='user-logo-text'>{userName}</p>
           </Link>
         </div>
 

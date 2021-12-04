@@ -133,15 +133,16 @@ function SignUpPageContent(props) {
                 };
 
                 fetch("http://localhost:8080/api/login", requestOptions)
-                    .then(response => {
+                    .then(response => response.json().then(data => {
                         console.log(response.status);
                         if (response.status !== 200) {
-                            console.log('trouble')
+                            alert('problem');
                         } else {
-                            props.setAuth();
+                            props.setAuth(data);
                             history.push('/')
                         }
-                    }).catch(error => console.log('error', error));
+                    }))
+                    .catch(error => console.log('error', error));
             }).catch(error => console.log('error', error));
 
     }

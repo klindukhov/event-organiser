@@ -29,9 +29,6 @@ export default function Sidebar(props) {
       <a className="menu-item" href="/RestaurantPage">
         RestaurantDemo
       </a>
-      <a className="menu-item" href="/SignInTest">
-        SignInTEST
-      </a>
       <a className="menu-item" href="/" onClick={() => {console.log(props.props.setUnauth())}}>
         Logout
       </a>

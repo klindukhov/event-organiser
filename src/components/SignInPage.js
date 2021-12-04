@@ -23,8 +23,6 @@ function SignInPageContent(props) {
         myHeaders.append("Accept", "application/json");
         myHeaders.append("Content-Type", "application/json");
 
-        //      let raw = JSON.stringify({ "email": "admin@gmail.com", "password": "admin" });
-
         let raw = JSON.stringify({ "email": loginField, "password": passwordField });
 
         let requestOptions = {
@@ -36,15 +34,15 @@ function SignInPageContent(props) {
         };
 
         fetch("http://localhost:8080/api/login", requestOptions)
-            .then(response => {
+            .then(response => response.json().then( data => {
                 console.log(response.status);
                 if (response.status !== 200) {
                     setLoginMessage('Login or password is incorrect');
                 } else {
-                    props.setAuth();
+                    props.setAuth(data);
                     history.push('/')
                 }
-            })
+            }))
             .catch(error => console.log('error', error));
     }
 

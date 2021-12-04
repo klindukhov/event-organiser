@@ -5,11 +5,8 @@ import { Route, Switch } from 'react-router-dom'
 
 
 import HomePage from '../HomePage'
-import CustomerHomePage from '../CustomerHomePage'
 import SignIn from '../SignInPage'
-import SignInTest from '../SignInPageTest'
 import SignUp from '../SignUpPage'
-import CreateEvent from '../CreateEventPage'
 import Header from './Header'
 import VenuesPage from '../VenuesPage'
 import CustomerProfile from '../CustomerProfilePage'
@@ -31,10 +28,7 @@ export default function App(props) {
       <Route exact path='/' component={Header} />
 
       <Route path='/signIn' render={() => <SignIn {...props.myProps}/>} />
-      <Route path='/signInTest' render={() => <SignInTest {...props.myProps}/>} />
       <Route path='/signUp' render={() => <SignUp {...props.myProps}/>} />
-      <Route path='/createEvent' render={() => <CreateEvent {...props.myProps}/>} />
-      <Route path='/customerHome' render={() => <CustomerHomePage {...props.myProps}/>} />
       <Route path='/VenuesPage'  render={() => <VenuesPage {...props.myProps}/>}/>
       <Route path='/CustomerProfilePage' render={() => <CustomerProfile {...props.myProps}/>} />
       <Route path='/BusinessProfilePage' render={() => <BusinessProfile {...props.myProps}/>} />
