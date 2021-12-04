@@ -1,75 +1,83 @@
-.contact-form-main{
-    background-color: #e5e5e5;
-    height: auto;
-    display: grid;
+.contact-form-main {
+    background-color     : #e5e5e5;
+    height               : calc(100vh - 100px);
+    display              : grid;
     grid-template-columns: auto;
-    justify-content: center;
-    align-content: center;
+    justify-content      : center;
+    align-content        : center;
 }
-.contact-form-rect{
-    height: auto;
-    width: 1520px;
-    background-color: white;  
-    color: #47525e;
-    text-align: center;
-    display: grid;
+
+.contact-form-rect {
+    height               : auto;
+    width                : 1520px;
+    background-color     : white;
+    color                : #47525e;
+    text-align           : center;
+    display              : grid;
     grid-template-columns: auto;
-    margin: 50px;
+    margin               : 50px;
 }
-.contact-form-heading{
-    font-size: 32pt;
-    margin: 30px;
+
+.contact-form-heading {
+    font-size   : 32pt;
+    margin      : 30px;
     justify-self: center;
 
 }
-.select-problem-type{
+
+.select-problem-type {
     background-color: #e5e5e5;
-    border-color: #e5e5e5;
-    height: 40px;
-    width: 400px;
-    justify-self: start;
-    margin-left: 100px;
+    border-color    : #e5e5e5;
+    height          : 40px;
+    width           : 400px;
+    justify-self    : start;
+    margin-left     : 100px;
 }
-.problem-description-input{
+
+.problem-description-input {
     background-color: #e5e5e5;
-    border-color: transparent;
-    height: 200px;
-    width: 1320px;
-    justify-self: start;
-    margin-top:30px;
-    margin-left: 100px;
-    
+    border-color    : transparent;
+    height          : 200px;
+    width           : 1320px;
+    justify-self    : start;
+    margin-top      : 30px;
+    margin-left     : 100px;
+
 }
-.problem-image-input{
+
+.problem-image-input {
     background-color: #e5e5e5;
-    border-color: #e5e5e5;
-    height: 200px;
-    width: 1320px;
-    justify-self: start;
-    margin-left: 100px;
-    margin-top:30px;
-    display: flex;
+    border-color    : #e5e5e5;
+    height          : 200px;
+    width           : 1320px;
+    justify-self    : start;
+    margin-left     : 100px;
+    margin-top      : 30px;
+    display         : flex;
 }
-.problem-pic{
-    height: 180px;
-    width: 100px;
+
+.problem-pic {
+    height          : 180px;
+    width           : 100px;
     background-color: cadetblue;
-    margin: 10px;
+    margin          : 10px;
 
 }
-.add-pic-button{
+
+.add-pic-button {
     background-color: #e5e5e5;
-    border-color: transparent;
-    color: #47525e;
-    font-size: 50pt;
+    border-color    : transparent;
+    color           : #47525e;
+    font-size       : 50pt;
 }
-.submit-problem-button{
+
+.submit-problem-button {
     background-color: #47525e;
-    font-size: 28pt;
-    border-radius: 5px;
-    width: 200px;
-    justify-self: center;
-    margin:30px;
-    color: white;
+    font-size       : 28pt;
+    border-radius   : 5px;
+    width           : 200px;
+    justify-self    : center;
+    margin          : 30px;
+    color           : white;
 
 }

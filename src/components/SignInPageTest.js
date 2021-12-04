@@ -1,16 +1,35 @@
 import React from 'react';
-import { useHistory, Link } from 'react-router-dom'
+import {  Link } from 'react-router-dom'
 import { useState } from 'react/cjs/react.development';
-import '../styles/SignInPage.css';
+import '../styles/SignInPage copy.css';
 
 
-function SignInPageContent(props) {
+function SignInPageContent() {
     const [loginField, setLoginField] = useState('');
     const [passwordField, setPasswordField] = useState('');
     const [showInput, setShowInput] = useState(false);
     const [passButtonText, setPassButtonText] = useState('Show password');
     const [loginMessage, setLoginMessage] = useState(' ');
-    let history = useHistory();
+  //  let history = useHistory();
+    
+
+    const handleUsers = () => {
+        var myHeaders = new Headers();
+
+
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow',
+            credentials: 'include'
+
+        };
+
+        fetch("http://localhost:8080/api/users", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+    }
 
 
     const handleLoginInput = (event) => setLoginField(event.target.value);
@@ -31,7 +50,6 @@ function SignInPageContent(props) {
             method: 'POST',
             headers: myHeaders,
             body: raw,
-            redirect: 'follow',
             credentials: 'include'
         };
 
@@ -41,8 +59,7 @@ function SignInPageContent(props) {
                 if (response.status !== 200) {
                     setLoginMessage('Login or password is incorrect');
                 } else {
-                    props.setAuth();
-                    history.push('/')
+                    console.log(response.headers.get('Set-Cookie'));
                 }
             })
             .catch(error => console.log('error', error));
@@ -84,6 +101,9 @@ function SignInPageContent(props) {
                 <br />
                 <Link to="/SignUp">Forgot password?</Link>
             </div>
+
+            <input type="button" value='getUsers' className='get-users-button' onClick={()=>handleUsers()} />
+
 
         </div>
     )

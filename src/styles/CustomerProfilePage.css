@@ -1,103 +1,118 @@
-.customer-profile-main{
-    background-color: #e5e5e5;
-    height: 848px;
-    display: grid;
+.customer-profile-main {
+    background-color     : #e5e5e5;
+    height               : calc(100vh - 100px);
+    display              : grid;
     grid-template-columns: auto;
-    justify-content: center;
-    align-content: center;
+    justify-content      : center;
+    align-content        : center;
 }
-.customer-profile-rect{
-    width: 1520px;
-    background-color: white;  
-    color: #47525e;
-    display: grid;
-    height: fit-content;
+
+.customer-profile-rect {
+    width           : 1520px;
+    background-color: white;
+    color           : #47525e;
+    display         : grid;
+    height          : fit-content;
 }
-.customer-pic-and-info{
-    display: grid;
+
+.customer-pic-and-info {
+    display              : grid;
     grid-template-columns: 50% 50%;
-    column-gap: 40px;
+    column-gap           : 40px;
 }
-.customer-profile-image{
-    height: 250px;
-    width: 250px;
-    margin: 50px;
+
+.customer-profile-image {
+    height      : 250px;
+    width       : 250px;
+    margin      : 50px;
     justify-self: center;
 }
-.customer-pic-and-labels{
-    display: grid;
+
+.customer-pic-and-labels {
+    display              : grid;
     grid-template-columns: auto auto;
-    font-size: 24pt;
+    font-size            : 24pt;
 }
-.customer-info-labels{
-    display: grid;
+
+.customer-info-labels {
+    display              : grid;
     grid-template-columns: auto;
-    justify-content: end;
-    align-content: center;
+    justify-content      : end;
+    align-content        : center;
 }
-.customer-info-fields{
-    display: grid;
+
+.customer-info-fields {
+    display              : grid;
     grid-template-columns: auto;
-    justify-content: start;
-    align-content: center;
+    justify-content      : start;
+    align-content        : center;
 
 
 }
-.customer-profile-field-input{
-    width: 400px;
-    height: 35px;
+
+.customer-profile-field-input {
+    width    : 400px;
+    height   : 35px;
     font-size: 22pt;
-    margin: 10px;
+    margin   : 10px;
 
 }
-.customer-profile-field-label{
-    height: 35px;
+
+.customer-profile-field-label {
+    height    : 35px;
     text-align: end;
-    margin: 10px;
+    margin    : 10px;
 }
-.submit-customer-profile{
-    height: 50px;
-    font-size: 24pt;
+
+.submit-customer-profile {
+    height          : 50px;
+    font-size       : 24pt;
     background-color: #47525e;
-    color: white;
-    border-radius: 5px;
-    width: 400px;
-    justify-self: center;
+    color           : white;
+    border-radius   : 5px;
+    width           : 400px;
+    justify-self    : center;
 }
-.cust-password-change-field{
-    color: #47525e;
+
+.cust-password-change-field {
+    color : #47525e;
     height: 40px;
-    width: 400px;
+    width : 400px;
 
 }
-.cust-password-submit-button{
+
+.cust-password-submit-button {
     background-color: #47525e;
-    color: white;
-    height: 40px;
-    width: 150px;
-    border-radius: 5px;    
+    color           : white;
+    height          : 40px;
+    width           : 150px;
+    border-radius   : 5px;
 }
-.customer-password-change{
-    display: grid;
+
+.customer-password-change {
+    display              : grid;
     grid-template-columns: auto auto auto;
-    justify-content:space-evenly ;
+    justify-content      : space-evenly;
 }
-.change-password-p{
-    color: #47525e;
-    font-size: 32pt;
-    margin: 40px;
+
+.change-password-p {
+    color      : #47525e;
+    font-size  : 32pt;
+    margin     : 40px;
     margin-left: 100px;
 }
-.cust-prof-bottom-text{
-    margin-top: 40px;
-    color: #47525e;
-    font-size: 16pt;
+
+.cust-prof-bottom-text {
+    margin-top   : 40px;
+    color        : #47525e;
+    font-size    : 16pt;
     margin-bottom: 5px;
-    justify-self: center;
+    justify-self : center;
 }
-.delete-acc-link{
-    margin-top: 0px;
+
+.delete-acc-link {
+    margin-top   : 0px;
     margin-bottom: 40px;
-    font-size: 16pt;
-    justify-self: center;
+    font-size    : 16pt;
+    justify-self : center;
 }

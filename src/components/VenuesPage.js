@@ -7,7 +7,6 @@ import image3 from '../images/image3.png';
 import pplIcon from '../images/pplIcon.png';
 
 export default function VenuesPage(props) {
-    const [singleDay, setSingleDay] = useState(false);
 
     const [eventType, setEventType] = useState('');
     const [guestNum, setGuestNum] = useState('');
@@ -26,9 +25,6 @@ export default function VenuesPage(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleSingleDay = () => {
-        setSingleDay(!singleDay);
-    }
 
 
 
@@ -65,11 +61,8 @@ export default function VenuesPage(props) {
                 </div>
 
                 <div className="event-date">
+                    Date 
                     <input defaultValue={date} type="date" className='venue-input-date' />
-                    to
-                    <input placeholder="dd/mm/yyyy" type="date" className='venue-input-date' disabled={singleDay} />
-                    <input type="checkbox" className='venue-input-date' onClick={handleSingleDay} />
-                    Single day event
                 </div>
                 Must have:
                 <br />

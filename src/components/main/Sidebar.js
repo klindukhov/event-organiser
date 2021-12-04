@@ -2,7 +2,7 @@ import React from 'react';
 import { slide as Menu } from 'react-burger-menu';
 import '../../styles/Sidebar.css';
 
-export default function Sidebar() {
+export default function Sidebar(props) {
   return (
     <Menu>
       <a className="menu-item" href="/">
@@ -15,10 +15,10 @@ export default function Sidebar() {
         Venues
       </a>
       <a className="menu-item" href="/CustomerProfilePage">
-        Customer Profile
+        Customer Profile settings
       </a>
       <a className="menu-item" href="/BusinessProfilePage">
-        Business Profile
+        Business Profile settings
       </a>
       <a className="menu-item" href="/ContactFormPage">
         Report a problem
@@ -29,7 +29,12 @@ export default function Sidebar() {
       <a className="menu-item" href="/RestaurantPage">
         RestaurantDemo
       </a>
-
+      <a className="menu-item" href="/SignInTest">
+        SignInTEST
+      </a>
+      <a className="menu-item" href="/" onClick={() => {console.log(props.props.setUnauth())}}>
+        Logout
+      </a>
     </Menu>
   );
 };

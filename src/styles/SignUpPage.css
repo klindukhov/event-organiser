@@ -1,70 +1,83 @@
-.signUp-page-content{
-  background-color: #e5e5e5;
-  height: 848px;
-  display: grid;
+.signUp-page-content {
+  background-color     : #e5e5e5;
+  height               : auto;
+  display              : grid;
   grid-template-columns: auto;
-  justify-content: center;
-  align-content: center;
-  }
-  .signup-input-label{
-    margin-top: 30px;
-    margin-bottom: 0;
-    font-size: 20pt;
-  }
-  .sign-up-rect{
-    height: 800px;
-    width: 800px;
-    background-color: white;  
-    color: #47525e;
-    text-align: center;
-  }
-  .sign-up-h1{
-    font-size: 50px;
-    color: #47525e;
-    margin-top: 30px;
-  }
-  .input-register{
-    height: 50px;
-    border-radius: 5px;
-    width: 400px; 
-    font-size: 30px;
-    color: #47525e;
+  justify-content      : center;
+  align-content        : center;
+}
 
-  }
-  .input-register-button{
-    margin-top: 50px;
-    height: 60px;
-    border-radius: 5px;
-    width: 200px; 
-    background-color: #47525e;
-    color: white;
-    font-size: 30px;
-  }
-  .input-acctype-personal{
-    margin-top: 50px;
-    height: 60px;
-    border-radius: 5px;
-    width: 250px; 
-    background-color: #e5e5e5;
-    color: #47525e;
-    font-size: 30px;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
+.signup-input-label {
+  margin-top   : 30px;
+  margin-bottom: 0;
+  font-size    : 20pt;
+}
 
-  }
-  .input-acctype-business{
-    margin-top: 50px;
-    height: 60px;
-    border-radius: 5px;
-    width: 250px; 
-    background-color: #e5e5e5;
-    color: #47525e;
-    font-size: 30px;
-    border-bottom-left-radius: 0px;
-    border-top-left-radius: 0px;
-  }
-  .register-text-button{
-    color: #47525e;
-  }
+.sign-up-rect {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding-bottom: 50px;
+  height          : auto;
+  width           : 800px;
+  background-color: white;
+  color           : #47525e;
+  text-align      : center;
+}
 
-  
+.sign-up-h1 {
+  font-size : 50px;
+  color     : #47525e;
+  margin-top: 30px;
+}
+
+.input-register {
+  height       : 50px;
+  border-radius: 5px;
+  width        : 400px;
+  font-size    : 30px;
+  color        : #47525e;
+
+}
+
+.input-register-button {
+  margin-top      : 50px;
+  height          : 60px;
+  border-radius   : 5px;
+  width           : 200px;
+  background-color: #47525e;
+  color           : white;
+  font-size       : 30px;
+}
+
+.input-acctype-personal {
+  margin-top                : 50px;
+  height                    : 60px;
+  border-radius             : 5px;
+  width                     : 250px;
+  background-color          : #e5e5e5;
+  color                     : #47525e;
+  font-size                 : 30px;
+  border-top-right-radius   : 0px;
+  border-bottom-right-radius: 0px;
+
+}
+
+.input-acctype-business {
+  margin-top               : 50px;
+  height                   : 60px;
+  border-radius            : 5px;
+  width                    : 250px;
+  background-color         : #e5e5e5;
+  color                    : #47525e;
+  font-size                : 30px;
+  border-bottom-left-radius: 0px;
+  border-top-left-radius   : 0px;
+}
+
+.register-text-button {
+  color: #47525e;
+}
+
+.passwords-dont-match{
+  color: red;
+}

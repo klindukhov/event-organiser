@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/SignUpPage.css';
 import { useHistory } from 'react-router-dom'
+
 
 
 
@@ -16,20 +17,30 @@ function SignUpPageContent(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [uName, setUName] = useState('');
+    const [uSurname, setUSurname] = useState('');
+    const [uBirthdate, setUBirthdate] = useState('');
+    const [uPhoneNum, setUPhoneNum] = useState('');
+    const [bName, setBName] = useState('');
+    const [country, setCountry] = useState('');
+    const [city, setCity] = useState('');
+    const [street, setStreet] = useState('');
+    const [house, setHouse] = useState('');
+    const [zip, setZip] = useState('');
+
+
     const [passwordConf, setPasswordConf] = useState('');
     const [accType, setAccType] = useState('C');
 
+    const [accDetails, setAccDetails] = useState(
+        <div></div>)
+
     const handleSignUp = () => {
-        props.setProps(
-            {
-                email: email
-            }
-        )
         if (password !== confirmPassword || password === '') {
             setPasswordConf('passwords have to match and not be empty');
         } else {
+
             createUser();
-            history.push(businessOrPersonal());
         }
     }
 
@@ -49,32 +60,90 @@ function SignUpPageContent(props) {
         setAccType('B');
     }
 
-    const businessOrPersonal = () => {
-        if (persBackColor === '#47525e') {
-            return '/CreatePersonalAccount';
+    useEffect(() => {
+        if (accType === 'C') {
+            setAccDetails(
+                <div> </div>
+            )
         } else {
-            return '/CreateBusinessAccount';
+            setAccDetails(
+                <div>
+                    <p className="signup-input-label">Business name</p>
+                    <input className="input-register" type="text" onChange={(event) => setBName(event.target.value)}>
+                    </input>
+
+                    <p className="signup-input-label">Country</p>
+                    <input className="input-register" type="text" onChange={(event) => setCountry(event.target.value)}>
+                    </input>
+
+                    <p className="signup-input-label">City</p>
+                    <input className="input-register" type="text" onChange={(event) => setCity(event.target.value)}>
+                    </input>
+
+                    <p className="signup-input-label">Street</p>
+                    <input className="input-register" type="text" onChange={(event) => setStreet(event.target.value)}>
+                    </input>
+
+                    <p className="signup-input-label">House</p>
+                    <input className="input-register" type="text" onChange={(event) => setHouse(event.target.value)}>
+                    </input>
+
+                    <p className="signup-input-label">Zip-code</p>
+                    <input className="input-register" type="text" onChange={(event) => setZip(event.target.value)}>
+                    </input>
+                </div>
+            )
         }
-    }
+    }, [accType]);
 
     const createUser = () => {
         var myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
         myHeaders.append("Content-Type", "application/json");
+        let raw;
+        let requestOptions;
+        let accT;
+        if (accType === 'C') {
+            raw = JSON.stringify({ "email": email, "password": password, "firstName": uName, "lastName": uSurname, "birthdate": uBirthdate, "phoneNumber": uPhoneNum, "address": { "country": country, "city": city, "streetName": street, "streetNumber": house, "zipCode": zip } });
+            accT = 'customer';
+        } else {
+            raw = JSON.stringify({ "email": email, "password": password, "firstName": uName, "lastName": uSurname, "businessName": bName, "phoneNumber": uPhoneNum, "address": { "country": country, "city": city, "streetName": street, "streetNumber": house, "zipCode": zip } });
+            accT = 'business';
+        }
 
-        var raw = JSON.stringify({ "email": email, "password": password, "type": accType });
-
-        var requestOptions = {
+        requestOptions = {
             method: 'POST',
             headers: myHeaders,
             body: raw,
             redirect: 'follow'
         };
 
-        fetch("http://localhost:8080/api/register", requestOptions)
+        fetch(`http://localhost:8080/api/register/${accT}`, requestOptions)
             .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
+            .then(result => {
+                console.log(result);
+                raw = JSON.stringify({ "email": email, "password": password });
+
+                requestOptions = {
+                    method: 'POST',
+                    headers: myHeaders,
+                    body: raw,
+                    redirect: 'follow',
+                    credentials: 'include'
+                };
+
+                fetch("http://localhost:8080/api/login", requestOptions)
+                    .then(response => {
+                        console.log(response.status);
+                        if (response.status !== 200) {
+                            console.log('trouble')
+                        } else {
+                            props.setAuth();
+                            history.push('/')
+                        }
+                    }).catch(error => console.log('error', error));
+            }).catch(error => console.log('error', error));
+
     }
 
 
@@ -105,9 +174,26 @@ function SignUpPageContent(props) {
                 </input>
                 <p className='passwords-dont-match'>{passwordConf}</p>
                 <br />
+                <p className="signup-input-label">Name</p>
+                <input className="input-register" type="text" onChange={(event) => setUName(event.target.value)}>
+                </input>
+
+                <p className="signup-input-label">Surname</p>
+                <input className="input-register" type="text" onChange={(event) => setUSurname(event.target.value)}>
+                </input>
+
+                <p className="signup-input-label">Birthdate</p>
+                <input className="input-register" type="date" onChange={(event) => setUBirthdate(event.target.value)}>
+                </input>
+
+                <p className="signup-input-label">Phone number</p>
+                <input className="input-register" type="text" onChange={(event) => setUPhoneNum(event.target.value)}>
+                </input>
+                {accDetails}
                 <button className="input-register-button" onClick={() => handleSignUp()}>
                     Sign up
                 </button>
+
             </div>
         </div>
     )
