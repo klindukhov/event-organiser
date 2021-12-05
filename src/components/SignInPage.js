@@ -40,10 +40,17 @@ function SignInPageContent(props) {
                     setLoginMessage('Login or password is incorrect');
                 } else {
                     props.setAuth(data);
-                    history.push('/')
+                    if(data.type === 'C'){
+                        history.push('/');
+                    }else if(data.type === 'A'){
+                        history.push('/AdminHomePage');
+                    }else if(data.type === 'B'){
+                        history.push('/BusinessHomePage');
+                    }
                 }
             }))
-            .catch(error => console.log('error', error));
+            .catch(error => {console.log('error', error);
+            setLoginMessage('Login or password is incorrect');});
     }
 
 

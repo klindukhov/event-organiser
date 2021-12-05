@@ -9,7 +9,8 @@ import Header from './components/main/Header';
 const Main = () => {
   const [headerMessage, setHeaderMessage] = useState('');
   const [authorized, setAuthorized] = useState(false);
-  const [userId, setUserId] = useState();
+  const [userId, setUserId] = useState(); 
+  const [userData, setUserData] = useState();
 
   useEffect(() => {
     if (window.localStorage.getItem('auth') === 'true') {
@@ -17,17 +18,20 @@ const Main = () => {
     } else {
       setAuthorized(false);
     }
-    setUserId(window.localStorage.getItem('userId'))
+    setUserId(window.localStorage.getItem('userId'));
+    setUserData(JSON.parse(window.localStorage.getItem('userData')));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 
 
   const setAuth = (resBody) => {
+    setUserData(resBody);
     setUserId(resBody.id);
     setAuthorized(true);
     window.localStorage.setItem('auth', true);
     window.localStorage.setItem('userId', resBody.id);
+    window.localStorage.setItem('userData', JSON.stringify(resBody));
   }
 
   const setUnauth = () => {
@@ -49,6 +53,7 @@ const Main = () => {
   const myProps = {
     authorized: authorized,
     userId: userId,
+    userData: userData,
     setAuth: setAuth,
     setUnauth: setUnauth,
     setHeaderMessage: setHeaderMessage,

@@ -14,6 +14,9 @@ import BusinessProfile from '../BusinessProfilePage';
 import ContactFormPage from '../ContactFormPage';
 import NewEventPage from '../NewEventPage';
 import RestaurantPage from '../RestaurantPage';
+import BusinessHomePage from '../BusinessHomePage';
+import AdminHomePage from '../AdminHomePage';
+import CustomerHomePage from '../CustomerHomePage';
 
 export default function App(props) {
   const setProps = (p) =>{
@@ -35,6 +38,9 @@ export default function App(props) {
       <Route path='/ContactFormPage' render={() => <ContactFormPage {...props.myProps}/>} />
       <Route path='/NewEventPage' render={() => <NewEventPage {...props.myProps}/>} />
       <Route path='/RestaurantPage' render={() => <RestaurantPage {...props.myProps}/>} />
+      <Route path='/CustomerHomePage' render={() => <CustomerHomePage {...props.myProps}/>} />
+      <Route path='/AdminHomePage' render={() => <AdminHomePage {...props.myProps}/>} />
+      <Route path='/BusinessHomePage' render={() => <BusinessHomePage {...props.myProps}/>} />
       
     </Switch>
   )

@@ -8,42 +8,58 @@ import { useState } from 'react/cjs/react.development';
 const Header = (props) => {
   const [userPageLink, setUserPageLink] = useState('/SignIn');
   const [userName, setUserName] = useState('Sign in');
+  const [myAccount, setMyAccount] = useState('/SignIn');
+
 
   useEffect(() => {
     if (props.myProps.authorized === true) {
-      setUserPageLink('/CustomerProfilePage');
+      if (props.myProps.userData.type === 'C') {
+        setUserPageLink('/CustomerHomePage');
+        setMyAccount('/CustomerHomePage');
 
-      var myHeaders = new Headers();
 
-      var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow',
-        credentials: 'include'
-      };
+        var myHeaders = new Headers();
 
-      fetch(`http://localhost:8080/api/customers?id=${props.myProps.userId}`, requestOptions)
-        .then(response => response.json())
-        .then(res => setUserName(res.firstName + ' ' + res.lastName))
-        .catch(error => console.log('error', error));
+        var requestOptions = {
+          method: 'GET',
+          headers: myHeaders,
+          redirect: 'follow',
+          credentials: 'include'
+        };
 
-      console.log('userName')
+        fetch(`http://localhost:8080/api/customers?id=${props.myProps.userId}`, requestOptions)
+          .then(response => response.json())
+          .then(res => {
+            if (res.firstName !== undefined) {
+              setUserName(res.firstName + ' ' + res.lastName);
+            } else {
+              props.myProps.setUnauth();
+            }
+          }).catch(error => console.log('error', error));
+      } else if (props.myProps.userData.type === 'B') {
+        setUserName('business');
+        setUserPageLink('/BusinessHomePage');
+        setMyAccount('/BusinessHomePage');
+
+      } else if (props.myProps.userData.type === 'A') {
+        setUserName('admin');
+        setUserPageLink('/AdminHomePage');
+        setMyAccount('/AdminHomePage');
+
+      }
+
     } else if (props.myProps.authorized === false) {
       setUserPageLink('/SignIn');
       setUserName('Sign in');
-      console.log('sign in')
     }
-
-    console.log('header');
-    console.log(props);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    //  eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.myProps.authorized]);
 
 
   return (
     <div className="header-main">
       <header className='header'>
-        <Sidebar props={props.myProps} />
+        <Sidebar props={props.myProps} myAccount={myAccount} />
         <Link to='/' className="logo">
           <p className="logo">
             *LOGO*

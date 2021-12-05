@@ -22,11 +22,11 @@ function SignUpPageContent(props) {
     const [uBirthdate, setUBirthdate] = useState('');
     const [uPhoneNum, setUPhoneNum] = useState('');
     const [bName, setBName] = useState('');
-    const [country, setCountry] = useState('');
-    const [city, setCity] = useState('');
-    const [street, setStreet] = useState('');
-    const [house, setHouse] = useState('');
-    const [zip, setZip] = useState('');
+    const [country, setCountry] = useState(' ');
+    const [city, setCity] = useState(' ');
+    const [street, setStreet] = useState(' ');
+    const [house, setHouse] = useState(' ');
+    const [zip, setZip] = useState(' ');
 
 
     const [passwordConf, setPasswordConf] = useState('');
@@ -138,12 +138,15 @@ function SignUpPageContent(props) {
                         if (response.status !== 200) {
                             alert('problem');
                         } else {
-                            props.setAuth(data);
-                            history.push('/')
+                            props.setAuth(data);if(data.type === 'C'){
+                                history.push('/');
+                            }else if(data.type === 'B'){
+                                history.push('/BusinessHomePage');
+                            }
                         }
                     }))
-                    .catch(error => console.log('error', error));
-            }).catch(error => console.log('error', error));
+                    .catch(error => console.log('error-login', error));
+            }).catch(error => console.log('error-register', error));
 
     }
 
