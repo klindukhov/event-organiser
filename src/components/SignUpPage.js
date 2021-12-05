@@ -171,7 +171,7 @@ function SignUpPageContent(props) {
                 </input>
                 <br />
                 <p className='signup-input-label'>Confirm password</p>
-                <input className="input-register" type="text" onChange={(event) => setConfirmPassword(event.target.value)}>
+                <input className="input-register" type="password" onChange={(event) => setConfirmPassword(event.target.value)}>
                 </input>
                 <p className='passwords-dont-match'>{passwordConf}</p>
                 <br />

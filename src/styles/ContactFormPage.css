@@ -37,7 +37,7 @@
 .problem-description-input {
     background-color: #e5e5e5;
     border-color    : transparent;
-    height          : 200px;
+    height          : 400px;
     width           : 1320px;
     justify-self    : start;
     margin-top      : 30px;
@@ -45,30 +45,15 @@
 
 }
 
-.problem-image-input {
-    background-color: #e5e5e5;
-    border-color    : #e5e5e5;
-    height          : 200px;
-    width           : 1320px;
-    justify-self    : start;
-    margin-left     : 100px;
-    margin-top      : 30px;
-    display         : flex;
-}
-
-.problem-pic {
-    height          : 180px;
-    width           : 100px;
-    background-color: cadetblue;
-    margin          : 10px;
-
-}
-
-.add-pic-button {
+.problem-concern-input {
     background-color: #e5e5e5;
     border-color    : transparent;
-    color           : #47525e;
-    font-size       : 50pt;
+    height          : 50px;
+    width           : 1320px;
+    justify-self    : start;
+    margin-top      : 30px;
+    margin-left     : 100px;
+
 }
 
 .submit-problem-button {

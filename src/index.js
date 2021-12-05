@@ -12,11 +12,12 @@ const Main = () => {
   const [userId, setUserId] = useState();
 
   useEffect(() => {
-    if (window.localStorage.getItem('auth')) {
-      setAuthorized(window.localStorage.getItem('auth'));
+    if (window.localStorage.getItem('auth') === 'true') {
+      setAuthorized(true);
     } else {
       setAuthorized(false);
     }
+    setUserId(window.localStorage.getItem('userId'))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -26,7 +27,7 @@ const Main = () => {
     setUserId(resBody.id);
     setAuthorized(true);
     window.localStorage.setItem('auth', true);
-    window.localStorage.setItem('userId', userId);
+    window.localStorage.setItem('userId', resBody.id);
   }
 
   const setUnauth = () => {

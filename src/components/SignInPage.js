@@ -70,8 +70,6 @@ function SignInPageContent(props) {
                 {/* <Link to="/customerHome"> */}
                 <p style={{ color: 'red' }}>{loginMessage}</p>
                 <button className="input-login-button"
-                    onMouseEnter={e => { e.target.style.cursor = "pointer"; }}
-                    onMouseLeave={e => { e.target.style.cursor = "default"; }}
                     onClick={handleLogIn}>
                     Sign in
                 </button>

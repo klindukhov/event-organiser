@@ -26,10 +26,16 @@ const Header = (props) => {
         .then(response => response.json())
         .then(res => setUserName(res.firstName + ' ' + res.lastName))
         .catch(error => console.log('error', error));
-    } else {
+
+      console.log('userName')
+    } else if (props.myProps.authorized === false) {
       setUserPageLink('/SignIn');
       setUserName('Sign in');
+      console.log('sign in')
     }
+
+    console.log('header');
+    console.log(props);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.myProps.authorized]);
 
