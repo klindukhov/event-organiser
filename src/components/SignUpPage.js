@@ -119,34 +119,35 @@ function SignUpPageContent(props) {
         };
 
         fetch(`http://localhost:8080/api/register/${accT}`, requestOptions)
-            .then(response => response.text())
-            .then(result => {
+            .then(response => response.text().then(result => {
                 console.log(result);
-                raw = JSON.stringify({ "email": email, "password": password });
+                if (response.ok) {
+                    raw = JSON.stringify({ "email": email, "password": password });
 
-                requestOptions = {
-                    method: 'POST',
-                    headers: myHeaders,
-                    body: raw,
-                    redirect: 'follow',
-                    credentials: 'include'
-                };
+                    requestOptions = {
+                        method: 'POST',
+                        headers: myHeaders,
+                        body: raw,
+                        redirect: 'follow',
+                        credentials: 'include'
+                    };
 
-                fetch("http://localhost:8080/api/login", requestOptions)
-                    .then(response => response.json().then(data => {
-                        console.log(response.status);
-                        if (response.status !== 200) {
-                            alert('problem');
-                        } else {
-                            props.setAuth(data);if(data.type === 'C'){
-                                history.push('/');
-                            }else if(data.type === 'B'){
-                                history.push('/BusinessHomePage');
+                    fetch("http://localhost:8080/api/login", requestOptions)
+                        .then(response => response.json().then(data => {
+                            console.log(response.status);
+                            if (response.status !== 200) {
+                                alert('problem');
+                            } else {
+                                props.setAuth(data); if (data.type === 'C') {
+                                    history.push('/');
+                                } else if (data.type === 'B') {
+                                    history.push('/BusinessHomePage');
+                                }
                             }
-                        }
-                    }))
-                    .catch(error => console.log('error-login', error));
-            }).catch(error => console.log('error-register', error));
+                        }))
+                        .catch(error => console.log('error-login', error));
+                }
+            })).catch(error => console.log('error-register', error));
 
     }
 

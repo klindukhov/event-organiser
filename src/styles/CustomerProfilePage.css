@@ -55,6 +55,7 @@
     height   : 35px;
     font-size: 22pt;
     margin   : 10px;
+    color: #47525e;
 
 }
 
@@ -67,7 +68,6 @@
 .submit-customer-profile {
     height          : 50px;
     font-size       : 24pt;
-    background-color: #47525e;
     color           : white;
     border-radius   : 5px;
     width           : 400px;
@@ -77,7 +77,7 @@
 .cust-password-change-field {
     color : #47525e;
     height: 40px;
-    width : 400px;
+    width : 300px;
 
 }
 
@@ -91,7 +91,7 @@
 
 .customer-password-change {
     display              : grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: auto auto auto auto;
     justify-content      : space-evenly;
 }
 
