@@ -37,7 +37,7 @@ export default function App(props) {
       <Route path='/BusinessProfilePage' render={() => <BusinessProfile {...props.myProps}/>} />
       <Route path='/ContactFormPage' render={() => <ContactFormPage {...props.myProps}/>} />
       <Route path='/NewEventPage' render={() => <NewEventPage {...props.myProps}/>} />
-      <Route path='/RestaurantPage' render={() => <RestaurantPage {...props.myProps}/>} />
+      <Route path='/RestaurantPage:id' render={() => <RestaurantPage {...props.myProps}/>} />
       <Route path='/CustomerHomePage' render={() => <CustomerHomePage {...props.myProps}/>} />
       <Route path='/AdminHomePage' render={() => <AdminHomePage {...props.myProps}/>} />
       <Route path='/BusinessHomePage' render={() => <BusinessHomePage {...props.myProps}/>} />

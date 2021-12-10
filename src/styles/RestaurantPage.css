@@ -64,7 +64,8 @@
 
 .contact-acc-info {
     display              : grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto;
+    justify-content: center;
 }
 
 .contact-acc-pic {
@@ -78,16 +79,6 @@
     background-color: #47525E;
     color           : white;
     justify-self    : center;
-}
-
-.restaurant-reviews-rect {
-    background-color: white;
-    width           : 1520px;
-    height          : auto;
-    justify-self    : center;
-    display         : grid;
-    padding-top     : 50px;
-    margin-bottom   : 50px;
 }
 
 .each-slide>div {
@@ -110,13 +101,23 @@
     border-color    : transparent;
 }
 
+.write-title-div {
+    background-color: #e5e5e5;
+    color           : #47525E;
+    font-size       : 22pt;
+    height          : 50px;
+    width           : 400px;
+    border-color    : transparent;
+    margin-right    : 15px;
+}
+
 .review-submit-button {
     justify-self    : end;
     height          : 50px;
     width           : 300px;
     background-color: #47525E;
     color           : white;
-    margin          : 50px;
+    margin-top      : 50px;
 }
 
 .restaurant-reviews-rect1 {

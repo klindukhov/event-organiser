@@ -32,6 +32,7 @@ const Header = (props) => {
           .then(res => {
             if (res.firstName !== undefined) {
               setUserName(res.firstName + ' ' + res.lastName);
+              props.myProps.setUser(res);
             } else {
               props.myProps.setUnauth();
             }

@@ -96,6 +96,9 @@
     position: relative;
     top     : -100px;
     left    : 0px;
+    width   : 1520px;
+    overflow: auto;
+
 }
 
 .rest-listing-pic {
@@ -119,6 +122,10 @@
     padding-top          : 10px;
     display              : grid;
     grid-template-columns: auto auto;
+}
+
+.restaurant-list-element {
+    list-style-type: none;
 }
 
 .overlay-listing-left {

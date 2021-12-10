@@ -1,31 +1,39 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import '../styles/VenuesPage.css';
 
-import image1 from '../images/image1.png';
-import image2 from '../images/image2.png';
-import image3 from '../images/image3.png';
 import pplIcon from '../images/pplIcon.png';
 
 export default function VenuesPage(props) {
 
+    //filters
     const [eventType, setEventType] = useState('');
     const [guestNum, setGuestNum] = useState('');
     const [location, setLocation] = useState('');
     const [date, setDate] = useState('');
 
-    useEffect(() => { props.setHeaderMessage('Venues') });
+    const [locs, setLocs] = useState([]);
+
     useEffect(() => {
+        props.setHeaderMessage('Venues');
+
         try {
             if (props.cach.location) { setLocation(props.cach.location) }
             if (props.cach.eventType) { setEventType(props.cach.eventType) }
             if (props.cach.guestNum) { setGuestNum(props.cach.guestNum) }
             if (props.cach.date) { setDate(props.cach.date) }
-
         } catch (error) { }
+
+        getAllLocations();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
+    const getAllLocations = () => {
+        fetch("http://localhost:8080/api/locations/allowed/all").then(res => res.json()).then(locations => {
+            setLocs(locations);
+        });
+    }
 
 
     return (
@@ -35,7 +43,7 @@ export default function VenuesPage(props) {
                 <input placeholder='Location' defaultValue={location} className='venue-input-1'></input>
                 <br />
                 Event Type
-                <select name="Event type"  className='venue-input-1' id="event-type">
+                <select name="Event type" className='venue-input-1' id="event-type">
                     <option value=" ">{eventType}</option>
                     <option value="wedding">wedding</option>
                     <option value="party">party</option>
@@ -61,7 +69,7 @@ export default function VenuesPage(props) {
                 </div>
 
                 <div className="event-date">
-                    Date 
+                    Date
                     <input defaultValue={date} type="date" className='venue-input-date' />
                 </div>
                 Must have:
@@ -101,46 +109,28 @@ export default function VenuesPage(props) {
                     </select>
                 </div>
             </div>
-
-            <div className='restaurant-listing'>
-                <div className='overlay-listing'>
-                    <div className='overlay-listing-left'>
-                        Restaurant 1, address <br />
-                        Cuisine, description
-                        <img className='ppl-icon' alt='ppl-icon' src={pplIcon} />
-                        70
+            {locs.map(c => <div key={c.name} className='restaurant-list-element'>
+                <Link to={`/RestaurantPage${Object.values(c)[0]}`} style={{ textDecoration: 'none' }}>
+                    <div className='restaurant-listing' >
+                        <div className='overlay-listing' >
+                            <div className='overlay-listing-left'>
+                                {Object.values(c)[1]} , {Object.values(c)[10].city}, {Object.values(c)[10].streetName}/{Object.values(c)[10].streetNumber}<br />
+                                {Object.values(c)[6]}
+                                <img className='ppl-icon' alt='ppl-icon' src={pplIcon} />
+                                {Object.values(c)[4]}
+                            </div>
+                            <div className='overlay-listing-right'>
+                                From {Object.values(c)[8]}pln/day
+                            </div>
+                        </div>
+                        <div className='rest-listing-pics'>
+                            {Object.values(c)[18].map(i => <div key={i.id}>
+                                <img alt={Object.values(i)[1]} className='rest-listing-pic' src={Object.values(i)[0]} />
+                            </div>)}
+                        </div>
                     </div>
-                    <div className='overlay-listing-right'>
-                        &#9733; &#9733; &#9733; <br />
-                        From 75pln/h
-                    </div>
-                </div>
-                <div className='rest-listing-pics'>
-                    <img alt='rest-pic' className='rest-listing-pic' src={image1} />
-                    <img alt='rest-pic' className='rest-listing-pic' src={image2} />
-                    <img alt='rest-pic' className='rest-listing-pic' src={image3} />
-                </div>
-            </div>
-
-            <div className='restaurant-listing'>
-                <div className='overlay-listing'>
-                    <div className='overlay-listing-left'>
-                        Restaurant 2, address <br />
-                        Cuisine, description
-                        <img className='ppl-icon' alt='ppl-icon' src={pplIcon} />
-                        30
-                    </div>
-                    <div className='overlay-listing-right'>
-                        &#9733; &#9733; &#9733; &#9733; <br />
-                        From 100pln/h
-                    </div>
-                </div>
-                <div className='rest-listing-pics'>
-                    <img alt='rest-pic' className='rest-listing-pic' src={image3} />
-                    <img alt='rest-pic' className='rest-listing-pic' src={image2} />
-                    <img alt='rest-pic' className='rest-listing-pic' src={image1} />
-                </div>
-            </div>
+                </Link>
+            </div>)}
         </div>
     )
 
