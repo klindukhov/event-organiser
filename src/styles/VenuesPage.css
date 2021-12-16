@@ -89,6 +89,7 @@
     height    : 420px;
     width     : 1520px;
     margin-top: 30px;
+    background-color: white;
 }
 
 .rest-listing-pics {
@@ -98,7 +99,7 @@
     left    : 0px;
     width   : 1520px;
     overflow: auto;
-
+    background-color: white;
 }
 
 .rest-listing-pic {

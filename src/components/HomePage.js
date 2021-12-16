@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import '../styles/HomePage.css';
 import venues from '../images/venues.png';
 import entertainment from '../images/entertainment.png';
@@ -13,6 +13,8 @@ export default function HomePage(props) {
   const [guestNum, setGuestNum] = useState('');
   const [location, setLocation] = useState('');
   const [date, setDate] = useState('');
+
+  const history = useHistory();
 
 
   useEffect(() => {props.setHeaderMessage('')});
@@ -71,17 +73,17 @@ export default function HomePage(props) {
         <br />
         <br />
         <div className="explore-grid">
-          <div>
+          <div onClick={() => history.push('/VenuesPage')}>
             <p className="Explore-subheading">Venues</p>
             <img src={venues} alt="venuesPic" className="explore-imgs" />
             <p className="Explore-par">Find an ideal place to celebrate birthdays, weddings, important <br /> milestones or educate yourself and/or your colleagues.</p>
           </div>
-          <div>
+          <div onClick={() => history.push('/CateringsPage')}>
             <p className="Explore-subheading">Catering</p>
             <img src={catering} alt="venuesPic" className="explore-imgs" />
             <p className="Explore-par">Order or get delivered the meals <br />from thousands of restaurants in <br />the area</p>
           </div>
-          <div>
+          <div onClick={() => history.push('/ServicesPage')}>
             <p className="Explore-subheading">Entertainment&other</p>
             <img src={entertainment} alt="venuesPic" className="explore-imgs" />
             <p className="Explore-par">Invite entertainers like DJs, musicians to help create an unique <br />atmosphere at your event as well as important additions to your <br />seminars llike enterpreters or DI’s </p>

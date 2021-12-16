@@ -14,8 +14,8 @@ const Header = (props) => {
   useEffect(() => {
     if (props.myProps.authorized === true) {
       if (props.myProps.userData.type === 'C') {
-        setUserPageLink('/CustomerHomePage');
-        setMyAccount('/CustomerHomePage');
+        setUserPageLink('/CustomerProfilePage');
+        setMyAccount('/CustomerProfilePage');
 
 
         var myHeaders = new Headers();
@@ -60,7 +60,7 @@ const Header = (props) => {
   return (
     <div className="header-main">
       <header className='header'>
-        <Sidebar props={props.myProps} myAccount={myAccount} />
+        <Sidebar props={props.myProps} myAccount={myAccount} userName={userName}/>
         <Link to='/' className="logo">
           <p className="logo">
             *LOGO*

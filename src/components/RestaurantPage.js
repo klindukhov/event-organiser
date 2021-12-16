@@ -7,11 +7,14 @@ import StarRatings from 'react-star-ratings';
 import accIcon from '../images/accIcon250.png'
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 
 
 
 export default function RestaurantPage(props) {
     const { id } = useParams();
+
+    const history = useHistory();
 
     const [locationDetails, setLocationDetails] = useState({});
     const [slideImages, setSlideImages] = useState([]);
@@ -21,6 +24,7 @@ export default function RestaurantPage(props) {
     const [review, setReview] = useState('');
     const [title, setTitle] = useState('');
     const [reviewMessage, setReviewMessage] = useState('');
+    const [renderReviews, setRenderReviews] = useState(false);
 
     const [userName, setUserName] = useState();
 
@@ -62,6 +66,7 @@ export default function RestaurantPage(props) {
     }, [])
     // eslint-disable-next-line
     useEffect(() => { if (props.user) { setUserName(props.user.firstName + " " + props.user.lastName) } }, [props.user]);
+    useEffect(() => {if(reviews.length > 0){setRenderReviews(true)} }, [reviews])
 
     const changeRating = (newRating, name) => {
         setRating(newRating);
@@ -92,6 +97,11 @@ export default function RestaurantPage(props) {
             setReviewMessage('Please enter title and star rating')
         }
 
+    }
+
+    const handleAddToEvent = () =>{
+        props.setLocation(locationDetails);
+        history.push('/newEventPage');
     }
 
     return (
@@ -129,14 +139,15 @@ export default function RestaurantPage(props) {
                                 {locationDetails["email"]}<br />
                             </div>
                         </div>
-                        <input type='button' className='add-to-event-button' value='Add to event' />
+                        <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
 
                     </div>
                 </div>
             </div>
             <div className='restaurant-reviews-rect1'>
                 <p className='rest-review-heading'>Reviews</p>
-                {reviews.map(r =>
+                {renderReviews &&
+                reviews.map(r =>
                     <div key={r.id} className='rest-review-div'>
                         <div className='reviewer-info'>
                             <img alt='acc-pic' src={accIcon} className='contact-acc-pic1' />

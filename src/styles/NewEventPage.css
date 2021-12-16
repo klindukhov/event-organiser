@@ -1,26 +1,73 @@
-.new-event-main{
-    background-color: #e5e5e5;
-    height: 100vh;
-    display: grid;
+.new-event-main {
+    background-color     : #e5e5e5;
+    height               : calc(100vh - 100px);
+    display              : grid;
     grid-template-columns: auto;
-    justify-content: center;
-    align-content: start;
+    justify-content      : center;
+    align-content        : start;
 }
-.venue-choice-rect, .guest-choice-rect{
-    width: 1520px;
-    height: 200px;
+
+.venue-choice-rect,
+.guest-choice-rect {
+    width           : 1520px;
+    height          : auto;
     background-color: white;
-    color: #47525E;
-    margin-top: 30px;
+    color           : #47525E;
+    margin-top      : 30px;
 }
-.venue-choice-heading, .guest-choice-heading{
+
+.venue-choice-heading,
+.guest-choice-heading {
     font-size: 16pt;
+    margin   : 30px;
+}
+
+.add-button {
+    font-size       : 40pt;
+    background-color: white;
+    border-color    : transparent;
+    color           : #47525E;
+    margin-left     : 30px;
+}
+
+.new-guest-input {
+    height: 40px;
+    width: 300px;
+    margin-left: 30px;
+}
+
+.new-guest-button{
+    height: 40px;
+    width: 100px;
+    margin-left: 30px;
+    color: white;
+    background-color: #47525E;
+}
+
+.guest-list-element{
+    font-size: 20px;
     margin: 30px;
 }
-.add-button{
-    font-size: 40pt;
-    background-color: white;
-    border-color: transparent;
-    color: #47525E;
-    margin-left: 30px;
+
+.location-pic{
+    max-height: 200px;
+    margin-right: 30px;
+}
+
+.venue-div{
+    display: grid;
+    grid-template-columns: auto auto;
+    font-size: 20pt;
+    justify-content: start;
+    padding: 30px;
+}
+
+
+.venue-name-over{
+    position: relative;
+    top: -200px;
+    background-color: rgb(0, 0, 0, 0.5);
+    color: white;
+    margin-right: 30px;
+
 }
