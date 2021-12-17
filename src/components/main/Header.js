@@ -2,13 +2,14 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom'
 import acc from '../../images/accIcon.png';
 import Sidebar from './Sidebar';
-import '../../styles/Header.css';
+import '../../styles/general/Header.css';
 import { useState } from 'react/cjs/react.development';
 
 const Header = (props) => {
   const [userPageLink, setUserPageLink] = useState('/SignIn');
   const [userName, setUserName] = useState('Sign in');
   const [myAccount, setMyAccount] = useState('/SignIn');
+  const [accType, setAccType] = useState('');
 
 
   useEffect(() => {
@@ -16,6 +17,7 @@ const Header = (props) => {
       if (props.myProps.userData.type === 'C') {
         setUserPageLink('/CustomerProfilePage');
         setMyAccount('/CustomerProfilePage');
+        setAccType('C');
 
 
         var myHeaders = new Headers();
@@ -38,11 +40,13 @@ const Header = (props) => {
             }
           }).catch(error => console.log('error', error));
       } else if (props.myProps.userData.type === 'B') {
+        setAccType('B');
         setUserName('business');
         setUserPageLink('/BusinessHomePage');
         setMyAccount('/BusinessHomePage');
 
       } else if (props.myProps.userData.type === 'A') {
+        setAccType('A');
         setUserName('admin');
         setUserPageLink('/AdminHomePage');
         setMyAccount('/AdminHomePage');
@@ -60,7 +64,7 @@ const Header = (props) => {
   return (
     <div className="header-main">
       <header className='header'>
-        <Sidebar props={props.myProps} myAccount={myAccount} userName={userName}/>
+        <Sidebar props={props.myProps} myAccount={myAccount} userName={userName} accType={accType}/>
         <Link to='/' className="logo">
           <p className="logo">
             *LOGO*

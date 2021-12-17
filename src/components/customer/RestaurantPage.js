@@ -1,10 +1,10 @@
 import React from "react";
-import '../styles/RestaurantPage.css'
+import '../../styles/customer/RestaurantPage.css'
 import 'react-slideshow-image/dist/styles.css'
 import { Slide } from 'react-slideshow-image';
 import StarRatings from 'react-star-ratings';
 
-import accIcon from '../images/accIcon250.png'
+import accIcon from '../../images/accIcon250.png'
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import './styles/index.css';
+import './styles/general/index.css';
 import App from './components/main/App';
 import Header from './components/main/Header';
 

@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import '../styles/HomePage.css';
-import venues from '../images/venues.png';
-import entertainment from '../images/entertainment.png';
-import catering from '../images/catering.png';
+import '../../styles/customer/HomePage.css';
+import venues from '../../images/venues.png';
+import entertainment from '../../images/entertainment.png';
+import catering from '../../images/catering.png';
 import { useEffect } from 'react';
 import { useState } from 'react/cjs/react.development';
 

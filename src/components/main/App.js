@@ -1,23 +1,29 @@
-import '../../styles/App.css';
+import '../../styles/general/App.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 import React from 'react';
 import { Route, Switch } from 'react-router-dom'
 
 
-import HomePage from '../HomePage'
-import SignIn from '../SignInPage'
-import SignUp from '../SignUpPage'
+import HomePage from '../customer/HomePage'
+import SignIn from '../general/SignInPage'
+import SignUp from '../general/SignUpPage'
 import Header from './Header'
-import VenuesPage from '../VenuesPage'
-import CustomerProfile from '../CustomerProfilePage'
-import BusinessProfile from '../BusinessProfilePage';
-import ContactFormPage from '../ContactFormPage';
-import NewEventPage from '../NewEventPage';
-import RestaurantPage from '../RestaurantPage';
-import BusinessHomePage from '../BusinessHomePage';
-import AdminHomePage from '../AdminHomePage';
-import CateringsPage from '../CateringsPage';
-import ServicesPage from '../ServicesPage';
+import VenuesPage from '../customer/VenuesPage'
+import CustomerProfile from '../customer/CustomerProfilePage'
+import BusinessProfile from '../business/BusinessProfilePage';
+import ContactFormPage from '../general/ContactFormPage';
+import NewEventPage from '../customer/NewEventPage';
+import RestaurantPage from '../customer/RestaurantPage';
+import BusinessHomePage from '../business/BusinessHomePage';
+import AdminHomePage from '../admin/AdminHomePage';
+import CateringsPage from '../customer/CateringsPage';
+import ServicesPage from '../customer/ServicesPage';
+import UsersPage from '../admin/UsersPage';
+import ProblemsPage from '../admin/ProblemsPage';
+import VerificationRequestsPage from '../admin/VerificationRequestsPage';
+import ReservationsPage from '../admin/ReservationsPage';
+import AdminSettingsPage from '../admin/AdminSettings';
+
 import { useEffect, useState } from 'react/cjs/react.development';
 
 export default function App(props) {
@@ -79,6 +85,11 @@ export default function App(props) {
       <Route path='/BusinessHomePage' render={() => <BusinessHomePage {...props.myProps}/>} />
       <Route path='/CateringsPage' render={() => <CateringsPage {...props.myProps}/>} />
       <Route path='/ServicesPage' render={() => <ServicesPage {...props.myProps}/>} />
+      <Route path='/UsersPage' render={() => <UsersPage {...props.myProps}/>} />
+      <Route path='/ProblemsPage' render={() => <ProblemsPage {...props.myProps}/>} />
+      <Route path='/VerificationRequestsPage' render={() => <VerificationRequestsPage {...props.myProps}/>} />
+      <Route path='/ReservationsPage' render={() => <ReservationsPage {...props.myProps}/>} />
+      <Route path='/AdminSettingsPage' render={() => <AdminSettingsPage {...props.myProps}/>} />
       
     </Switch>
   )

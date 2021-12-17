@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/SignUpPage.css';
+import '../../styles/general/SignUpPage.css';
 import { useHistory } from 'react-router-dom'
 
 

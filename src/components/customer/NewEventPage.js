@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import '../styles/NewEventPage.css';
+import '../../styles/customer/NewEventPage.css';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory, Link } from 'react-router-dom'
 import { useState } from 'react/cjs/react.development';
-import '../styles/SignInPage.css';
+import '../../styles/general/SignInPage.css';
 
 
 function SignInPageContent(props) {
@@ -53,11 +53,17 @@ function SignInPageContent(props) {
             setLoginMessage('Login or password is incorrect');});
     }
 
+    const handleKeypress = e => {
+      if (e.key === 'Enter') {
+        handleLogIn();
+      }
+    };
+
 
     return (
         <div className="signIn-page-content">
 
-            <div className="sign-in-rect">
+            <div className="sign-in-rect" >
                 <div className="sign-in-h1">
                     Sign in
                 </div>
@@ -66,7 +72,7 @@ function SignInPageContent(props) {
                 </input>
                 <br />
                 <p className='login-input-label'>Password</p>
-                <input className="input-login" type={showInput ? 'text' : 'password'} onChange={handlePasswordInput}>
+                <input className="input-login" onKeyPress={handleKeypress} type={showInput ? 'text' : 'password'} onChange={handlePasswordInput}>
                 </input>
                 <br />
                 <button className='show-password-button' onClick={() => {
@@ -74,13 +80,11 @@ function SignInPageContent(props) {
                     setPassButtonText(showInput ? 'Show password' : 'Hide password');
                 }}>{passButtonText}</button>
                 <br />
-                {/* <Link to="/customerHome"> */}
                 <p style={{ color: 'red' }}>{loginMessage}</p>
                 <button className="input-login-button"
                     onClick={handleLogIn}>
                     Sign in
                 </button>
-                {/* </Link> */}
                 <br />
                 Don't have an account?
                 <Link to="/SignUp">Register</Link>

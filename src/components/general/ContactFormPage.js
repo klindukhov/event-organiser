@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react/cjs/react.development";
-import "../styles/ContactFormPage.css"
+import "../../styles/general/ContactFormPage.css"
 
 export default function ContactFormPage(props) {
     const [concern, setConcern] = useState('');

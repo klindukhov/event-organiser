@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/CustomerProfilePage.css';
-import accIcon from '../images/accIcon250.png'
+import '../../styles/customer/CustomerProfilePage.css';
+import accIcon from '../../images/accIcon250.png'
 import { Link } from 'react-router-dom'
 
 export default function CustomerProfilePage(props) {

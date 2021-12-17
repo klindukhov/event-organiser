@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import '../styles/VenuesPage.css';
+import '../../styles/customer/VenuesPage.css';
 
-import pplIcon from '../images/pplIcon.png';
+import pplIcon from '../../images/pplIcon.png';
 
 export default function VenuesPage(props) {
 
