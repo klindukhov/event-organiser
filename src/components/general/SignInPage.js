@@ -34,29 +34,31 @@ function SignInPageContent(props) {
         };
 
         fetch("http://localhost:8080/api/login", requestOptions)
-            .then(response => response.json().then( data => {
+            .then(response => response.json().then(data => {
                 console.log(response.status);
                 if (response.status !== 200) {
                     setLoginMessage('Login or password is incorrect');
                 } else {
                     props.setAuth(data);
-                    if(data.type === 'C'){
+                    if (data.type === 'C') {
                         history.push('/');
-                    }else if(data.type === 'A'){
+                    } else if (data.type === 'A') {
                         history.push('/AdminHomePage');
-                    }else if(data.type === 'B'){
+                    } else if (data.type === 'B') {
                         history.push('/BusinessHomePage');
                     }
                 }
             }))
-            .catch(error => {console.log('error', error);
-            setLoginMessage('Login or password is incorrect');});
+            .catch(error => {
+                console.log('error', error);
+                setLoginMessage('Login or password is incorrect');
+            });
     }
 
     const handleKeypress = e => {
-      if (e.key === 'Enter') {
-        handleLogIn();
-      }
+        if (e.key === 'Enter') {
+            handleLogIn();
+        }
     };
 
 
@@ -68,11 +70,11 @@ function SignInPageContent(props) {
                     Sign in
                 </div>
                 <p className='login-input-label'>Email</p>
-                <input className="input-login" type="text" onChange={handleLoginInput}>
+                <input className="input-login" type="text" onKeyPress={e => { if (e.key === 'Enter') { document.querySelector('input[name=passwordField]').focus(); } }} onChange={handleLoginInput}>
                 </input>
                 <br />
                 <p className='login-input-label'>Password</p>
-                <input className="input-login" onKeyPress={handleKeypress} type={showInput ? 'text' : 'password'} onChange={handlePasswordInput}>
+                <input className="input-login" name='passwordField' onKeyPress={handleKeypress} type={showInput ? 'text' : 'password'} onChange={handlePasswordInput}>
                 </input>
                 <br />
                 <button className='show-password-button' onClick={() => {
