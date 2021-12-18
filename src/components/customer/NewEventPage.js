@@ -84,6 +84,9 @@ export default function NewEventPage(props) {
         let temp = [...guestList];
         temp.splice(id,1);
         setGuestList(temp);
+        if(temp.length === 0){
+            props.setGuests([]);
+        }
     }
 
     return (
