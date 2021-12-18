@@ -42,6 +42,11 @@ export default function Sidebar(props) {
         </a>
       }
       {props.accType === 'C' &&
+        <a className="menu-item" href="/GuestBookPage">
+          Guest book
+        </a>
+      }
+      {props.accType === 'C' &&
         <a className="menu-item" href="/ContactFormPage">
           Report a problem
         </a>

@@ -1,6 +1,6 @@
 .business-profile-main{
     background-color: #e5e5e5;
-    height:auto;
+    min-height: calc(100vh - 100px);
     display: grid;
     grid-template-columns: auto;
     justify-content: center;

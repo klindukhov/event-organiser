@@ -23,6 +23,7 @@ import ProblemsPage from '../admin/ProblemsPage';
 import VerificationRequestsPage from '../admin/VerificationRequestsPage';
 import ReservationsPage from '../admin/ReservationsPage';
 import AdminSettingsPage from '../admin/AdminSettings';
+import GuestBookPage from '../customer/GuestBookPage';
 
 import { useEffect, useState } from 'react/cjs/react.development';
 
@@ -63,10 +64,23 @@ export default function App(props) {
     window.localStorage.setItem('cart', JSON.stringify(temp));
   }
 
+  const setGuests= (s) =>{
+    setCart({
+      ...cart,
+      "guests": s
+    });
+    let temp = JSON.parse(window.localStorage.getItem('cart'));
+    temp.guests = s;
+    window.localStorage.setItem('cart', JSON.stringify(temp));
+    console.log('guests updated')
+  }
+
   props.myProps.cart = cart;
   props.myProps.setLocation = setLocation;
   props.myProps.setCatering = setCatering;
   props.myProps.setService = setService;
+  props.myProps.setGuests = setGuests;
+
 
   return (
     <Switch >
@@ -90,6 +104,7 @@ export default function App(props) {
       <Route path='/VerificationRequestsPage' render={() => <VerificationRequestsPage {...props.myProps}/>} />
       <Route path='/ReservationsPage' render={() => <ReservationsPage {...props.myProps}/>} />
       <Route path='/AdminSettingsPage' render={() => <AdminSettingsPage {...props.myProps}/>} />
+      <Route path='/GuestBookPage' render={() => <GuestBookPage {...props.myProps}/>} />
       
     </Switch>
   )
