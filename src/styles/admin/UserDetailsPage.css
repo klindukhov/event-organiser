@@ -1,0 +1,12 @@
+.reservations-heading-rect{
+    width: 1520px;
+    height: auto;
+    background-color: white;
+    color: #47525e;
+    padding-top: 10px;
+}
+
+.verify-buttion{
+    color: white;
+    background-color: #47525e;
+}

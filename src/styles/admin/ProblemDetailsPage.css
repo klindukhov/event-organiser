@@ -1,0 +1,30 @@
+.problem-details-main{
+    min-height: calc(100vh - 100px);
+    background-color: #e5e5e5;
+    display: grid;
+    justify-content: center;
+    align-content: start;
+    padding: 50px;
+    color: #47525e;
+}
+.problem-rect{
+    width: 1520px;
+    background-color: white;
+    height: auto;
+    color: #47525e;
+    padding: 30px;
+    font-size: 20pt;
+    margin-bottom: 30px;
+
+}
+.problem-heading{
+    font-size: 30pt;
+    text-align: center;
+}
+.resolve-problem-button{
+    height: 50px;
+    width: 400px;
+    color: white;
+    background-color: #47525e;
+    margin-top: 50px;
+}

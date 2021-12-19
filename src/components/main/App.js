@@ -15,15 +15,14 @@ import ContactFormPage from '../general/ContactFormPage';
 import NewEventPage from '../customer/NewEventPage';
 import RestaurantPage from '../customer/RestaurantPage';
 import BusinessHomePage from '../business/BusinessHomePage';
-import AdminHomePage from '../admin/AdminHomePage';
 import CateringsPage from '../customer/CateringsPage';
 import ServicesPage from '../customer/ServicesPage';
 import UsersPage from '../admin/UsersPage';
 import ProblemsPage from '../admin/ProblemsPage';
 import VerificationRequestsPage from '../admin/VerificationRequestsPage';
-import ReservationsPage from '../admin/ReservationsPage';
-import AdminSettingsPage from '../admin/AdminSettings';
 import GuestBookPage from '../customer/GuestBookPage';
+import ProblemDetailsPage from '../admin/ProblemDetailsPage';
+import UserDetailsPage from '../admin/UserDetailsPage'
 
 import { useEffect, useState } from 'react/cjs/react.development';
 
@@ -95,16 +94,15 @@ export default function App(props) {
       <Route path='/ContactFormPage' render={() => <ContactFormPage {...props.myProps}/>} />
       <Route path='/NewEventPage' render={() => <NewEventPage {...props.myProps}/>} />
       <Route path='/RestaurantPage:id' render={() => <RestaurantPage {...props.myProps}/>} />
-      <Route path='/AdminHomePage' render={() => <AdminHomePage {...props.myProps}/>} />
       <Route path='/BusinessHomePage' render={() => <BusinessHomePage {...props.myProps}/>} />
       <Route path='/CateringsPage' render={() => <CateringsPage {...props.myProps}/>} />
       <Route path='/ServicesPage' render={() => <ServicesPage {...props.myProps}/>} />
       <Route path='/UsersPage' render={() => <UsersPage {...props.myProps}/>} />
       <Route path='/ProblemsPage' render={() => <ProblemsPage {...props.myProps}/>} />
       <Route path='/VerificationRequestsPage' render={() => <VerificationRequestsPage {...props.myProps}/>} />
-      <Route path='/ReservationsPage' render={() => <ReservationsPage {...props.myProps}/>} />
-      <Route path='/AdminSettingsPage' render={() => <AdminSettingsPage {...props.myProps}/>} />
       <Route path='/GuestBookPage' render={() => <GuestBookPage {...props.myProps}/>} />
+      <Route path='/ProblemDetailsPage:id' render={() => <ProblemDetailsPage {...props.myProps}/>} />
+      <Route path='/UserDetailsPage:id' render={() => <UserDetailsPage {...props.myProps}/>} />
       
     </Switch>
   )

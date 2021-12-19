@@ -10,6 +10,7 @@ const Header = (props) => {
   const [userName, setUserName] = useState('Sign in');
   const [myAccount, setMyAccount] = useState('/SignIn');
   const [accType, setAccType] = useState('');
+  const [logoLink, setLogoLink] = useState('/');
 
 
   useEffect(() => {
@@ -44,12 +45,14 @@ const Header = (props) => {
         setUserName('business');
         setUserPageLink('/BusinessHomePage');
         setMyAccount('/BusinessHomePage');
+        setLogoLink('/BusinessHomePage');
 
       } else if (props.myProps.userData.type === 'A') {
         setAccType('A');
         setUserName('admin');
-        setUserPageLink('/AdminHomePage');
-        setMyAccount('/AdminHomePage');
+        setUserPageLink('/ProblemsPage');
+        setMyAccount('/ProblemsPage');
+        setLogoLink('/ProblemsPage');
 
       }
 
@@ -65,7 +68,7 @@ const Header = (props) => {
     <div className="header-main">
       <header className='header'>
         <Sidebar props={props.myProps} myAccount={myAccount} userName={userName} accType={accType}/>
-        <Link to='/' className="logo">
+        <Link to={logoLink} className="logo">
           <p className="logo">
             *LOGO*
           </p>

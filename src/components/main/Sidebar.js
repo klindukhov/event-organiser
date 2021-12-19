@@ -57,16 +57,6 @@ export default function Sidebar(props) {
         </a>
       }
       {props.accType === 'A' &&
-        <a className="menu-item" href="/AdminHomePage">
-          Dashboard
-        </a>
-      }
-      {props.accType === 'A' &&
-        <a className="menu-item" href="/AdminSettingsPage">
-          Settings
-        </a>
-      }
-      {props.accType === 'A' &&
         <a className="menu-item" href="/ProblemsPage">
           Problems
         </a>
@@ -79,11 +69,6 @@ export default function Sidebar(props) {
       {props.accType === 'A' &&
         <a className="menu-item" href="/VerificationRequestsPage">
           Verification requests
-        </a>
-      }
-      {props.accType === 'A' &&
-        <a className="menu-item" href="/ReservationsPage">
-          Reservations
         </a>
       }
 

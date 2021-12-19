@@ -43,7 +43,7 @@ function SignInPageContent(props) {
                     if (data.type === 'C') {
                         history.push('/');
                     } else if (data.type === 'A') {
-                        history.push('/AdminHomePage');
+                        history.push('/ProblemsPage');
                     } else if (data.type === 'B') {
                         history.push('/BusinessHomePage');
                     }

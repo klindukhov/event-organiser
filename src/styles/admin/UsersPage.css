@@ -3,6 +3,7 @@
     color: #47525e;
     min-height: calc(100vh - 100px);
     display: grid;
+    align-content: start;
     justify-content: center ;
     padding: 50px;
 }
