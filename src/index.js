@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, useHistory } from 'react-router-dom';
 import './styles/general/index.css';
 import App from './components/main/App';
 import Header from './components/main/Header';
 
 
 const Main = () => {
+  const history = useHistory();
   const [headerMessage, setHeaderMessage] = useState('');
   const [authorized, setAuthorized] = useState(false);
   const [userId, setUserId] = useState(); 
@@ -50,6 +51,9 @@ const Main = () => {
     fetch("http://localhost:8080/api/logout", requestOptions)
       .then(response => response.text())
       .catch(error => console.log('error', error));
+
+    history.push('/');
+    window.location.reload();
   }
 
   const myProps = {

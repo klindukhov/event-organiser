@@ -147,7 +147,7 @@ export default function NewEventPage(props) {
                     <div className='new-guest-panel'>
                         <select className='select-guest' onChange={handleSelectGuest}>
                             <option value=''>Pick from guest book</option>
-                            {guestBook.map(guest => <option key={guest.id} value={JSON.stringify(guest)}>{guest.firstName + " " + guest.lastName + " (" + guest.email +')'}</option>)}
+                            {props.authorized && guestBook.map(guest => <option key={guest.id} value={JSON.stringify(guest)}>{guest.firstName + " " + guest.lastName + " (" + guest.email +')'}</option>)}
                         </select><br/>
                         <input className='new-guest-input' id='newGuestName' placeholder='name' onChange={e => setName(e.target.value)} />
                         <input className='new-guest-input' id='newGuestSurname'  placeholder='surname' onChange={e => setSurname(e.target.value)} />

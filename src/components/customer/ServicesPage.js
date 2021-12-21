@@ -21,22 +21,17 @@ export default function ServicesPage(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const handleAddToEvent = (c) => {
-        props.setService(c)
-        history.push('/newEventPage');
-    }
     return (
         <div className='caterings-page-main'>
-            {services.map(c => <div key={c.id} className='restaurant-list-element'>
+            {services.map(c => <div key={c.id} className='restaurant-list-element' onClick={() => history.push(`/ServiceListingPage${c.id}`)}>
                 <div className='restaurant-listing' >
                     <div className='overlay-listing' >
                         <div className='overlay-listing-left'>
-                            {c.type}<br />
-                            {c.descriprion}
+                            {c.type + " " + c.firstName + " " + c.lastName}<br />
+                            {c.description}
                         </div>
                         <div className='overlay-listing-right'>
                             Service cost: {c.serviceCost} pln<br />
-                            <input type='button' value='Add to event' className='add-to-event-button' onClick={() => handleAddToEvent(c)} />
                         </div>
                     </div>
                     <div className='rest-listing-pics'>

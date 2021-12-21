@@ -1,5 +1,4 @@
 import React from "react";
-import '../../styles/customer/RestaurantPage.css'
 import 'react-slideshow-image/dist/styles.css'
 import { Slide } from 'react-slideshow-image';
 import StarRatings from 'react-star-ratings';
@@ -11,12 +10,12 @@ import { Link, useHistory } from "react-router-dom";
 
 
 
-export default function RestaurantPage(props) {
+export default function CateringListingPage(props) {
     const { id } = useParams();
 
     const history = useHistory();
 
-    const [locationDetails, setLocationDetails] = useState({});
+    const [cateringDetails, setCateringDetails] = useState({});
     const [slideImages, setSlideImages] = useState([]);
     const [reviews, setReviews] = useState([]);
 
@@ -42,10 +41,10 @@ export default function RestaurantPage(props) {
             credentials: 'include'
         };
 
-        fetch(`http://localhost:8080/api/locations/allowed/${id}/detail`, requestOptions)
+        fetch(`http://localhost:8080/api/caterings/allowed/${id}/detail`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                setLocationDetails(result);
+                setCateringDetails(result);
                 setSlideImages(result.images);
             })
             .catch(error => console.log('error', error));
@@ -62,7 +61,7 @@ export default function RestaurantPage(props) {
             credentials: 'include'
         };
 
-        fetch(`http://localhost:8080/api/reviews/location/allowed/all?locationId=${id}`, requestOptions)
+        fetch(`http://localhost:8080/api/reviews/catering/allowed/all?id=${id}`, requestOptions)
             .then(response => response.json())
             .then(result => setReviews(result))
             .catch(error => console.log('error', error));
@@ -91,12 +90,12 @@ export default function RestaurantPage(props) {
                 credentials: 'include'
             };
 
-            fetch(`http://localhost:8080/api/reviews/location?customerId=${props.userData.id}&locationId=${id}`, requestOptions)
+            fetch(`http://localhost:8080/api/reviews/catering?id=${props.userData.id}&cateringId=${id}`, requestOptions)
                 .then(response => response.text())
                 .then(result => console.log(result))
                 .catch(error => console.log('error', error));
 
-            window.location.reload();
+           // window.location.reload();
         } else {
             setReviewMessage('Please enter title and star rating')
         }
@@ -104,7 +103,7 @@ export default function RestaurantPage(props) {
     }
 
     const handleAddToEvent = () => {
-        props.setLocation(locationDetails);
+        props.setCatering(cateringDetails);
         history.push('/newEventPage');
     }
 
@@ -113,7 +112,7 @@ export default function RestaurantPage(props) {
             <div className='gallery-info-div'>
                 <div className='restaurant-gallery-rect'>
                     <div>
-                        <Slide >
+                        {slideImages && <Slide >
                             {slideImages.map(i =>
                                 <div key={i.alt} className="each-slide">
                                     <div style={{ backgroundImage: `url(${i.image})` }}>
@@ -121,26 +120,26 @@ export default function RestaurantPage(props) {
                                 </div>
                             )}
 
-                        </Slide>
+                        </Slide>}
                     </div>
 
                 </div>
                 <div className='restaurant-info-div'>
                     <div className='restaurant-info-rect'>
                         <p className='restaurant-info-heading'>
-                            {locationDetails["name"]}
+                            {cateringDetails["name"]}
                         </p>
                         <br />
                         <p className='restaurant-description-p'>
-                            {locationDetails["description"]}
+                            {cateringDetails["description"]}
                         </p>
                     </div>
                     <div className='restaurant-contact-rect'>
                         <div className='contact-acc-info'>
                             <div>
                                 Contact<br />
-                                {locationDetails["phoneNumber"]}<br />
-                                {locationDetails["email"]}<br />
+                                {cateringDetails["phoneNumber"]}<br />
+                                {cateringDetails["email"]}<br />
                             </div>
                         </div>
                         <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
@@ -162,7 +161,7 @@ export default function RestaurantPage(props) {
                             </div>
                         </div>
                     )}
-                {authorised === true && <>
+                {authorised === true && <div>
                     <div className='reviewer-info'>
                         <img alt='acc-pic' src={accIcon} className='contact-acc-pic1' />
                         <div className='reviewer-name'> {userName} <br /> <input className='write-title-div' placeholder='Write a title here' onChange={e => setTitle(e.target.value)} />
@@ -180,7 +179,7 @@ export default function RestaurantPage(props) {
                     <textarea className='write-review-div' type='text' placeholder='Write your review here' onChange={e => setReview(e.target.value)} />
                     {reviewMessage}
                     <input className='review-submit-button' type='button' value='Submit' onClick={handleSubmitReview} />
-                </>}
+                </div>}
                 {authorised === false &&
                 <div className='reviewer-name' style={{textAlign: 'center'}}>
                     <Link to='/SignIn'>Sign in</Link> to leave a review

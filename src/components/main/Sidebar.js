@@ -10,7 +10,7 @@ export default function Sidebar(props) {
 
   useEffect(() => {
     if (props.userName !== 'Sign in') {
-      setLogout(<a className="menu-item" href="/" onClick={() => { console.log(props.props.setUnauth()) }}>Logout</a>)
+      setLogout(<a className="menu-item" href="/" onClick={() => { props.props.setUnauth() }}>Logout</a>)
     } else {
       setLogout('');
     }
@@ -49,6 +49,26 @@ export default function Sidebar(props) {
       {props.accType === 'C' &&
         <a className="menu-item" href="/ContactFormPage">
           Report a problem
+        </a>
+      }
+      {props.accType === 'B' &&
+        <a className="menu-item" href="/ReservationRequestsPage">
+          Reservation requests
+        </a>
+      }
+      {props.accType === 'B' &&
+        <a className="menu-item" href="/BusinessCateringsPage">
+          My caterings
+        </a>
+      }
+      {props.accType === 'B' &&
+        <a className="menu-item" href="/BusinessLocationsPage">
+          My locations
+        </a>
+      }
+      {props.accType === 'B' &&
+        <a className="menu-item" href="/BusinessServicesPage">
+          My services
         </a>
       }
       {props.accType === 'B' &&

@@ -42,11 +42,29 @@ const Header = (props) => {
           }).catch(error => console.log('error', error));
       } else if (props.myProps.userData.type === 'B') {
         setAccType('B');
-        setUserName('business');
-        setUserPageLink('/BusinessHomePage');
-        setMyAccount('/BusinessHomePage');
+        setUserPageLink('/BusinessProfilePage');
+        setMyAccount('/BusinessProfilePage');
         setLogoLink('/BusinessHomePage');
 
+        var myHeaderss = new Headers();
+
+        var requestOptionss = {
+          method: 'GET',
+          headers: myHeaderss,
+          redirect: 'follow',
+          credentials: 'include'
+        };
+
+        fetch(`http://localhost:8080/api/business/${props.myProps.userId}/detail`, requestOptionss)
+          .then(response => response.json())
+          .then(res => {
+            if (res.firstName !== undefined) {
+              setUserName(res.firstName + ' ' + res.lastName);
+              props.myProps.setUser(res);
+            } else {
+              props.myProps.setUnauth();
+            }
+          }).catch(error => console.log('error', error));
       } else if (props.myProps.userData.type === 'A') {
         setAccType('A');
         setUserName('admin');
@@ -67,7 +85,7 @@ const Header = (props) => {
   return (
     <div className="header-main">
       <header className='header'>
-        <Sidebar props={props.myProps} myAccount={myAccount} userName={userName} accType={accType}/>
+        <Sidebar props={props.myProps} myAccount={myAccount} userName={userName} accType={accType} />
         <Link to={logoLink} className="logo">
           <p className="logo">
             *LOGO*

@@ -1,5 +1,4 @@
 import React from "react";
-import '../../styles/customer/RestaurantPage.css'
 import 'react-slideshow-image/dist/styles.css'
 import { Slide } from 'react-slideshow-image';
 import StarRatings from 'react-star-ratings';
@@ -11,12 +10,16 @@ import { Link, useHistory } from "react-router-dom";
 
 
 
-export default function RestaurantPage(props) {
+export default function ServiceListingPage(props) {
     const { id } = useParams();
 
     const history = useHistory();
 
-    const [locationDetails, setLocationDetails] = useState({});
+    const [authorised, setAuthorised] = useState(false);
+
+    useEffect(() => { setAuthorised(props.authorized) }, [props.authorized])
+
+    const [serviceDetails, setServiceDetails] = useState({});
     const [slideImages, setSlideImages] = useState([]);
     const [reviews, setReviews] = useState([]);
 
@@ -28,10 +31,6 @@ export default function RestaurantPage(props) {
 
     const [userName, setUserName] = useState();
 
-    const [authorised, setAuthorised] = useState(false);
-
-    useEffect(() => {setAuthorised(props.authorized)}, [props.authorized])
-
     useEffect(() => {
         var myHeaders = new Headers();
 
@@ -42,10 +41,10 @@ export default function RestaurantPage(props) {
             credentials: 'include'
         };
 
-        fetch(`http://localhost:8080/api/locations/allowed/${id}/detail`, requestOptions)
+        fetch(`http://localhost:8080/api/services/allowed?id=${id}`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                setLocationDetails(result);
+                setServiceDetails(result);
                 setSlideImages(result.images);
             })
             .catch(error => console.log('error', error));
@@ -62,7 +61,7 @@ export default function RestaurantPage(props) {
             credentials: 'include'
         };
 
-        fetch(`http://localhost:8080/api/reviews/location/allowed/all?locationId=${id}`, requestOptions)
+        fetch(`http://localhost:8080/api/reviews/service/allowed/all?id=${id}`, requestOptions)
             .then(response => response.json())
             .then(result => setReviews(result))
             .catch(error => console.log('error', error));
@@ -91,12 +90,12 @@ export default function RestaurantPage(props) {
                 credentials: 'include'
             };
 
-            fetch(`http://localhost:8080/api/reviews/location?customerId=${props.userData.id}&locationId=${id}`, requestOptions)
+            fetch(`http://localhost:8080/api/reviews/service?id=${props.userData.id}&serviceId=${id}`, requestOptions)
                 .then(response => response.text())
                 .then(result => console.log(result))
                 .catch(error => console.log('error', error));
 
-            window.location.reload();
+            //window.location.reload();
         } else {
             setReviewMessage('Please enter title and star rating')
         }
@@ -104,7 +103,7 @@ export default function RestaurantPage(props) {
     }
 
     const handleAddToEvent = () => {
-        props.setLocation(locationDetails);
+        props.setService(serviceDetails);
         history.push('/newEventPage');
     }
 
@@ -113,7 +112,7 @@ export default function RestaurantPage(props) {
             <div className='gallery-info-div'>
                 <div className='restaurant-gallery-rect'>
                     <div>
-                        <Slide >
+                        {slideImages && <Slide >
                             {slideImages.map(i =>
                                 <div key={i.alt} className="each-slide">
                                     <div style={{ backgroundImage: `url(${i.image})` }}>
@@ -121,26 +120,34 @@ export default function RestaurantPage(props) {
                                 </div>
                             )}
 
-                        </Slide>
+                        </Slide>}
                     </div>
 
                 </div>
                 <div className='restaurant-info-div'>
-                    <div className='restaurant-info-rect'>
+                    <div className='restaurant-info-rect' style={{ height: 'auto' }}>
                         <p className='restaurant-info-heading'>
-                            {locationDetails["name"]}
+                            {serviceDetails["firstName"] + ' ' + serviceDetails["lastName"]}<br />
+                            {serviceDetails["type"]}{serviceDetails.musicBandPeopleCount !== null && <>({serviceDetails.musicBandPeopleCount} people)</>}
+                            {serviceDetails.kidPerformerType !== null && <>, {serviceDetails.kidPerformerType}</>}
                         </p>
                         <br />
                         <p className='restaurant-description-p'>
-                            {locationDetails["description"]}
+                            {serviceDetails.translationLanguages !== null && <>{serviceDetails.translationLanguages !== undefined && <>Languages: {serviceDetails.translationLanguages.map(l => l.name + ' ')}<br /></>}</>}
+                            {serviceDetails.musicStyle !== null && <>{serviceDetails.musicStyle !== undefined && <>Styles: {serviceDetails.musicStyle.map(l => '"' + l.name + '"' + ' ')}<br /></>}</>}
+                            {serviceDetails.instrument !== null && <>Instrument: {serviceDetails.instrument}<br/></>}
+                            {serviceDetails.kidAgeFrom !== null && <>{serviceDetails.kidAgeTo !== serviceDetails.kidAgeFrom && <>Ages: {serviceDetails.kidAgeFrom + '-' + serviceDetails.kidAgeTo}</>}<br/></>}
+                            {serviceDetails.kidAgeFrom !== null && <>{serviceDetails.kidAgeTo === serviceDetails.kidAgeFrom && <>Ages: {serviceDetails.kidAgeFrom}</>}<br/></>}
+                            {serviceDetails.kidAgeFrom === null && <>{serviceDetails.kidAgeTo !== null && <>Ages: {0 + '-' + serviceDetails.kidAgeTo}</>}<br/></>}
+                            {serviceDetails.kidAgeFrom !== null && <>{serviceDetails.kidAgeTo === null && <>Ages: {serviceDetails.kidAgeFrom + '+'}</>}<br/></>}
+                            Description: {serviceDetails["description"]}
                         </p>
                     </div>
-                    <div className='restaurant-contact-rect'>
+                    <div className='restaurant-contact-rect' style={{ height: 'auto' }}>
                         <div className='contact-acc-info'>
-                            <div>
-                                Contact<br />
-                                {locationDetails["phoneNumber"]}<br />
-                                {locationDetails["email"]}<br />
+                            <div >
+                                Contact: {serviceDetails["email"]}<br />
+                                Service cost: {serviceDetails["serviceCost"]} pln/h
                             </div>
                         </div>
                         <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
@@ -148,6 +155,10 @@ export default function RestaurantPage(props) {
                     </div>
                 </div>
             </div>
+            {serviceDetails.businessHours !== null && <> {serviceDetails.businessHours !== undefined && <div className='restaurant-reviews-rect1'>
+                <p className='restaurant-info-heading'>Business hours</p>
+
+            </div>}</>}
             <div className='restaurant-reviews-rect1'>
                 <p className='rest-review-heading'>Reviews</p>
                 {renderReviews &&
@@ -182,9 +193,9 @@ export default function RestaurantPage(props) {
                     <input className='review-submit-button' type='button' value='Submit' onClick={handleSubmitReview} />
                 </>}
                 {authorised === false &&
-                <div className='reviewer-name' style={{textAlign: 'center'}}>
-                    <Link to='/SignIn'>Sign in</Link> to leave a review
-                </div>
+                    <div className='reviewer-name' style={{ textAlign: 'center' }}>
+                        <Link to='/SignIn'>Sign in</Link> to leave a review
+                    </div>
                 }
 
             </div>

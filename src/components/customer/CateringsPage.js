@@ -21,13 +21,9 @@ export default function CateringsPage(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const handleAddToEvent = (c) =>{
-        props.setCatering(c)
-        history.push('/newEventPage');
-    }
     return (
         <div className='caterings-page-main'>
-            {caterings.map(c => <div key={c.name} className='restaurant-list-element'>
+            {caterings.map(c => <div key={c.name} className='restaurant-list-element' onClick={() => history.push(`/CateringListingPage${c.id}`)}>
                 <div className='restaurant-listing' >
                     <div className='overlay-listing' >
                         <div className='overlay-listing-left'>
@@ -36,7 +32,6 @@ export default function CateringsPage(props) {
                         </div>
                         <div className='overlay-listing-right'>
                             Service cost: {c.serviceCost} pln<br/>
-                            <input type='button' value='Add to event' className='add-to-event-button' onClick={() => handleAddToEvent(c)}/>
                         </div>
                     </div>
                     <div className='rest-listing-pics'>
