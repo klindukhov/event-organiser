@@ -8,18 +8,33 @@ export default function CateringsPage(props) {
     // eslint-disable-next-line
     useEffect(() => { props.setHeaderMessage('Caterings') }, []);
     useEffect(() => {
-        var requestOptions = {
-            method: 'GET',
-            redirect: 'follow'
-        };
+        if (props.userData && props.userData.type === 'B') {
+            var myHeaders = new Headers();
 
-        fetch("http://localhost:8080/api/caterings/allowed/all", requestOptions)
-            .then(response => response.json())
-            .then(result => setCaterings(result))
-            .catch(error => console.log('error', error));
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow',
+                credentials: 'include'
+            };
 
+            fetch(`http://localhost:8080/api/caterings/business?id=${props.userId}`, requestOptions)
+                .then(response => response.json())
+                .then(result => setCaterings(result))
+                .catch(error => console.log('error', error));
+        } else {
+            var requestOptionss = {
+                method: 'GET',
+                redirect: 'follow'
+            };
+
+            fetch("http://localhost:8080/api/caterings/allowed/all", requestOptionss)
+                .then(response => response.json())
+                .then(result => setCaterings(result))
+                .catch(error => console.log('error', error));
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [props.userData])
 
     return (
         <div className='caterings-page-main'>
@@ -31,7 +46,7 @@ export default function CateringsPage(props) {
                             {c.description}
                         </div>
                         <div className='overlay-listing-right'>
-                            Service cost: {c.serviceCost} pln<br/>
+                            Service cost: {c.serviceCost} pln<br />
                         </div>
                     </div>
                     <div className='rest-listing-pics'>

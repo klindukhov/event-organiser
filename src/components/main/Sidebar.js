@@ -57,17 +57,17 @@ export default function Sidebar(props) {
         </a>
       }
       {props.accType === 'B' &&
-        <a className="menu-item" href="/BusinessCateringsPage">
+        <a className="menu-item" href="/CateringsPage">
           My caterings
         </a>
       }
       {props.accType === 'B' &&
-        <a className="menu-item" href="/BusinessLocationsPage">
+        <a className="menu-item" href="/VenuesPage">
           My locations
         </a>
       }
       {props.accType === 'B' &&
-        <a className="menu-item" href="/BusinessServicesPage">
+        <a className="menu-item" href="/ServicesPage">
           My services
         </a>
       }

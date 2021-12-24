@@ -37,66 +37,82 @@ export default function VenuesPage(props) {
             if (props.cach.guestNum) { setGuestNum(props.cach.guestNum) }
             if (props.cach.date) { setDate(props.cach.date) }
         } catch (error) { }
-
-        getAllLocations();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        if (props.userData && props.userData.type === 'B') {
+            var myHeaders = new Headers();
 
-    const getAllLocations = () => {
-        fetch("http://localhost:8080/api/locations/allowed/all").then(res => res.json()).then(locations => {
-            setLocs(locations);
-        });
-    }
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow',
+                credentials: 'include'
+            };
+
+            fetch(`http://localhost:8080/api/locations/business?id=${props.userId}`, requestOptions)
+                .then(response => response.json())
+                .then(result => setLocs(result))
+                .catch(error => console.log('error', error));
+        } else {
+            fetch("http://localhost:8080/api/locations/allowed/all").then(res => res.json()).then(locations => {
+                setLocs(locations);
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.userData])
 
 
     return (
         <div className="venues-main">
-            <div className="filter-rect">
-                City:
-                <select name="City" id="city-select" className='HP-input' style={{marginBottom: '5px'}}>
-                    <option value=" ">{location !== '' && location}</option>
-                    {cities.map(c => <option value={c} key={c}>{c}</option>)}
-                </select>
-                <br />
-                <div className="guests-choice">
-                    Number of guests
-                    <input type="text" className='venue-input-number' defaultValue={guestNum} contentEditable />
-                    <input type="checkbox" className='venue-input-seat' />
-                    Seated
-                    <input type="checkbox" className='venue-input-seat' />
-                    Standing
-                </div>
-
-                <div className="event-date">
-                    Date
-                    <input defaultValue={date} type="date" className='venue-input-date' />
-                </div>
-                Must have:
-                <br />
-                <div className="must-haves">
-                    <div>
-                        <input className='venue-input-musts' id="wifi" type="checkbox"></input>Wi-Fi
-                    </div><div>
-                        <input className='venue-input-musts' id="stage" type="checkbox"></input>Stage
-                    </div><div>
-                        <input className='venue-input-musts' id="alcohol" type="checkbox"></input>Serves alcohol
-                    </div><div>
-                        <input className='venue-input-musts' id="own-alcohol" type="checkbox"></input>Can bring own alcohol
-                    </div><div>
-                        <input className='venue-input-musts' id="otside-catering" type="checkbox"></input>Outside catering
-                    </div><div>
-                        <input className='venue-input-musts' id="wheelchair-accessible" type="checkbox"></input>Wheelchair accessible
-                    </div><div>
-                        <input className='venue-input-musts' id="outside-patio" type="checkbox"></input>Outside patio
-                    </div><div>
-                        <input className='venue-input-musts' id="food" type="checkbox"></input>Serves food
-                    </div><div>
-                        <input className='venue-input-musts' id="own-food" type="checkbox"></input>Can bring own food
+            {(props.authorized === false || (props.authorized === true && props.userData.type === 'C')) &&
+                <div className="filter-rect">
+                    City:
+                    <select name="City" id="city-select" className='HP-input' style={{ marginBottom: '5px' }}>
+                        <option value=" ">{location !== '' && location}</option>
+                        {cities.map(c => <option value={c} key={c}>{c}</option>)}
+                    </select>
+                    <br />
+                    <div className="guests-choice">
+                        Number of guests
+                        <input type="text" className='venue-input-number' defaultValue={guestNum} contentEditable />
+                        <input type="checkbox" className='venue-input-seat' />
+                        Seated
+                        <input type="checkbox" className='venue-input-seat' />
+                        Standing
                     </div>
+
+                    <div className="event-date">
+                        Date
+                        <input defaultValue={date} type="date" className='venue-input-date' />
+                    </div>
+                    Must have:
+                    <br />
+                    <div className="must-haves">
+                        <div>
+                            <input className='venue-input-musts' id="wifi" type="checkbox"></input>Wi-Fi
+                        </div><div>
+                            <input className='venue-input-musts' id="stage" type="checkbox"></input>Stage
+                        </div><div>
+                            <input className='venue-input-musts' id="alcohol" type="checkbox"></input>Serves alcohol
+                        </div><div>
+                            <input className='venue-input-musts' id="own-alcohol" type="checkbox"></input>Can bring own alcohol
+                        </div><div>
+                            <input className='venue-input-musts' id="otside-catering" type="checkbox"></input>Outside catering
+                        </div><div>
+                            <input className='venue-input-musts' id="wheelchair-accessible" type="checkbox"></input>Wheelchair accessible
+                        </div><div>
+                            <input className='venue-input-musts' id="outside-patio" type="checkbox"></input>Outside patio
+                        </div><div>
+                            <input className='venue-input-musts' id="food" type="checkbox"></input>Serves food
+                        </div><div>
+                            <input className='venue-input-musts' id="own-food" type="checkbox"></input>Can bring own food
+                        </div>
+                    </div>
+                    <input type='button' className='apply-filters-button' value='Apply filters' />
                 </div>
-                <input type='button' className='apply-filters-button' value='Apply filters'/>
-            </div>
+            }
             <div className='venue-sorting-rect'>
                 <p className='displaying-info'>Displaying 1-20 results out of 50</p>
                 <div className='select-venue-sorting'>

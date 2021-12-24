@@ -8,18 +8,33 @@ export default function ServicesPage(props) {
     // eslint-disable-next-line
     useEffect(() => { props.setHeaderMessage('Services') }, []);
     useEffect(() => {
-        var requestOptions = {
-            method: 'GET',
-            redirect: 'follow'
-        };
+        if (props.userData && props.userData.type === 'B') {
+            var myHeaders = new Headers();
 
-        fetch("http://localhost:8080/api/services/allowed/all", requestOptions)
-            .then(response => response.json())
-            .then(result => setServices(result))
-            .catch(error => console.log('error', error));
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow',
+                credentials: 'include'
+            };
 
+            fetch(`http://localhost:8080/api/services/business?id=${props.userId}`, requestOptions)
+                .then(response => response.json())
+                .then(result => setServices(result))
+                .catch(error => console.log('error', error));
+        } else {
+            var requestOptionss = {
+                method: 'GET',
+                redirect: 'follow'
+            };
+
+            fetch("http://localhost:8080/api/services/allowed/all", requestOptionss)
+                .then(response => response.json())
+                .then(result => setServices(result))
+                .catch(error => console.log('error', error));
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [props.userData])
 
     return (
         <div className='caterings-page-main'>

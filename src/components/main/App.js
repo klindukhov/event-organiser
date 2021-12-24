@@ -24,9 +24,6 @@ import GuestBookPage from '../customer/GuestBookPage';
 import ProblemDetailsPage from '../admin/ProblemDetailsPage';
 import UserDetailsPage from '../admin/UserDetailsPage'
 import ReservationRequestsPage from '../business/ReservationRequestsPage';
-import BusinessCateringsPage from '../business/BusinessCateringsPage';
-import BusinessLocationsPage from '../business/BusinessLocationsPage';
-import BusinessServicesPage from '../business/BusinessServicesPage';
 import AddBusinessPage from '../business/AddBusinessPage';
 import CateringListingPage from '../customer/CateringListingPage';
 import ServiceListingPage from '../customer/ServiceListingPage';
@@ -111,9 +108,6 @@ export default function App(props) {
       <Route path='/ProblemDetailsPage:id' render={() => <ProblemDetailsPage {...props.myProps}/>} />
       <Route path='/UserDetailsPage:id' render={() => <UserDetailsPage {...props.myProps}/>} />
       <Route path='/ReservationRequestsPage' render={() => <ReservationRequestsPage {...props.myProps}/>} />
-      <Route path='/BusinessCateringsPage' render={() => <BusinessCateringsPage {...props.myProps}/>} />
-      <Route path='/BusinessLocationsPage' render={() => <BusinessLocationsPage {...props.myProps}/>} />
-      <Route path='/BusinessServicesPage' render={() => <BusinessServicesPage {...props.myProps}/>} />
       <Route path='/AddBusinessPage' render={() => <AddBusinessPage {...props.myProps}/>} />
       <Route path='/CateringListingPage:id' render={() => <CateringListingPage {...props.myProps}/>} />
       <Route path='/ServiceListingPage:id' render={() => <ServiceListingPage {...props.myProps}/>} />
