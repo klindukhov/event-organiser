@@ -32,6 +32,8 @@ export default function ServiceListingPage(props) {
     const [userName, setUserName] = useState();
 
     useEffect(() => {
+        props.setHeaderMessage("Additional service");
+
         var myHeaders = new Headers();
 
         var requestOptions = {
@@ -103,8 +105,13 @@ export default function ServiceListingPage(props) {
     }
 
     const handleAddToEvent = () => {
-        props.setService(serviceDetails);
-        history.push('/newEventPage');
+        try {
+            props.setService(serviceDetails);
+            history.push('/newEventPage');
+        } catch (e) {
+            history.push('/VenuesPage');
+            alert('You have to pick venue first')
+        }
     }
 
     return (
@@ -125,7 +132,7 @@ export default function ServiceListingPage(props) {
 
                 </div>
                 <div className='restaurant-info-div'>
-                    <div className='restaurant-info-rect' style={{ height: 'auto' }}>
+                    <div className='restaurant-info-rect' style={{ height: '430px', overflow: 'auto' }}>
                         <p className='restaurant-info-heading'>
                             {serviceDetails["firstName"] + ' ' + serviceDetails["lastName"]}<br />
                             {serviceDetails["type"]}{serviceDetails.musicBandPeopleCount !== null && <>({serviceDetails.musicBandPeopleCount} people)</>}
@@ -134,7 +141,7 @@ export default function ServiceListingPage(props) {
                         <br />
                         <p className='restaurant-description-p'>
                             {serviceDetails.translationLanguages !== null && <>{serviceDetails.translationLanguages !== undefined && <>Languages: {serviceDetails.translationLanguages.map(l => l.name + ' ')}<br /></>}</>}
-                            {serviceDetails.musicStyle !== null && <>{serviceDetails.musicStyle !== undefined && <>Styles: {serviceDetails.musicStyle.map(l => '"' + l.name + '"' + ' ')}<br /></>}</>}
+                            {serviceDetails.musicStyle !== null && <>{serviceDetails.musicStyle !== undefined && <>Styles: {serviceDetails.musicStyle.map(l => '"' + l.name + '" ')}<br /></>}</>}
                             {serviceDetails.instrument !== null && <>Instrument: {serviceDetails.instrument}<br/></>}
                             {serviceDetails.kidAgeFrom !== null && <>{serviceDetails.kidAgeTo !== serviceDetails.kidAgeFrom && <>Ages: {serviceDetails.kidAgeFrom + '-' + serviceDetails.kidAgeTo}</>}<br/></>}
                             {serviceDetails.kidAgeFrom !== null && <>{serviceDetails.kidAgeTo === serviceDetails.kidAgeFrom && <>Ages: {serviceDetails.kidAgeFrom}</>}<br/></>}
@@ -150,7 +157,13 @@ export default function ServiceListingPage(props) {
                                 Service cost: {serviceDetails["serviceCost"]} pln/h
                             </div>
                         </div>
-                        <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
+                        {authorised === false &&
+                            <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
+                        }
+                        {authorised === true && props.userData.type === 'C' &&
+                            <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
+                        }
+                        
 
                     </div>
                 </div>

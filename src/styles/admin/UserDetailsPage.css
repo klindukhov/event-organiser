@@ -3,7 +3,9 @@
     height: auto;
     background-color: white;
     color: #47525e;
-    padding-top: 10px;
+    padding: 30px;
+    display: grid;
+    margin-bottom: 30px;
 }
 
 .verify-buttion{

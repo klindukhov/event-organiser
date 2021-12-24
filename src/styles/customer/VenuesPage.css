@@ -136,3 +136,9 @@
 .overlay-listing-right {
     justify-self: end;
 }
+
+.apply-filters-button{
+    color: white;
+    background-color: #47525e;
+    height: 40px;
+}

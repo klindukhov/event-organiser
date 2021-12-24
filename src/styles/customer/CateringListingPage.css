@@ -1,0 +1,17 @@
+.catering-menu-item{
+    font-size: 16pt;
+    display: grid;
+    grid-template-columns: auto auto;
+    margin-bottom: 10px;
+    border-bottom-style: solid;
+    border-bottom-color: #47525e;
+    border-width: 1px;
+    
+}
+.menu-item-left{
+    justify-self: start;
+}
+.menu-item-right{
+    justify-self: end;
+    text-align: end;
+}

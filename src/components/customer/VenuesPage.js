@@ -7,19 +7,33 @@ import pplIcon from '../../images/pplIcon.png';
 export default function VenuesPage(props) {
 
     //filters
-    const [eventType, setEventType] = useState('');
     const [guestNum, setGuestNum] = useState('');
     const [location, setLocation] = useState('');
     const [date, setDate] = useState('');
 
     const [locs, setLocs] = useState([]);
 
+    const [cities, setCities] = useState([]);
+    useEffect(() => {
+        var myHeaders = new Headers();
+
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("http://localhost:8080/api/locations/allowed/cities", requestOptions)
+            .then(response => response.json())
+            .then(result => setCities(result))
+            .catch(error => console.log('error', error));
+    }, [])
+
     useEffect(() => {
         props.setHeaderMessage('Venues');
 
         try {
             if (props.cach.location) { setLocation(props.cach.location) }
-            if (props.cach.eventType) { setEventType(props.cach.eventType) }
             if (props.cach.guestNum) { setGuestNum(props.cach.guestNum) }
             if (props.cach.date) { setDate(props.cach.date) }
         } catch (error) { }
@@ -39,26 +53,12 @@ export default function VenuesPage(props) {
     return (
         <div className="venues-main">
             <div className="filter-rect">
-                Location
-                <input placeholder='Location' defaultValue={location} className='venue-input-1'></input>
-                <br />
-                Event Type
-                <select name="Event type" className='venue-input-1' id="event-type">
-                    <option value=" ">{eventType}</option>
-                    <option value="wedding">wedding</option>
-                    <option value="party">party</option>
-                    <option value="birthday">birthday</option>
-                    <option value="meeting">meeting</option>
+                City:
+                <select name="City" id="city-select" className='HP-input' style={{marginBottom: '5px'}}>
+                    <option value=" ">{location !== '' && location}</option>
+                    {cities.map(c => <option value={c} key={c}>{c}</option>)}
                 </select>
                 <br />
-                Location type
-                <select name="Location type" className='venue-input-1' id="event-type">
-                    <option value=" ">Location type</option>
-                    <option value="reastaurant">wedding</option>
-                    <option value="cafe">party</option>
-                    <option value="hall">birthday</option>
-                    <option value="office">meeting</option>
-                </select>
                 <div className="guests-choice">
                     Number of guests
                     <input type="text" className='venue-input-number' defaultValue={guestNum} contentEditable />
@@ -95,6 +95,7 @@ export default function VenuesPage(props) {
                         <input className='venue-input-musts' id="own-food" type="checkbox"></input>Can bring own food
                     </div>
                 </div>
+                <input type='button' className='apply-filters-button' value='Apply filters'/>
             </div>
             <div className='venue-sorting-rect'>
                 <p className='displaying-info'>Displaying 1-20 results out of 50</p>

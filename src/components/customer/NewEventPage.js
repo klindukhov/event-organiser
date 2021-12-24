@@ -71,7 +71,7 @@ export default function NewEventPage(props) {
         // eslint-disable-next-line
     }, [guestList])
 
-    const handleSelectGuest = e =>{
+    const handleSelectGuest = e => {
         document.getElementById('newGuestName').defaultValue = JSON.parse(e.target.value).firstName;
         setName(JSON.parse(e.target.value).firstName)
         document.getElementById('newGuestSurname').defaultValue = JSON.parse(e.target.value).lastName;
@@ -80,11 +80,11 @@ export default function NewEventPage(props) {
         setEmail(JSON.parse(e.target.value).email)
     }
 
-    const handleGuestDelete = id =>{
+    const handleGuestDelete = id => {
         let temp = [...guestList];
-        temp.splice(id,1);
+        temp.splice(id, 1);
         setGuestList(temp);
-        if(temp.length === 0){
+        if (temp.length === 0) {
             props.setGuests([]);
         }
     }
@@ -135,28 +135,31 @@ export default function NewEventPage(props) {
                     <input type='button' value='+' className='add-button' onClick={() => history.push('/VenuesPage')} />
                 }
             </div>
-            <div className='guest-choice-rect'>
-                <p className='guest-choice-heading'>Guests</p>
-                {guestList.map(guest =>
-                    <div className='guest-list-element' key={guestList.indexOf(guest)}>
-                        {guest.name} {guest.surname} {guest.email}
-                        <input type='button' value='x' style={{ color: '#47525e', backgroundColor: 'transparent', borderColor: 'transparent' }} onClick={() => handleGuestDelete(guestList.indexOf(guest))} />
-                    </div>
-                )}
-                {newGuestPanel &&
-                    <div className='new-guest-panel'>
-                        <select className='select-guest' onChange={handleSelectGuest}>
-                            <option value=''>Pick from guest book</option>
-                            {props.authorized && guestBook.map(guest => <option key={guest.id} value={JSON.stringify(guest)}>{guest.firstName + " " + guest.lastName + " (" + guest.email +')'}</option>)}
-                        </select><br/>
-                        <input className='new-guest-input' id='newGuestName' placeholder='name' onChange={e => setName(e.target.value)} />
-                        <input className='new-guest-input' id='newGuestSurname'  placeholder='surname' onChange={e => setSurname(e.target.value)} />
-                        <input className='new-guest-input' id='newGuestEmail'  type='email' placeholder='email' onChange={e => setEmail(e.target.value)} />
-                        <input className='new-guest-button' type='button' value='Add guest' onClick={addNewGuest} />
-                    </div>
-                }
-                <input type='button' value='+' className='add-button' onClick={() => setNewGuestPanel(true)} />
-            </div>
+            {isLocPicked &&
+                <div className='guest-choice-rect'>
+                    <p className='guest-choice-heading'>Guests</p>
+                    {guestList.map(guest =>
+                        <div className='guest-list-element' key={guestList.indexOf(guest)}>
+                            {guest.name} {guest.surname} {guest.email}
+                            <input type='button' value='x' style={{ color: '#47525e', backgroundColor: 'transparent', borderColor: 'transparent' }} onClick={() => handleGuestDelete(guestList.indexOf(guest))} />
+                        </div>
+                    )}
+                    {newGuestPanel &&
+                        <div className='new-guest-panel'>
+                            <select className='select-guest' onChange={handleSelectGuest}>
+                                <option value=''>Pick from guest book</option>
+                                {props.authorized && guestBook.map(guest => <option key={guest.id} value={JSON.stringify(guest)}>{guest.firstName + " " + guest.lastName + " (" + guest.email + ')'}</option>)}
+                            </select><br />
+                            <input className='new-guest-input' id='newGuestName' placeholder='name' onChange={e => setName(e.target.value)} />
+                            <input className='new-guest-input' id='newGuestSurname' placeholder='surname' onChange={e => setSurname(e.target.value)} />
+                            <input className='new-guest-input' id='newGuestEmail' type='email' placeholder='email' onChange={e => setEmail(e.target.value)} />
+                            <input className='new-guest-button' type='button' value='Add guest' onClick={addNewGuest} />
+                        </div>
+                    }
+                    <input type='button' value='+' className='add-button' onClick={() => setNewGuestPanel(true)} />
+                </div>
+            }
+
         </div>
     )
 }

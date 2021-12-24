@@ -41,6 +41,7 @@
     height          : 300px;
     margin-bottom   : 50px;
     padding         : 20px;
+    overflow: auto;
 }
 
 .restaurant-info-heading {

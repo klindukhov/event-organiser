@@ -30,9 +30,11 @@ export default function RestaurantPage(props) {
 
     const [authorised, setAuthorised] = useState(false);
 
-    useEffect(() => {setAuthorised(props.authorized)}, [props.authorized])
+    useEffect(() => { setAuthorised(props.authorized) }, [props.authorized])
 
     useEffect(() => {
+        props.setHeaderMessage("Venue");
+
         var myHeaders = new Headers();
 
         var requestOptions = {
@@ -132,21 +134,50 @@ export default function RestaurantPage(props) {
                         </p>
                         <br />
                         <p className='restaurant-description-p'>
-                            {locationDetails["description"]}
+                            {locationDetails["description"]}<br />
+                            Seats: {locationDetails["seatingCapacity"]} people<br />
+                            Standing capacity: {locationDetails["seatingCapacity"]} people<br />
+                            Square meters: {locationDetails["sizeInSqMeters"]}<br />
+                            Features: {locationDetails["descriptions"] && locationDetails["descriptions"].map(d => <div key={d}>"{d}"</div>)}
                         </p>
                     </div>
                     <div className='restaurant-contact-rect'>
                         <div className='contact-acc-info'>
                             <div>
-                                Contact<br />
-                                {locationDetails["phoneNumber"]}<br />
-                                {locationDetails["email"]}<br />
+                                Phone number: {locationDetails["phoneNumber"]}<br />
+                                Email: {locationDetails["email"]}<br />
+                                Address: {locationDetails.address && <>{locationDetails.address.streetName + ' ' + locationDetails.address.streetNumber + ', ' + locationDetails.address.city}</>}<br/>
+                                {locationDetails["dailyRentCost"] !== '0.00' && <>Cost: {locationDetails["dailyRentCost"]} pln/day<br /></>}
+
                             </div>
                         </div>
-                        <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
+                        {authorised === false &&
+                            <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
+                        }
+                        {authorised === true && props.userData.type === 'C' &&
+                            <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
+                        }
 
                     </div>
                 </div>
+            </div>
+            <div className='restaurant-reviews-rect1'>
+                <p className='rest-review-heading'>Available caterings</p>
+                {locationDetails.caterings && locationDetails.caterings.map(c => <div key={c.name} className='restaurant-list-element' style={{ justifySelf: 'center', width: '1420px' }} onClick={() => history.push(`/CateringListingPage${c.id}`)}>
+                    <div className='restaurant-listing' style={{ width: '1420px' }}>
+                        <div className='overlay-listing' style={{ width: '1420px' }}>
+                            <div className='overlay-listing-left'>
+                                {c.name}<br />
+                                {c.description}
+                            </div>
+                            <div className='overlay-listing-right'>
+                                Service cost: {c.serviceCost} pln<br />
+                            </div>
+                        </div>
+                        <div className='rest-listing-pics' style={{ width: '1420px' }}>
+                        </div>
+                    </div>
+                </div>)}
             </div>
             <div className='restaurant-reviews-rect1'>
                 <p className='rest-review-heading'>Reviews</p>
@@ -182,9 +213,9 @@ export default function RestaurantPage(props) {
                     <input className='review-submit-button' type='button' value='Submit' onClick={handleSubmitReview} />
                 </>}
                 {authorised === false &&
-                <div className='reviewer-name' style={{textAlign: 'center'}}>
-                    <Link to='/SignIn'>Sign in</Link> to leave a review
-                </div>
+                    <div className='reviewer-name' style={{ textAlign: 'center' }}>
+                        <Link to='/SignIn'>Sign in</Link> to leave a review
+                    </div>
                 }
 
             </div>
