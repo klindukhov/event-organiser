@@ -117,9 +117,9 @@ export default function UserDetailsPage() {
         {details.type === 'B' && locations.length !== 0 &&
             <div className="reservations-heading-rect">
                 <p className="problem-heading">Locations</p>
-                {locations.map(c => <div key={c.name} className='restaurant-list-element' style={{ justifySelf: 'center', width: '1420px' }} >
+                {locations.map(c => <div key={c.name} className='item-list-element' style={{ justifySelf: 'center', width: '1420px' }} >
                     <Link to={`/RestaurantPage${Object.values(c)[0]}`} style={{ textDecoration: 'none' }}>
-                        <div className='restaurant-listing' style={{ width: '1420px' }}>
+                        <div className='list-item' style={{ width: '1420px' }}>
                             <div className='overlay-listing' style={{ width: '1420px' }}>
                                 <div className='overlay-listing-left' >
                                     {Object.values(c)[1]} , {Object.values(c)[10].city}, {Object.values(c)[10].streetName}/{Object.values(c)[10].streetNumber}<br />
@@ -131,9 +131,9 @@ export default function UserDetailsPage() {
                                     From {Object.values(c)[8]}pln/day
                                 </div>
                             </div>
-                            <div className='rest-listing-pics' style={{ width: '1420px' }}>
+                            <div className='list-item-pics' style={{ width: '1420px' }}>
                                 {Object.values(c)[18].map(i => <div key={i.id}>
-                                    <img alt={Object.values(i)[1]} className='rest-listing-pic' src={Object.values(i)[0]} />
+                                    <img alt={Object.values(i)[1]} className='list-item-pic' src={Object.values(i)[0]} />
                                 </div>)}
                             </div>
                         </div>
@@ -143,8 +143,8 @@ export default function UserDetailsPage() {
         {details.type === 'B' &&  caterings.length !== 0 &&
             <div className="reservations-heading-rect" >
                 <p className="problem-heading">Caterings</p>
-                {caterings.map(c => <div key={c.name} className='restaurant-list-element' style={{ justifySelf: 'center', width: '1420px' }} onClick={() => history.push(`/CateringListingPage${c.id}`)}>
-                    <div className='restaurant-listing' style={{ width: '1420px' }}>
+                {caterings.map(c => <div key={c.name} className='item-list-element' style={{ justifySelf: 'center', width: '1420px' }} onClick={() => history.push(`/CateringListingPage${c.id}`)}>
+                    <div className='list-item' style={{ width: '1420px' }}>
                         <div className='overlay-listing' style={{ width: '1420px' }}>
                             <div className='overlay-listing-left'>
                                 {c.name}<br />
@@ -154,7 +154,7 @@ export default function UserDetailsPage() {
                                 Service cost: {c.serviceCost} pln<br />
                             </div>
                         </div>
-                        <div className='rest-listing-pics' style={{ width: '1420px' }}>
+                        <div className='list-item-pics' style={{ width: '1420px' }}>
                         </div>
                     </div>
                 </div>)}
@@ -162,8 +162,8 @@ export default function UserDetailsPage() {
         {details.type === 'B' && services.length !== 0 &&
             <div className="reservations-heading-rect">
                 <p className="problem-heading">Services</p>
-                {services.map(c => <div key={c.id} className='restaurant-list-element' style={{ justifySelf: 'center', width: '1420px' }} onClick={() => history.push(`/ServiceListingPage${c.id}`)}>
-                    <div className='restaurant-listing' style={{ width: '1420px' }}>
+                {services.map(c => <div key={c.id} className='list-item' style={{ justifySelf: 'center', width: '1420px' }} onClick={() => history.push(`/ServiceListingPage${c.id}`)}>
+                    <div className='list-item' style={{ width: '1420px' }}>
                         <div className='overlay-listing' style={{ width: '1420px' }}>
                             <div className='overlay-listing-left'>
                                 {c.type + " " + c.firstName + " " + c.lastName}<br />
@@ -173,7 +173,7 @@ export default function UserDetailsPage() {
                                 Service cost: {c.serviceCost} pln<br />
                             </div>
                         </div>
-                        <div className='rest-listing-pics'>
+                        <div className='list-item-pics'>
                         </div>
                     </div>
                 </div>)}

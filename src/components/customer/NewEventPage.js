@@ -117,7 +117,7 @@ export default function NewEventPage(props) {
                                 </div>
                             }
                             {!isCatPicked &&
-                                <input type='button' value='+' className='add-button' onClick={() => history.push('/CateringsPage')} />
+                                <input type='button' value='+' className='add-button' onClick={() => history.push('/ListPage/Caterings')} />
                             }<br />
                             Services:{' '}
                             {isServicePicked &&
@@ -126,13 +126,13 @@ export default function NewEventPage(props) {
                                 </div>
                             }
                             {!isServicePicked &&
-                                <input type='button' value='+' className='add-button' onClick={() => history.push('/ServicesPage')} />
+                                <input type='button' value='+' className='add-button' onClick={() => history.push('/ListPage/Services')} />
                             }<br />
                         </div>
                     </div>
                 }
                 {!isLocPicked &&
-                    <input type='button' value='+' className='add-button' onClick={() => history.push('/VenuesPage')} />
+                    <input type='button' value='+' className='add-button' onClick={() => history.push('/ListPage/Venues')} />
                 }
             </div>
             {isLocPicked &&

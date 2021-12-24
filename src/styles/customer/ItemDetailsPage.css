@@ -1,11 +1,9 @@
-.restaurant-page-main {
-    background-color     : #e5e5e5;
-    color                : #47525E;
-    height               : auto;
-    display              : grid;
-    grid-template-columns: auto;
-    padding-top          : 50px;
-    padding-bottom       : 30px;
+.item-detail-main {
+    background-color: #e5e5e5;
+    min-height      : calc(100vh - 100px);
+    display         : grid;
+    align-content   : start;
+    padding         : 50px;
 }
 
 .gallery-info-div {
@@ -18,7 +16,7 @@
     margin-bottom        : 50px;
 }
 
-.restaurant-gallery-rect {
+.item-gallery-rect {
     background-color: white;
     width           : 950px;
     height          : 650px;
@@ -26,7 +24,7 @@
     margin-right    : 50px;
 }
 
-.restaurant-info-div {
+.item-info-div {
     width                : 520px;
     height               : 650px;
     padding              : 0px;
@@ -35,29 +33,29 @@
     justify-self         : end;
 }
 
-.restaurant-info-rect {
+.item-info-rect {
     background-color: white;
     width           : 520px;
-    height          : 300px;
+    height          : auto;
     margin-bottom   : 50px;
     padding         : 20px;
-    overflow: auto;
+    overflow        : auto;
 }
 
-.restaurant-info-heading {
+.item-info-heading {
     font-size : 30px;
     text-align: center;
 }
 
-.restaurant-description-p {
+.item-description-p {
     font-size : 18pt;
     text-align: start;
 }
 
-.restaurant-contact-rect {
+.item-contact-rect {
     background-color: white;
     width           : 520px;
-    height          : 300px;
+    height          : auto;
     font-size       : 20pt;
     padding         : 20px;
     display         : grid;
@@ -66,7 +64,7 @@
 .contact-acc-info {
     display              : grid;
     grid-template-columns: auto;
-    justify-content: center;
+    justify-content      : center;
 }
 
 .contact-acc-pic {
@@ -121,7 +119,7 @@
     margin-top      : 50px;
 }
 
-.restaurant-reviews-rect1 {
+.item-reviews-rect1 {
     background-color: white;
     width           : 1520px;
     height          : auto;
@@ -143,13 +141,13 @@
     margin-left: 20px;
 }
 
-.rest-review-text {
+.item-review-text {
     background-color: #e5e5e5;
     color           : #47525E;
     font-size       : 18pt;
 }
 
-.rest-review-div {
+.item-review-div {
     margin-bottom: 50px;
 }
 
@@ -160,8 +158,28 @@
     margin-bottom        : 20px;
 }
 
-.rest-review-heading {
+.item-review-heading {
     font-size    : 40pt;
     margin-bottom: 50px;
     justify-self : center;
+}
+
+.catering-menu-item {
+    font-size            : 16pt;
+    display              : grid;
+    grid-template-columns: auto auto;
+    margin-bottom        : 10px;
+    border-bottom-style  : solid;
+    border-bottom-color  : #47525e;
+    border-width         : 1px;
+
+}
+
+.menu-item-left {
+    justify-self: start;
+}
+
+.menu-item-right {
+    justify-self: end;
+    text-align  : end;
 }

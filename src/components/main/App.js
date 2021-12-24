@@ -8,15 +8,11 @@ import HomePage from '../customer/HomePage'
 import SignIn from '../general/SignInPage'
 import SignUp from '../general/SignUpPage'
 import Header from './Header'
-import VenuesPage from '../customer/VenuesPage'
 import CustomerProfile from '../customer/CustomerProfilePage'
 import BusinessProfile from '../business/BusinessProfilePage';
 import ContactFormPage from '../general/ContactFormPage';
 import NewEventPage from '../customer/NewEventPage';
-import RestaurantPage from '../customer/RestaurantPage';
 import BusinessHomePage from '../business/BusinessHomePage';
-import CateringsPage from '../customer/CateringsPage';
-import ServicesPage from '../customer/ServicesPage';
 import UsersPage from '../admin/UsersPage';
 import ProblemsPage from '../admin/ProblemsPage';
 import VerificationRequestsPage from '../admin/VerificationRequestsPage';
@@ -25,8 +21,9 @@ import ProblemDetailsPage from '../admin/ProblemDetailsPage';
 import UserDetailsPage from '../admin/UserDetailsPage'
 import ReservationRequestsPage from '../business/ReservationRequestsPage';
 import AddBusinessPage from '../business/AddBusinessPage';
-import CateringListingPage from '../customer/CateringListingPage';
-import ServiceListingPage from '../customer/ServiceListingPage';
+
+import ItemDetailsPage from '../customer/ItemDetailsPage';
+import ListPage from '../customer/ListPage';
 
 import { useEffect, useState } from 'react/cjs/react.development';
 
@@ -92,15 +89,11 @@ export default function App(props) {
 
       <Route path='/signIn' render={() => <SignIn {...props.myProps}/>} />
       <Route path='/signUp' render={() => <SignUp {...props.myProps}/>} />
-      <Route path='/VenuesPage'  render={() => <VenuesPage {...props.myProps}/>}/>
       <Route path='/CustomerProfilePage' render={() => <CustomerProfile {...props.myProps}/>} />
       <Route path='/BusinessProfilePage' render={() => <BusinessProfile {...props.myProps}/>} />
       <Route path='/ContactFormPage' render={() => <ContactFormPage {...props.myProps}/>} />
       <Route path='/NewEventPage' render={() => <NewEventPage {...props.myProps}/>} />
-      <Route path='/RestaurantPage:id' render={() => <RestaurantPage {...props.myProps}/>} />
       <Route path='/BusinessHomePage' render={() => <BusinessHomePage {...props.myProps}/>} />
-      <Route path='/CateringsPage' render={() => <CateringsPage {...props.myProps}/>} />
-      <Route path='/ServicesPage' render={() => <ServicesPage {...props.myProps}/>} />
       <Route path='/UsersPage' render={() => <UsersPage {...props.myProps}/>} />
       <Route path='/ProblemsPage' render={() => <ProblemsPage {...props.myProps}/>} />
       <Route path='/VerificationRequestsPage' render={() => <VerificationRequestsPage {...props.myProps}/>} />
@@ -108,9 +101,12 @@ export default function App(props) {
       <Route path='/ProblemDetailsPage:id' render={() => <ProblemDetailsPage {...props.myProps}/>} />
       <Route path='/UserDetailsPage:id' render={() => <UserDetailsPage {...props.myProps}/>} />
       <Route path='/ReservationRequestsPage' render={() => <ReservationRequestsPage {...props.myProps}/>} />
-      <Route path='/AddBusinessPage' render={() => <AddBusinessPage {...props.myProps}/>} />
-      <Route path='/CateringListingPage:id' render={() => <CateringListingPage {...props.myProps}/>} />
-      <Route path='/ServiceListingPage:id' render={() => <ServiceListingPage {...props.myProps}/>} />
+      <Route path='/AddBusinessPage/:businessType' render={() => <AddBusinessPage {...props.myProps}/>} />
+
+      <Route path='/ItemDetails/:typeOfItem/:id' render={() => <ItemDetailsPage {...props.myProps}/>} />
+      <Route path='/ListPage/:typeOfList' render={() => <ListPage {...props.myProps}/>} />
+
+
       
     </Switch>
   )

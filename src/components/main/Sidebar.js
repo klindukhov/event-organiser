@@ -37,7 +37,7 @@ export default function Sidebar(props) {
         </a>
       }
       {props.accType === 'C' &&
-        <a className="menu-item" href="/NewEventPage">
+        <a className="menu-item" href="/ListPage/Events">
           My events
         </a>
       }
@@ -46,32 +46,27 @@ export default function Sidebar(props) {
           Guest book
         </a>
       }
-      {props.accType === 'C' &&
-        <a className="menu-item" href="/ContactFormPage">
-          Report a problem
-        </a>
-      }
       {props.accType === 'B' &&
         <a className="menu-item" href="/ReservationRequestsPage">
           Reservation requests
         </a>
       }
       {props.accType === 'B' &&
-        <a className="menu-item" href="/CateringsPage">
+        <a className="menu-item" href="/ListPage/Caterings">
           My caterings
         </a>
       }
       {props.accType === 'B' &&
-        <a className="menu-item" href="/VenuesPage">
+        <a className="menu-item" href="/ListPage/Venues">
           My locations
         </a>
       }
       {props.accType === 'B' &&
-        <a className="menu-item" href="/ServicesPage">
+        <a className="menu-item" href="/ListPage/Services">
           My services
         </a>
       }
-      {props.accType === 'B' &&
+      {(props.accType === 'B' || props.accType === 'C') &&
         <a className="menu-item" href="/ContactFormPage">
           Report a problem
         </a>

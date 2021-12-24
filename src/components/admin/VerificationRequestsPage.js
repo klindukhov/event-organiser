@@ -27,6 +27,5 @@ export default function UsersPage(props) {
     }
     return (<div className="users-page-main">
         {users.map(user => <div className="user-list-element" key={user.id} onClick={() => history.push(`/UserDetailsPage${user.id}`)}>{"Id: " + user.id + '  Name: ' + user.firstName + "  Surname: " + user.lastName}</div>)}
-
     </div>)
 }
