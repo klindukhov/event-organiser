@@ -30,6 +30,7 @@ const Header = (props) => {
       r.style.setProperty('--bg', '#e5e5e5');
       r.style.setProperty('--txt', '#47525e');
       r.style.setProperty('--blockbg', 'white');
+      setTheme('\u263E');
     }
   }, [])
 
