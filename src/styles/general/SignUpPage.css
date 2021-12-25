@@ -1,10 +1,11 @@
 .signUp-page-content {
-  background-color     : #e5e5e5;
+  background-color     : var(--bg);
   height               : auto;
   display              : grid;
   grid-template-columns: auto;
   justify-content      : center;
   align-content        : center;
+  color                : var(--txt);
 }
 
 .signup-input-label {
@@ -14,19 +15,17 @@
 }
 
 .sign-up-rect {
-  margin-top: 50px;
-  margin-bottom: 50px;
-  padding-bottom: 50px;
+  margin-top      : 50px;
+  margin-bottom   : 50px;
+  padding-bottom  : 50px;
   height          : auto;
   width           : 800px;
-  background-color: white;
-  color           : #47525e;
+  background-color: var(--blockbg);
   text-align      : center;
 }
 
 .sign-up-h1 {
   font-size : 50px;
-  color     : #47525e;
   margin-top: 30px;
 }
 
@@ -44,8 +43,8 @@
   height          : 60px;
   border-radius   : 5px;
   width           : 200px;
-  background-color: #47525e;
-  color           : white;
+  background-color: var(--txt);
+  color           : var(--blockbg);
   font-size       : 30px;
 }
 
@@ -54,8 +53,7 @@
   height                    : 60px;
   border-radius             : 5px;
   width                     : 250px;
-  background-color          : #e5e5e5;
-  color                     : #47525e;
+  background-color          : var(--bg);
   font-size                 : 30px;
   border-top-right-radius   : 0px;
   border-bottom-right-radius: 0px;
@@ -67,17 +65,16 @@
   height                   : 60px;
   border-radius            : 5px;
   width                    : 250px;
-  background-color         : #e5e5e5;
-  color                    : #47525e;
+  background-color         : var(--bg);
   font-size                : 30px;
   border-bottom-left-radius: 0px;
   border-top-left-radius   : 0px;
 }
 
 .register-text-button {
-  color: #47525e;
+  color: var(--txt);
 }
 
-.passwords-dont-match{
+.passwords-dont-match {
   color: red;
 }

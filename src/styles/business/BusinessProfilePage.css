@@ -1,5 +1,5 @@
 .business-profile-main{
-    background-color: #e5e5e5;
+    background-color: var(--bg);
     min-height: calc(100vh - 100px);
     display: grid;
     grid-template-columns: auto;
@@ -10,8 +10,8 @@
     margin-top: 50px;
     margin-bottom: 50px;
     width: 1520px;
-    background-color: white;  
-    color: #47525e;
+    background-color: var(--blockbg);  
+    color: var(--txt);
     display: grid;
     height: fit-content;
 }
@@ -60,21 +60,21 @@
 .submit-business-profile{
     height: 50px;
     font-size: 24pt;
-    background-color: #47525e;
-    color: white;
+    background-color: var(--txt);
+    color: var(--blockbg);
     border-radius: 5px;
     width: 400px;
     justify-self: center;
 }
 .business-password-change-field{
-    color: #47525e;
+    color: var(--txt);
     height: 40px;
     width: 400px;
 
 }
 .business-password-submit-button{
-    background-color: #47525e;
-    color: white;
+    background-color: var(--txt);
+    color: var(--blockbg);
     height: 40px;
     width: 150px;
     border-radius: 5px;    
@@ -85,14 +85,14 @@
     justify-content:space-evenly ;
 }
 .change-password-p{
-    color: #47525e;
+    color: var(--txt);
     font-size: 32pt;
     margin: 40px;
     margin-left: 100px;
 }
 .business-prof-bottom-text{
     margin-top: 40px;
-    color: #47525e;
+    color: var(--txt);
     font-size: 16pt;
     margin-bottom: 5px;
     justify-self: center;
@@ -138,8 +138,8 @@
 .request-verification{
     height: 50px;
     font-size: 24pt;
-    background-color: #47525e;
-    color: white;
+    background-color: var(--txt);
+    color: var(--blockbg);
     border-radius: 5px;
     width: 400px;
     margin-left: 50px;
@@ -152,8 +152,8 @@
     margin-top: 30px;
     height: 50px;
     font-size: 24pt;
-    background-color: #47525e;
-    color: white;
+    background-color: var(--txt);
+    color: var(--blockbg);
     border-radius: 5px;
     width: 400px;
     justify-self: center;
@@ -162,7 +162,7 @@
 .images-rect{
     height: 200px;
     width: 1220px;
-    background-color: #e5e5e5;
+    background-color: var(--bg);
     display: flex;
     direction: ltr;
     justify-self: center;
@@ -176,7 +176,7 @@
 }
 .rest-img-add-button{
     font-size: 50pt;
-    color: #47525e;
+    color: var(--txt);
     background-color: transparent;
     border-color: transparent;
 }

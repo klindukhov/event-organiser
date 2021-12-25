@@ -1,5 +1,5 @@
 .contact-form-main {
-    background-color     : #e5e5e5;
+    background-color     : var(--bg);
     height               : calc(100vh - 100px);
     display              : grid;
     grid-template-columns: auto;
@@ -10,8 +10,8 @@
 .contact-form-rect {
     height               : auto;
     width                : 1520px;
-    background-color     : white;
-    color                : #47525e;
+    background-color     : var(--blockbg);
+    color                : var(--txt);
     text-align           : center;
     display              : grid;
     grid-template-columns: auto;
@@ -26,8 +26,8 @@
 }
 
 .select-problem-type {
-    background-color: #e5e5e5;
-    border-color    : #e5e5e5;
+    background-color: var(--bg);
+    border-color    : var(--bg);
     height          : 40px;
     width           : 400px;
     justify-self    : start;
@@ -35,7 +35,7 @@
 }
 
 .problem-description-input {
-    background-color: #e5e5e5;
+    background-color: var(--bg);
     border-color    : transparent;
     height          : 400px;
     width           : 1320px;
@@ -46,7 +46,7 @@
 }
 
 .problem-concern-input {
-    background-color: #e5e5e5;
+    background-color: var(--bg);
     border-color    : transparent;
     height          : 50px;
     width           : 1320px;
@@ -57,12 +57,12 @@
 }
 
 .submit-problem-button {
-    background-color: #47525e;
+    background-color: var(--txt);
     font-size       : 28pt;
     border-radius   : 5px;
     width           : 200px;
     justify-self    : center;
     margin          : 30px;
-    color           : white;
+    color           : var(--blockbg);
 
 }

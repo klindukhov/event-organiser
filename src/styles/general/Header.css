@@ -1,9 +1,9 @@
 .header{
     position: fixed;
     z-index: 10;
-    background-color: white;
+    background-color: var(--blockbg);
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: auto auto auto auto auto;
     height: 100px;
     width: 100%;
   }
@@ -14,7 +14,7 @@
     justify-content: center;
     align-content: center;
     height: 100px;
-    color: #47525E;
+    color: var(--txt);
   }
   .logo{
     color: #ff0000;
@@ -35,5 +35,11 @@
     text-decoration: none;
     display: grid;
     justify-content: center;
-    width: 300px;
+    width: 200px;
+  }
+  .theme-button{
+    background-color: transparent;
+    border-color: transparent;
+    font-size: 30pt;
+    color: var(--txt);
   }

@@ -1,17 +1,17 @@
 .problem-details-main{
     min-height: calc(100vh - 100px);
-    background-color: #e5e5e5;
+    background-color: var(--bg);
     display: grid;
     justify-content: center;
     align-content: start;
     padding: 50px;
-    color: #47525e;
+    color: var(--txt);
 }
 .problem-rect{
     width: 1520px;
-    background-color: white;
+    background-color: var(--blockbg);
     height: auto;
-    color: #47525e;
+    color: var(--txt);
     padding: 30px;
     font-size: 20pt;
     margin-bottom: 30px;
@@ -24,7 +24,7 @@
 .resolve-problem-button{
     height: 50px;
     width: 400px;
-    color: white;
-    background-color: #47525e;
+    color: var(--blockbg);
+    background-color: var(--txt);
     margin-top: 50px;
 }

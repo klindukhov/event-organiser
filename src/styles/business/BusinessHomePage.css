@@ -1,5 +1,5 @@
 .business-home-main{
-    background-color: #e5e5e5;
+    background-color: var(--bg);
     min-height: calc(100vh - 100px);
     display: grid;
     align-content: start;

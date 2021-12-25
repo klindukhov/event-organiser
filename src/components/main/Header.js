@@ -12,6 +12,44 @@ const Header = (props) => {
   const [accType, setAccType] = useState('');
   const [logoLink, setLogoLink] = useState('/');
 
+  const [theme, setTheme] = useState('');
+  useEffect(() => {
+    var r = document.querySelector(':root');
+    if (window.sessionStorage.getItem('theme') !== null) {
+      setTheme(window.sessionStorage.getItem('theme'));
+      if (window.sessionStorage.getItem('theme') === '\u263E') {
+        r.style.setProperty('--bg', '#e5e5e5');
+        r.style.setProperty('--txt', '#47525e');
+        r.style.setProperty('--blockbg', 'white');
+      } else if (window.sessionStorage.getItem('theme') === '\u263C') {
+        r.style.setProperty('--bg', 'black');
+        r.style.setProperty('--txt', 'white');
+        r.style.setProperty('--blockbg', '#47525e');
+      }
+    } else {
+      r.style.setProperty('--bg', '#e5e5e5');
+      r.style.setProperty('--txt', '#47525e');
+      r.style.setProperty('--blockbg', 'white');
+    }
+  }, [])
+
+  const handleThemeChange = () => {
+    var r = document.querySelector(':root');
+    if (theme === '\u263C') {
+      r.style.setProperty('--bg', '#e5e5e5');
+      r.style.setProperty('--txt', '#47525e');
+      r.style.setProperty('--blockbg', 'white');
+      setTheme('\u263E');
+      window.sessionStorage.setItem('theme', '\u263E');
+    } else if (theme === '\u263E') {
+      r.style.setProperty('--bg', 'black');
+      r.style.setProperty('--txt', 'white');
+      r.style.setProperty('--blockbg', '#47525e');
+      setTheme('\u263C');
+      window.sessionStorage.setItem('theme', '\u263C');
+    }
+  }
+
 
   useEffect(() => {
     if (props.myProps.authorized === true) {
@@ -100,6 +138,7 @@ const Header = (props) => {
             <p className='user-logo-text'>{userName}</p>
           </Link>
         </div>
+        <input type='button' className='theme-button' value={theme} onClick={handleThemeChange} />
 
       </header>
     </div>

@@ -143,7 +143,7 @@ export default function ListPage(props) {
                 </select>
             </div>
         </div>
-        {items.map(c => <div key={c.id} className='list-element' onClick={() => history.push(`/ItemDetails/${typeOfList.substring(0, typeOfList.length-1)}/${c.id}`)}>
+        {items.map(c => <div key={c.id} className='list-element' onClick={() => history.push(`/ItemDetails/${typeOfList.substring(0, typeOfList.length - 1)}/${c.id}`)}>
             <div className='list-item' >
                 <div className='overlay-listing' >
                     <div className='overlay-listing-left'>
@@ -183,8 +183,10 @@ export default function ListPage(props) {
             </div>
         </div>)}
 
-        <div className='add-item-rect' onClick={() => history.push('/AddBusinessPage')}>
-            Add {typeOfList.substring(0, typeOfList.length-1)}
-        </div>
+        {props.authorized === true && props.userData.type === 'C' &&
+            <div className='add-item-rect' onClick={() => history.push('/AddBusinessPage/' + typeOfList.substring(0, typeOfList.length - 1))}>
+                Add {typeOfList.substring(0, typeOfList.length - 1)}
+            </div>
+        }
     </div>)
 }

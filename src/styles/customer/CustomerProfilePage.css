@@ -1,5 +1,5 @@
 .customer-profile-main {
-    background-color     : #e5e5e5;
+    background-color     : var(--bg);
     height               : calc(100vh - 100px);
     display              : grid;
     grid-template-columns: auto;
@@ -9,8 +9,8 @@
 
 .customer-profile-rect {
     width           : 1520px;
-    background-color: white;
-    color           : #47525e;
+    background-color: var(--blockbg);
+    color           : var(--txt);
     display         : grid;
     height          : fit-content;
 }
@@ -55,7 +55,7 @@
     height   : 35px;
     font-size: 22pt;
     margin   : 10px;
-    color: #47525e;
+    color    : #47525e;
 
 }
 
@@ -66,24 +66,24 @@
 }
 
 .submit-customer-profile {
-    height          : 50px;
-    font-size       : 24pt;
-    color           : white;
-    border-radius   : 5px;
-    width           : 400px;
-    justify-self    : center;
+    height       : 50px;
+    font-size    : 24pt;
+    color        : var(--blockbg);
+    border-radius: 5px;
+    width        : 400px;
+    justify-self : center;
 }
 
 .cust-password-change-field {
-    color : #47525e;
+    color : var(--txt);
     height: 40px;
     width : 300px;
 
 }
 
 .cust-password-submit-button {
-    background-color: #47525e;
-    color           : white;
+    background-color: var(--txt);
+    color           : var(--blockbg);
     height          : 40px;
     width           : 150px;
     border-radius   : 5px;
@@ -96,7 +96,7 @@
 }
 
 .change-password-p {
-    color      : #47525e;
+    color      : var(--txt);
     font-size  : 32pt;
     margin     : 40px;
     margin-left: 100px;
@@ -104,7 +104,7 @@
 
 .cust-prof-bottom-text {
     margin-top   : 40px;
-    color        : #47525e;
+    color        : var(--txt);
     font-size    : 16pt;
     margin-bottom: 5px;
     justify-self : center;

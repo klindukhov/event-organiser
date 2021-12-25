@@ -19,36 +19,36 @@ export default function CustomerProfilePage(props) {
     const [passwordMessageColor, setPasswordMessageColor] = useState('red');
 
     const handlePasswordSubmit = () => {
-        if(newPassword === confirmPassword && newPassword !== ''){
+        if (newPassword === confirmPassword && newPassword !== '') {
             var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
+            myHeaders.append("Content-Type", "application/json");
 
-        var raw = JSON.stringify({ "oldPassword": password, "newPassword": newPassword });
+            var raw = JSON.stringify({ "oldPassword": password, "newPassword": newPassword });
 
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow',
-            credentials: 'include'
-        };
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow',
+                credentials: 'include'
+            };
 
-        fetch(`http://localhost:8080/api/password/change?id=${props.userId}`, requestOptions)
-            .then(response => response.text()
-            .then(result => {
-                console.log(result);
-                if(!response.ok){
-                    setPasswordMessage('Password is incorrect')
-                }else{
-                    setPasswordMessageColor('#47525e');
-                    setPasswordMessage('Password is changed');
-                }
-            }))
-            .catch(error => console.log('error', error));
-        }else{
+            fetch(`http://localhost:8080/api/password/change?id=${props.userId}`, requestOptions)
+                .then(response => response.text()
+                    .then(result => {
+                        console.log(result);
+                        if (!response.ok) {
+                            setPasswordMessage('Password is incorrect')
+                        } else {
+                            setPasswordMessageColor(getComputedStyle(document.querySelector(':root')).getPropertyValue('--txt'));
+                            setPasswordMessage('Password is changed');
+                        }
+                    }))
+                .catch(error => console.log('error', error));
+        } else {
             setPasswordMessage('New passwords should match and not be empty')
         }
-        
+
     }
 
     useEffect(() => {
@@ -100,7 +100,7 @@ export default function CustomerProfilePage(props) {
 
     const handleInput = () => {
         setChanges(false);
-        setButtonColor('#47525e')
+        setButtonColor(getComputedStyle(document.querySelector(':root')).getPropertyValue('--txt'))
     }
 
     return (
@@ -124,7 +124,7 @@ export default function CustomerProfilePage(props) {
                         <input className='customer-profile-field-input' type='text' defaultValue={phoneNumber} onChange={e => { setPhoneNumber(e.target.value); handleInput() }} />
                     </div>
                 </div>
-                <input type='button' className='submit-customer-profile' value='Submit changes' disabled={changes} style={{ backgroundColor: buttonColor }} onClick={() => { setChanges(true); setButtonColor('#e5e5e5'); handleSubmit() }}></input>
+                <input type='button' className='submit-customer-profile' value='Submit changes' disabled={changes} style={{ backgroundColor: buttonColor }} onClick={() => { setChanges(true); setButtonColor(getComputedStyle(document.querySelector(':root')).getPropertyValue('--bg')); handleSubmit() }}></input>
                 <p className='change-password-p' >Change password</p>
                 <div className='customer-password-change'>
                     <input className='cust-password-change-field' type='password' onChange={e => setPassword(e.target.value)} placeholder='Password'></input>

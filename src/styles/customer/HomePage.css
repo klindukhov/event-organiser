@@ -1,50 +1,63 @@
 .home-page-content {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("../../images/backgroundImage.jpg");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 600px;
-    text-align: center;
-    align-items: center;
-  }
-  .HP-heading{
-    color: #ffffff;
-    font-size: 50px;
-  }
-  .HP-subheading{
-    color: #ffffff;
-    font-size: 20px;
-  }
-  .new-event-button{
-    background-color: #E63946;
-    width: 600px;
-    color: #ffffff;
-    font-size: 30px;
-  }
-  .HP-input{
-    height: 40px;
-    width: 200px;
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-  .Explore-heading{
-    text-align: center;
-    color: #47525E;
-  }
-  .Explore-par{
-    color: #47525E;
-    font-size: 16pt;
-  }
-  .Explore-subheading{
-    color: #47525E;
-    font-size: 20pt;
-  }
-  .explore-grid{
-    text-align: center;
-    display: grid;
-    grid-template-columns: auto auto auto;
-    grid-column-gap: 40px;
-  }
-  .explore-imgs{
-    height: 250px;
-  }
+  background-image   : linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("../../images/backgroundImage.jpg");
+  background-position: center;
+  background-repeat  : no-repeat;
+  background-size    : cover;
+  height             : 600px;
+  text-align         : center;
+  align-items        : center;
+}
+
+.home{
+  background-color: var(--bg);
+}
+
+.HP-heading {
+  color    : #ffffff;
+  font-size: 50px;
+}
+
+.HP-subheading {
+  color    : #ffffff;
+  font-size: 20px;
+}
+
+.new-event-button {
+  background-color: #E63946;
+  width           : 600px;
+  color           : #ffffff;
+  font-size       : 30px;
+}
+
+.HP-input {
+  height      : 40px;
+  width       : 200px;
+  margin-left : 10px;
+  margin-right: 10px;
+}
+
+.Explore-heading {
+  text-align: center;
+  color     : var(--txt);
+}
+
+.Explore-par {
+  color    : var(--txt);
+  font-size: 16pt;
+}
+
+.Explore-subheading {
+  color    : var(--txt);
+  font-size: 20pt;
+}
+
+.explore-grid {
+  text-align           : center;
+  display              : grid;
+  grid-template-columns: auto auto auto;
+  grid-column-gap      : 40px;
+}
+
+.explore-imgs {
+  height: 250px;
+}

@@ -44,7 +44,7 @@ export default function HomePage(props) {
   }
 
   return (
-    <div>
+    <div className='home'>
       <div className="home-page-content">
         <br />
         <br />

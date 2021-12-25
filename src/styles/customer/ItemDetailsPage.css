@@ -1,5 +1,6 @@
 .item-detail-main {
-    background-color: #e5e5e5;
+    background-color: var(--bg);
+    color: var(--txt);
     min-height      : calc(100vh - 100px);
     display         : grid;
     align-content   : start;
@@ -17,7 +18,7 @@
 }
 
 .item-gallery-rect {
-    background-color: white;
+    background-color: var(--blockbg);
     width           : 950px;
     height          : 650px;
     justify-self    : start;
@@ -34,7 +35,7 @@
 }
 
 .item-info-rect {
-    background-color: white;
+    background-color: var(--blockbg);
     width           : 520px;
     height          : auto;
     margin-bottom   : 50px;
@@ -53,7 +54,7 @@
 }
 
 .item-contact-rect {
-    background-color: white;
+    background-color: var(--blockbg);
     width           : 520px;
     height          : auto;
     font-size       : 20pt;
@@ -75,8 +76,8 @@
 .add-to-event-button {
     height          : 50px;
     width           : 300px;
-    background-color: #47525E;
-    color           : white;
+    background-color: var(--txt);
+    color           : var(--blockbg);
     justify-self    : center;
 }
 
@@ -91,8 +92,8 @@
 }
 
 .write-review-div {
-    background-color: #e5e5e5;
-    color           : #47525E;
+    background-color: var(--bg);
+    color           : var(--txt);
     font-size       : 22pt;
     height          : 300px;
     width           : 1420px;
@@ -101,8 +102,8 @@
 }
 
 .write-title-div {
-    background-color: #e5e5e5;
-    color           : #47525E;
+    background-color: var(--bg);
+    color           : var(--txt);
     font-size       : 22pt;
     height          : 50px;
     width           : 400px;
@@ -114,13 +115,13 @@
     justify-self    : end;
     height          : 50px;
     width           : 300px;
-    background-color: #47525E;
-    color           : white;
+    background-color: var(--txt);
+    color           : var(--blockbg);
     margin-top      : 50px;
 }
 
 .item-reviews-rect1 {
-    background-color: white;
+    background-color: var(--blockbg);
     width           : 1520px;
     height          : auto;
     justify-self    : center;
@@ -142,8 +143,8 @@
 }
 
 .item-review-text {
-    background-color: #e5e5e5;
-    color           : #47525E;
+    background-color: var(--bg);
+    color           : var(--txt);
     font-size       : 18pt;
 }
 
@@ -170,7 +171,7 @@
     grid-template-columns: auto auto;
     margin-bottom        : 10px;
     border-bottom-style  : solid;
-    border-bottom-color  : #47525e;
+    border-bottom-color  : var(--txt);
     border-width         : 1px;
 
 }

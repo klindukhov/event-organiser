@@ -1,0 +1,30 @@
+:root{
+    /* --bg: #e5e5e5;
+    --txt: #47525e;
+    --blockbg: white; */
+    --white: white;
+}
+
+.main{
+    background-color: var(--bg);
+    min-height: calc(100vh - 100px);
+    display: grid;
+    justify-items: center;
+    align-items: start;
+    padding: 50px;
+}
+
+.default-rect{
+    background-color: var(--bg);
+    color: var(--txt);
+    width: 1520px;
+    padding: 30px;
+    color: var(--blockbg);
+}
+
+.button{
+    color: var(--blockbg);
+    background-color: var(--txt);
+    height: 50px;
+    font-size: 20pt;
+}

@@ -1,16 +1,16 @@
 .guest-book-main{
     min-height: calc(100vh - 100px);
-    background-color: #e5e5e5;
+    background-color: var(--bg);
     display: grid;
     padding: 50px;
     justify-content: center;
     align-content: start;
     grid-template-columns: auto;
-    color: #47525e;
+    color: var(--txt);
 }
 .guest-listing{
-    background-color: white;
-    color: #47525e;
+    background-color: var(--blockbg);
+    color: var(--txt);
     height: 100px;
     width: 1520px;
     padding: 30px;
@@ -19,8 +19,8 @@
 }
 .guest-listing-button,
 .delete-guest-button{
-    background-color: #47525e;
-    color: white;
+    background-color: var(--txt);
+    color: var(--blockbg);
     border-radius: 5px;
     margin-left: 30px;
 }
@@ -29,5 +29,5 @@
     height: 40px;
     width: 300px;
     margin-right: 30px;
-    color: #47525e;
+    color: var(--txt);
 }
