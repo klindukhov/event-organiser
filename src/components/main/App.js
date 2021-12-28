@@ -28,10 +28,9 @@ import ListPage from '../customer/ListPage';
 import { useEffect, useState } from 'react/cjs/react.development';
 
 export default function App(props) {
-  const setProps = (p) =>{
-    props.myProps.cach=p;
-  }
-  props.myProps.setProps = setProps;
+  const [filtersProp, setFiltersProp] = useState();
+  props.myProps.setFiltersProp = setFiltersProp;
+  props.myProps.filtersProp=filtersProp;
 
   const [cart, setCart] = useState({});
   useEffect(() => {

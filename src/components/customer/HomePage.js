@@ -15,10 +15,11 @@ export default function HomePage(props) {
   const [date, setDate] = useState('');
 
   const history = useHistory();
-  
+
   useEffect(() => { props.setHeaderMessage('') });
 
   const [cities, setCities] = useState([]);
+  const [eventTypes, setEventTypes] = useState([]);
   useEffect(() => {
     var myHeaders = new Headers();
 
@@ -31,6 +32,11 @@ export default function HomePage(props) {
     fetch("http://localhost:8080/api/locations/allowed/cities", requestOptions)
       .then(response => response.json())
       .then(result => setCities(result))
+      .catch(error => console.log('error', error));
+
+    fetch("http://localhost:8080/api/events/types/allowed/all", requestOptions)
+      .then(response => response.json())
+      .then(result => setEventTypes(result))
       .catch(error => console.log('error', error));
   }, [])
 
@@ -60,10 +66,7 @@ export default function HomePage(props) {
         <br />
         <select name="Event type" id="event-type" className='HP-input' onChange={(event) => setEventType(event.target.value)}>
           <option value=" ">Event type</option>
-          <option value="wedding">wedding</option>
-          <option value="party">party</option>
-          <option value="birthday">birthday</option>
-          <option value="meeting">meeting</option>
+          {eventTypes.map(t => <option value={t.type} key={t.type}>{t.type}</option>)}
         </select>
         <input placeholder="Number of guests" className='HP-input' onChange={(event) => setGuestNum(event.target.value)} />
         <select name="City" id="city-select" className='HP-input' onChange={(event) => setLocation(event.target.value)}>
@@ -78,7 +81,7 @@ export default function HomePage(props) {
           <button className="new-event-button"
             onMouseEnter={e => { e.target.style.cursor = "pointer"; }}
             onMouseLeave={e => { e.target.style.cursor = "default"; }}
-            onClick={() => { props.setProps(getProps()) }}>
+            onClick={() => { props.setFiltersProp(getProps()) }}>
             Search
           </button>
         </Link>

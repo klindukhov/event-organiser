@@ -15,8 +15,10 @@ export default function UserDetailsPage() {
     const [caterings, setCaterings] = useState([]);
     const [locations, setLocations] = useState([]);
     const [services, setServices] = useState([]);
+    const [events, setEvents] = useState([]);
+    const [eventsTab, setEventsTab] = useState('ALL');
 
-  //  const [reservations, setReservations] = useState([]);
+    //  const [reservations, setReservations] = useState([]);
 
     useEffect(() => {
         var myHeaders = new Headers();
@@ -61,8 +63,33 @@ export default function UserDetailsPage() {
                 .then(response => response.json())
                 .then(result => setServices(result))
                 .catch(error => console.log('error', error));
-        }// eslint-disable-next-line
+        } else if (details.type === 'C') {
+            getAllEvents();
+        }
+
+        // eslint-disable-next-line
     }, [details])
+
+    useEffect(() => {
+        getAllEvents();
+        // eslint-disable-next-line
+    }, [eventsTab])
+
+    const getAllEvents = () => {
+        var myHeaderss = new Headers();
+
+        var requestOptionss = {
+            method: 'GET',
+            headers: myHeaderss,
+            redirect: 'follow',
+            credentials: 'include'
+        };
+
+        fetch(`http://localhost:8080/api/events/customer?customerId=${id}&tab=${eventsTab}`, requestOptionss)
+            .then(response => response.json())
+            .then(result => setEvents(result))
+            .catch(error => console.log('error', error));
+    }
 
     const handleVerify = () => {
         var myHeaders = new Headers();
@@ -88,9 +115,44 @@ export default function UserDetailsPage() {
 
     }
 
+    const [eventPastColor, setEventPastColor] = useState('#47525e');
+    const [eventFutureColor, setEventFutureColor] = useState('#47525e');
+    const [eventAllColor, setEventAllColor] = useState('white');
+    const [eventPastBackColor, setEventPastBackColor] = useState('#e5e5e5');
+    const [eventFutureBackColor, setEventFutureBackColor] = useState('#e5e5e5');
+    const [eventAllBackColor, setEventAllBackrColor] = useState('#47525e');
+    const handleEvents = (e) => {
+        console.log(e.target.value);
+        if (e.target.value === "all") {
+            setEventPastColor('#47525e');
+            setEventFutureColor('#47525e');
+            setEventAllColor('white');
+            setEventPastBackColor('#e5e5e5');
+            setEventFutureBackColor('#e5e5e5');
+            setEventAllBackrColor('#47525e');
+            setEventsTab('ALL')
+        } else if (e.target.value === "past") {
+            setEventPastColor('white');
+            setEventFutureColor('#47525e');
+            setEventAllColor('#47525e');
+            setEventPastBackColor('#47525e');
+            setEventFutureBackColor('#e5e5e5');
+            setEventAllBackrColor("#e5e5e5");
+            setEventsTab('PAST')
+        } else if (e.target.value === "future") {
+            setEventPastColor('#47525e');
+            setEventFutureColor('white');
+            setEventAllColor('#47525e');
+            setEventPastBackColor('#e5e5e5');
+            setEventFutureBackColor('#47525e');
+            setEventAllBackrColor('#e5e5e5');
+            setEventsTab('CURRENT')
+        }
+    }
 
-    return (<div className="problem-details-main">
-        <div className="problem-rect">
+
+    return (<div className="main">
+        <div className="block">
             <p className="problem-heading">User information</p>
             User id: {details.id}<br />
             User type: {details.type}<br />
@@ -105,20 +167,41 @@ export default function UserDetailsPage() {
             {details.type === 'B' && <>
                 Business name: {details.business.businessName}<br />
                 Phone number: {details.business.phoneNumber}<br />
-                Verification: {details.business.verificationStatus} {details.business.verificationStatus !== 'VERIFIED' && <input type='button' className="verify-buttion" value='Mark verified' onClick={handleVerify} />}<br />
+                Verification: {details.business.verificationStatus} {details.business.verificationStatus !== 'VERIFIED' && <input type='button' className="button" value='Mark verified' onClick={handleVerify} />}<br />
                 Address: {details.business.address.streetName} {details.business.address.streetNumber}, {details.business.address.city}, {details.business.address.zipCode},  {details.business.address.country}<br />
             </>}
-            Active: {'' + details.active} <input type='button' className="verify-buttion" value='Deactivate' onClick={handleBan} />
+            Active: {'' + details.active} <input type='button' className="button" value='Deactivate' onClick={handleBan} />
         </div>
         {details.type === 'C' &&
-            <div className="reservations-heading-rect">
-                <p className="problem-heading">Reservations</p>
+            <div className="block">
+                <p className="problem-heading">Events</p>
+                <div className='event-filter-div'>
+                    <input type='button' className='e-c-button-l' value='past' onClick={handleEvents} style={{ color: eventPastColor, backgroundColor: eventPastBackColor }} />
+                    <input type='button' className='e-c-button-c' value='all' onClick={handleEvents} style={{ color: eventAllColor, backgroundColor: eventAllBackColor }} />
+                    <input type='button' className='e-c-button-r' value='future' onClick={handleEvents} style={{ color: eventFutureColor, backgroundColor: eventFutureBackColor }} />
+                </div>
+                {events.map(c => <div key={c.id} className='item-list-element' style={{ justifySelf: 'center', width: '1420px', marginBottom: '30px' }} onClick={() => history.push(`/ItemDetails/Event/${c.id}`)}>
+                    <div className='list-item' style={{ width: '1420px' }}>
+                        <div className='overlay-listing' style={{ width: '1420px' }}>
+                            <div className='overlay-listing-left'>
+                                {c.name}<br />
+                                {c.date}, {c.startTime}{c.endTime !== c.startTime && '- ' + c.endTime}
+                            </div>
+                            <div className='overlay-listing-right'>
+                                {c.eventType}<br />
+                                {c.guestCount} people
+                            </div>
+                        </div>
+                        <div className='list-item-pics' style={{ width: '1420px' }}>
+                        </div>
+                    </div>
+                </div>)}
             </div>}
         {details.type === 'B' && locations.length !== 0 &&
-            <div className="reservations-heading-rect">
+            <div className="block">
                 <p className="problem-heading">Locations</p>
-                {locations.map(c => <div key={c.name} className='item-list-element' style={{ justifySelf: 'center', width: '1420px' }} >
-                    <Link to={`/RestaurantPage${Object.values(c)[0]}`} style={{ textDecoration: 'none' }}>
+                {locations.map(c => <div key={c.id} className='item-list-element' style={{ justifySelf: 'center', width: '1420px', marginBottom: '30px' }} >
+                    <Link to={`/ItemDetails/Venue/${Object.values(c)[0]}`} style={{ textDecoration: 'none' }}>
                         <div className='list-item' style={{ width: '1420px' }}>
                             <div className='overlay-listing' style={{ width: '1420px' }}>
                                 <div className='overlay-listing-left' >
@@ -132,7 +215,7 @@ export default function UserDetailsPage() {
                                 </div>
                             </div>
                             <div className='list-item-pics' style={{ width: '1420px' }}>
-                                {Object.values(c)[18].map(i => <div key={i.id}>
+                                {Object.values(c)[18].map(i => <div key={i.alt}>
                                     <img alt={Object.values(i)[1]} className='list-item-pic' src={Object.values(i)[0]} />
                                 </div>)}
                             </div>
@@ -140,10 +223,10 @@ export default function UserDetailsPage() {
                     </Link>
                 </div>)}
             </div>}
-        {details.type === 'B' &&  caterings.length !== 0 &&
-            <div className="reservations-heading-rect" >
+        {details.type === 'B' && caterings.length !== 0 &&
+            <div className="block" >
                 <p className="problem-heading">Caterings</p>
-                {caterings.map(c => <div key={c.name} className='item-list-element' style={{ justifySelf: 'center', width: '1420px' }} onClick={() => history.push(`/CateringListingPage${c.id}`)}>
+                {caterings.map(c => <div key={c.id} className='item-list-element' style={{ justifySelf: 'center', width: '1420px', marginBottom: '30px' }} onClick={() => history.push(`/ItemDetails/Catering/${c.id}`)}>
                     <div className='list-item' style={{ width: '1420px' }}>
                         <div className='overlay-listing' style={{ width: '1420px' }}>
                             <div className='overlay-listing-left'>
@@ -160,9 +243,9 @@ export default function UserDetailsPage() {
                 </div>)}
             </div>}
         {details.type === 'B' && services.length !== 0 &&
-            <div className="reservations-heading-rect">
+            <div className="block">
                 <p className="problem-heading">Services</p>
-                {services.map(c => <div key={c.id} className='list-item' style={{ justifySelf: 'center', width: '1420px' }} onClick={() => history.push(`/ServiceListingPage${c.id}`)}>
+                {services.map(c => <div key={c.id} className='list-item' style={{ justifySelf: 'center', width: '1420px', marginBottom: '30px' }} onClick={() => history.push(`/ItemDetails/Service/${c.id}`)}>
                     <div className='list-item' style={{ width: '1420px' }}>
                         <div className='overlay-listing' style={{ width: '1420px' }}>
                             <div className='overlay-listing-left'>

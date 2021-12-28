@@ -1,20 +1,3 @@
-.page-main {
-    background-color: var(--bg);
-    min-height      : calc(100vh - 100px);
-    display         : grid;
-    align-content   : start;
-    justify-content : center;
-    padding         : 50px;
-}
-
-.list-filter-rect {
-    background-color: var(--blockbg);
-    color           : var(--txt);
-    width           : 1520px;
-    padding         : 15px;
-    font-size       : 14pt;
-}
-
 .must-haves {
     display              : grid;
     grid-template-columns: auto auto;
@@ -46,12 +29,6 @@
     margin-right: 10px;
 }
 
-.apply-filters-button {
-    color           : var(--blockbg);
-    background-color: var(--txt);
-    height          : 40px;
-}
-
 .list-sorting-rect {
     width                : 1520px;
     height               : 50px;
@@ -60,7 +37,6 @@
     display              : grid;
     grid-template-columns: auto auto;
     align-content        : center;
-    margin-top           : 30px;
 }
 
 .list-displaying-info {
@@ -83,7 +59,6 @@
 .list-item {
     height          : 420px;
     width           : 1520px;
-    margin-top      : 30px;
     background-color: var(--blockbg);
 }
 
@@ -130,15 +105,4 @@
 
 .overlay-listing-right {
     justify-self: end;
-}
-
-.add-item-rect {
-    color           : var(--txt);
-    background-color: var(--blockbg);
-    font-size       : 20pt;
-    text-align      : center;
-    padding         : 15px;
-    margin-top      : 30px;
-    width           : 1520px;
-
 }

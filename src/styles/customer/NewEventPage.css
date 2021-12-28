@@ -1,31 +1,6 @@
-.new-event-main {
-    background-color     : var(--bg);
-    min-height           : calc(100vh - 100px);
-    display              : grid;
-    grid-template-columns: auto;
-    justify-content      : center;
-    align-content        : start;
-    padding              : 50px;
-}
-
-.venue-choice-rect {
-    width           : 1520px;
-    height          : auto;
-    background-color: var(--blockbg);
-    color           : var(--txt);
-}
-
-.guest-choice-rect {
-    width           : 1520px;
-    height          : auto;
-    background-color: var(--blockbg);
-    color           : var(--txt);
-    margin-top      : 30px;
-}
-
 .venue-choice-heading,
 .guest-choice-heading {
-    font-size: 16pt;
+    font-size: 20pt;
     margin   : 30px;
 }
 
@@ -37,6 +12,16 @@
     margin-left     : 30px;
 }
 
+.x-button {
+    color           : var(--txt);
+    border-color    : transparent;
+    background-color: transparent;
+}
+
+.pic-div {
+    width: fit-content;
+}
+
 .new-guest-input {
     height     : 40px;
     width      : 300px;
@@ -45,7 +30,6 @@
 
 .new-guest-button {
     height          : 40px;
-    width           : 100px;
     margin-left     : 30px;
     color           : var(--blockbg);
     background-color: var(--txt);
@@ -61,20 +45,12 @@
     margin-right: 30px;
 }
 
-.venue-div {
-    display              : grid;
-    grid-template-columns: auto auto;
-    font-size            : 20pt;
-    justify-content      : start;
-    padding              : 30px;
-}
-
 
 .venue-name-over {
     position        : relative;
     top             : -200px;
     background-color: rgb(0, 0, 0, 0.5);
-    color           : var(--blockbg);
+    color           : white;
     margin-right    : 30px;
 }
 

@@ -140,7 +140,7 @@ export default function ItemDetailsPage(props) {
 
 
     return (
-        <div className='item-detail-main'>
+        <div className='main'>
             <div className='gallery-info-div'>
                 <div className='item-gallery-rect'>
                     <div>
@@ -158,16 +158,16 @@ export default function ItemDetailsPage(props) {
                 </div>
                 <div className='item-info-div'>
                     <div className='item-info-rect'>
-                        <p className='item-info-heading'>
+                        <div className='item-info-heading'>
                             {itemDetails["name"]}
                             {typeOfItem === "Service" && <>
                                 {itemDetails["firstName"] + ' ' + itemDetails["lastName"]}<br />
                                 {itemDetails["type"]}{itemDetails.musicBandPeopleCount !== null && <>({itemDetails.musicBandPeopleCount} people)</>}
                                 {itemDetails.kidPerformerType !== null && <>, {itemDetails.kidPerformerType}</>}
                             </>}
-                        </p>
+                        </div>
                         <br />
-                        <p className='item-description-p'>
+                        <div className='item-description-p'>
                             Description: {itemDetails["description"]} <br />
                             {typeOfItem === "Venue" && <>
                                 Seats: {itemDetails["seatingCapacity"]} people<br />
@@ -188,7 +188,7 @@ export default function ItemDetailsPage(props) {
                                 {itemDetails.kidAgeFrom === null && <>{itemDetails.kidAgeTo !== null && <>Ages: {0 + '-' + itemDetails.kidAgeTo}</>}<br /></>}
                                 {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo === null && <>Ages: {itemDetails.kidAgeFrom + '+'}</>}<br /></>}
                             </>}
-                        </p>
+                        </div>
                     </div>
                     <div className='item-contact-rect'>
                         <div className='contact-acc-info'>
@@ -219,7 +219,7 @@ export default function ItemDetailsPage(props) {
                 </div>
             </div>
             {typeOfItem === "Catering" && <>
-                {itemDetails.cateringItems !== undefined && itemDetails.cateringItems !== null && itemDetails.cateringItems.length > 0 && <div className='item-reviews-rect1'>
+                {itemDetails.cateringItems !== undefined && itemDetails.cateringItems !== null && itemDetails.cateringItems.length > 0 && <div className='block'>
                     <p className='item-review-heading'>Menu</p>
                     {cateringItemTypes.map(t => <div key={t}>
                         <p className='item-info-heading'>{t}s</p>
@@ -234,9 +234,9 @@ export default function ItemDetailsPage(props) {
                 </div>}
             </>}
             {(typeOfItem === "Venue" || typeOfItem === "Catering") &&
-                <div className='item-reviews-rect1'>
+                <div className='block'>
                     <p className='item-review-heading'>Available {aliasItemType}</p>
-                    {itemDetails[aliasItemType] && itemDetails[aliasItemType].map(c => <div key={c.id} className='list-element' style={{ width: '1420px' }} onClick={() => handleItemChoice(c.id)}>
+                    {itemDetails[aliasItemType] && itemDetails[aliasItemType].map(c => <div key={c.id} className='list-element' style={{ width: '1420px', marginBottom: '30px' }} onClick={() => handleItemChoice(c.id)}>
                         <div className='list-item' style={{ width: '1420px' }}>
                             <div className='overlay-listing' style={{ width: '1420px' }}>
                                 <div className='overlay-listing-left'>
@@ -277,10 +277,10 @@ export default function ItemDetailsPage(props) {
                     </div>)}
                 </div>
             }
-            {itemDetails.businessHours !== null && <> {itemDetails.businessHours !== undefined && <div className='item-reviews-rect1'>
+            {itemDetails.businessHours !== null && <> {itemDetails.businessHours !== undefined && <div className='block'>
                 <p className='item-info-heading'>Business hours</p>
             </div>}</>}
-            <div className='item-reviews-rect1'>
+            <div className='block'>
                 <p className='item-review-heading'>Reviews</p>
                 {reviews.length > 0 &&
                     reviews.map(r =>
@@ -300,13 +300,14 @@ export default function ItemDetailsPage(props) {
                         <div className='reviewer-name'> {props.user && props.user.firstName + " " + props.user.lastName} <br /> <input className='write-title-div' placeholder='Write a title here' onChange={e => setTitle(e.target.value)} />
                             <StarRatings
                                 rating={rating}
-                                starRatedColor="#47525e"
+                                starRatedColor={getComputedStyle(document.querySelector(':root')).getPropertyValue('--txt')}
                                 changeRating={changeRating}
                                 numberOfStars={5}
                                 name='rating'
                                 starDimension="40px"
                                 starSpacing="15px"
-                                starHoverColor="#47525e"
+                                starHoverColor={getComputedStyle(document.querySelector(':root')).getPropertyValue('--txt')}
+                                starEmptyColor={getComputedStyle(document.querySelector(':root')).getPropertyValue('--bg')}
                             /> </div>
                     </div>
                     <textarea className='write-review-div' type='text' placeholder='Write your review here' onChange={e => setReview(e.target.value)} />

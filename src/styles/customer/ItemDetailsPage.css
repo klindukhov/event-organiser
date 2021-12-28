@@ -1,12 +1,3 @@
-.item-detail-main {
-    background-color: var(--bg);
-    color: var(--txt);
-    min-height      : calc(100vh - 100px);
-    display         : grid;
-    align-content   : start;
-    padding         : 50px;
-}
-
 .gallery-info-div {
     width                : 1520;
     padding              : 0px;
@@ -14,7 +5,7 @@
     grid-template-columns: auto auto;
     justify-self         : center;
     justify-content      : space-around;
-    margin-bottom        : 50px;
+    margin-bottom        : 20px;
 }
 
 .item-gallery-rect {
@@ -120,16 +111,6 @@
     margin-top      : 50px;
 }
 
-.item-reviews-rect1 {
-    background-color: var(--blockbg);
-    width           : 1520px;
-    height          : auto;
-    justify-self    : center;
-    display         : grid;
-    padding         : 50px;
-    margin-bottom   : 50px;
-}
-
 .contact-acc-pic1 {
     height: 80px;
     width : 80px;
@@ -162,7 +143,7 @@
 .item-review-heading {
     font-size    : 40pt;
     margin-bottom: 50px;
-    justify-self : center;
+    text-align : center;
 }
 
 .catering-menu-item {

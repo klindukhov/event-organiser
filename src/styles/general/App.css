@@ -7,16 +7,24 @@
     min-height: calc(100vh - 100px);
     display: grid;
     justify-items: center;
-    align-items: start;
+    align-content: start;
     padding: 50px;
+    gap: 30px;
 }
 
-.default-rect{
-    background-color: var(--bg);
+.block{
+    background-color: var(--blockbg);
     color: var(--txt);
     width: 1520px;
     padding: 30px;
-    color: var(--blockbg);
+    font-size: 16pt;
+}
+
+.input{
+    color: #47525e;
+    min-width: 200px;
+    height: 40px;
+    margin: 5px;
 }
 
 .button{

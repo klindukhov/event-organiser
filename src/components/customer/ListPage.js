@@ -44,7 +44,7 @@ export default function ListPage(props) {
             } else {
                 fetch(`http://localhost:8080/api/${listType}/allowed/all`).then(res => res.json()).then(result => {
                     setItems(result);
-                });
+                }).catch(error => console.log('error', error));
             }
         }
     }, [props.userData, listType])
@@ -70,26 +70,27 @@ export default function ListPage(props) {
                 .catch(error => console.log('error', error));
 
             try {
-                setLocation(props.cach.location);
-                setGuestNum(props.cach.guestNum);
-                setDate(props.cach.date);
+                setLocation(props.filtersProp.location);
+                setGuestNum(props.filtersProp.guestNum);
+                setDate(props.filtersProp.date);
             } catch (e) { }
         }
     }, [])
 
 
-    return (<div className="page-main">
+
+    return (<div className="main">
         {(props.authorized === false || (props.authorized === true && props.userData.type === 'C')) && <>
             {typeOfList === "Venues" &&
-                <div className="list-filter-rect">
+                <div className="block">
                     City:
-                    <select name="City" id="city-select" className='HP-input' style={{ marginBottom: '5px' }}>
+                    <select name="City" id="city-select" className='input' >
                         <option value=" ">{location !== '' && location}</option>
                         {cities.map(c => <option value={c} key={c}>{c}</option>)}
                     </select>
                     <br />
                     <div className="guests-choice">
-                        Number of guests
+                        Number of guests:
                         <input type="text" className='venue-input-number' defaultValue={guestNum} contentEditable />
                         <input type="checkbox" className='venue-input-seat' />
                         Seated
@@ -98,7 +99,7 @@ export default function ListPage(props) {
                     </div>
 
                     <div className="event-date">
-                        Date
+                        Date:
                         <input defaultValue={date} type="date" className='venue-input-date' />
                     </div>
                     Must have:
@@ -124,7 +125,7 @@ export default function ListPage(props) {
                             <input className='venue-input-musts' id="own-food" type="checkbox"></input>Can bring own food
                         </div>
                     </div>
-                    <input type='button' className='apply-filters-button' value='Apply filters' />
+                    <input type='button' className='button' value='Apply filters' />
                 </div>
             }
             {typeOfList === "Services" && <div className="list-filter-rect">Services filters</div>}
@@ -176,15 +177,20 @@ export default function ListPage(props) {
                     </div>
                 </div>
                 <div className='list-item-pics'>
-                    {typeOfList === "Venues" && c.images.map(i => <div key={i.id}>
+                    {typeOfList === "Venues" && c.images.map(i => <div key={i.image}>
                         <img alt={i.alt} className='list-item-pic' src={i.image} />
                     </div>)}
                 </div>
             </div>
         </div>)}
 
-        {props.authorized === true && props.userData.type === 'C' &&
-            <div className='add-item-rect' onClick={() => history.push('/AddBusinessPage/' + typeOfList.substring(0, typeOfList.length - 1))}>
+        {props.authorized === true && props.userData.type === 'B' &&
+            <div className='block' style={{textAlign: 'center'}} onClick={() => history.push('/AddBusinessPage/' + typeOfList.substring(0, typeOfList.length - 1))}>
+                Add {typeOfList.substring(0, typeOfList.length - 1)}
+            </div>
+        }
+        {props.authorized === true && props.userData.type === 'C' && typeOfList === 'Events' &&
+            <div className='block' style={{textAlign: 'center'}} onClick={() => history.push('/NewEventPage')}>
                 Add {typeOfList.substring(0, typeOfList.length - 1)}
             </div>
         }
