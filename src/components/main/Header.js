@@ -111,6 +111,18 @@ const Header = (props) => {
         setMyAccount('/ProblemsPage');
         setLogoLink('/ProblemsPage');
 
+        var myHeders = new Headers();
+        var requestOptins = {
+          method: 'GET',
+          headers: myHeders,
+          redirect: 'follow',
+          credentials: 'include'
+        };
+
+        fetch("http://localhost:8080/api/problems?status=ALL", requestOptins)
+          .then(response => { if (response.status === 403) { props.myProps.setUnauth() } })
+          .catch(error => console.log('error', error));
+
       }
 
     } else if (props.myProps.authorized === false) {
@@ -140,6 +152,7 @@ const Header = (props) => {
           </Link>
         </div>
         <input type='button' className='theme-button' value={theme} onClick={handleThemeChange} />
+
 
       </header>
     </div>

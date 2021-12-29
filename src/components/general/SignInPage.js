@@ -41,7 +41,7 @@ function SignInPageContent(props) {
                 } else {
                     props.setAuth(data);
                     if (data.type === 'C') {
-                        history.push('/');
+                        history.goBack();
                     } else if (data.type === 'A') {
                         history.push('/ProblemsPage');
                     } else if (data.type === 'B') {

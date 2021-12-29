@@ -25,7 +25,7 @@ export default function ProblemsPage(props){
             .catch(error => console.log('error', error));
     }
     return (<div className="users-page-main">
-        {problems.map(p => <div className="user-list-element" key={p.id} onClick={() => history.push(`/ProblemDetailsPage${p.id}`)}>{"Id: " + p.id + '  Concern: ' + p.concern}</div>)}
+        {problems.map && problems.map(p => <div className="user-list-element" key={p.id} onClick={() => history.push(`/ProblemDetailsPage${p.id}`)}>{"Id: " + p.id + '  Concern: ' + p.concern}</div>)}
 
     </div>)
 }
