@@ -16,7 +16,8 @@ export default function HomePage(props) {
 
   const history = useHistory();
 
-  useEffect(() => { props.setHeaderMessage('') });
+  // eslint-disable-next-line
+  useEffect(() => { props.setHeaderMessage(''); handleSearch(); }, []);
 
   const [cities, setCities] = useState([]);
   const [eventTypes, setEventTypes] = useState([]);
@@ -40,13 +41,13 @@ export default function HomePage(props) {
       .catch(error => console.log('error', error));
   }, [])
 
-  const getProps = () => {
-    return {
+  const handleSearch = () => {
+    window.sessionStorage.setItem('filters', JSON.stringify({
       eventType: eventType,
       guestNum: guestNum,
       location: location,
       date: date
-    }
+    }))
   }
 
   return (
@@ -79,9 +80,7 @@ export default function HomePage(props) {
 
         <Link to='/ListPage/Venues'>
           <button className="new-event-button"
-            onMouseEnter={e => { e.target.style.cursor = "pointer"; }}
-            onMouseLeave={e => { e.target.style.cursor = "default"; }}
-            onClick={() => { props.setFiltersProp(getProps()) }}>
+            onClick={handleSearch}>
             Search
           </button>
         </Link>

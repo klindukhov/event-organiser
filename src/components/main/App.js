@@ -11,7 +11,7 @@ import Header from './Header'
 import CustomerProfile from '../customer/CustomerProfilePage'
 import BusinessProfile from '../business/BusinessProfilePage';
 import ContactFormPage from '../general/ContactFormPage';
-import NewEventPage from '../customer/NewEventPage';
+import EventDetailsPage from '../customer/EventDetailsPage';
 import BusinessHomePage from '../business/BusinessHomePage';
 import UsersPage from '../admin/UsersPage';
 import ProblemsPage from '../admin/ProblemsPage';
@@ -25,60 +25,9 @@ import AddBusinessPage from '../business/AddBusinessPage';
 import ItemDetailsPage from '../customer/ItemDetailsPage';
 import ListPage from '../customer/ListPage';
 
-import { useEffect, useState } from 'react/cjs/react.development';
 
 export default function App(props) {
-  const [filtersProp, setFiltersProp] = useState();
-  props.myProps.setFiltersProp = setFiltersProp;
-  props.myProps.filtersProp=filtersProp;
-
-  const [cart, setCart] = useState({});
-  useEffect(() => {
-    setCart(JSON.parse(window.localStorage.getItem('cart')));
-    // eslint-disable-next-line 
-  }, [])
-
-  const setLocation = (locs) =>{
-    setCart({'locationDetails':locs});
-    window.localStorage.setItem('cart', JSON.stringify({'locationDetails':locs}));
-  }
-
-  const setCatering = (catering) =>{
-    setCart({
-      ...cart,
-      "catering": catering
-    });
-    let temp = JSON.parse(window.localStorage.getItem('cart'));
-    temp.catering = catering;
-    window.localStorage.setItem('cart', JSON.stringify(temp));
-  }
-
-  const setService= (s) =>{
-    setCart({
-      ...cart,
-      "service": s
-    });
-    let temp = JSON.parse(window.localStorage.getItem('cart'));
-    temp.service = s;
-    window.localStorage.setItem('cart', JSON.stringify(temp));
-  }
-
-  const setGuests= (s) =>{
-    setCart({
-      ...cart,
-      "guests": s
-    });
-    let temp = JSON.parse(window.localStorage.getItem('cart'));
-    temp.guests = s;
-    window.localStorage.setItem('cart', JSON.stringify(temp));
-    console.log('guests updated')
-  }
-
-  props.myProps.cart = cart;
-  props.myProps.setLocation = setLocation;
-  props.myProps.setCatering = setCatering;
-  props.myProps.setService = setService;
-  props.myProps.setGuests = setGuests;
+  
 
 
   return (
@@ -91,7 +40,7 @@ export default function App(props) {
       <Route path='/CustomerProfilePage' render={() => <CustomerProfile {...props.myProps}/>} />
       <Route path='/BusinessProfilePage' render={() => <BusinessProfile {...props.myProps}/>} />
       <Route path='/ContactFormPage' render={() => <ContactFormPage {...props.myProps}/>} />
-      <Route path='/NewEventPage' render={() => <NewEventPage {...props.myProps}/>} />
+      <Route path='/EventDetailsPage/:id' render={() => <EventDetailsPage {...props.myProps}/>} />
       <Route path='/BusinessHomePage' render={() => <BusinessHomePage {...props.myProps}/>} />
       <Route path='/UsersPage' render={() => <UsersPage {...props.myProps}/>} />
       <Route path='/ProblemsPage' render={() => <ProblemsPage {...props.myProps}/>} />
@@ -102,8 +51,8 @@ export default function App(props) {
       <Route path='/ReservationRequestsPage' render={() => <ReservationRequestsPage {...props.myProps}/>} />
       <Route path='/AddBusinessPage/:businessType' render={() => <AddBusinessPage {...props.myProps}/>} />
 
-      <Route path='/ItemDetails/:typeOfItem/:id' render={() => <ItemDetailsPage {...props.myProps}/>} />
-      <Route path='/ListPage/:typeOfList' render={() => <ListPage {...props.myProps}/>} />
+      <Route path='/ItemDetails/:typeOfItem/:id/:forEventId?' render={() => <ItemDetailsPage {...props.myProps}/>} />
+      <Route path='/ListPage/:typeOfList/:forEventId?' render={() => <ListPage {...props.myProps}/>} />
 
 
       

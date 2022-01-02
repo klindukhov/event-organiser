@@ -32,7 +32,7 @@ export default function Sidebar(props) {
         </a>
       }
       {props.accType === 'C' &&
-        <a className="menu-item" href="/NewEventPage">
+        <a className="menu-item" href="/EventDetailsPage/new">
           New event
         </a>
       }

@@ -196,7 +196,8 @@ export default function UserDetailsPage() {
                         </div>
                     </div>
                 </div>)}
-            </div>}
+            </div>
+        }
         {details.type === 'B' && locations.length !== 0 &&
             <div className="block">
                 <p className="problem-heading">Locations</p>
@@ -222,7 +223,8 @@ export default function UserDetailsPage() {
                         </div>
                     </Link>
                 </div>)}
-            </div>}
+            </div>
+        }
         {details.type === 'B' && caterings.length !== 0 &&
             <div className="block" >
                 <p className="problem-heading">Caterings</p>
@@ -260,6 +262,7 @@ export default function UserDetailsPage() {
                         </div>
                     </div>
                 </div>)}
-            </div>}
+            </div>
+        }
     </div>)
 }

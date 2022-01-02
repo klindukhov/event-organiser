@@ -15,6 +15,7 @@ export default function ItemDetailsPage(props) {
     const [itemType, setItemType] = useState('');
     const [aliasItemType, setAliasItemType] = useState('');
     const { id } = useParams();
+    const { forEventId } = useParams();
     useEffect(() => {
         if (typeOfItem === "Venue") {
             setItemType('locations');
@@ -24,6 +25,8 @@ export default function ItemDetailsPage(props) {
             setAliasItemType('locations');
         } else if (typeOfItem === "Service") {
             setItemType('services')
+        } else if (typeOfItem === "Event") {
+            setItemType('events')
         }
         props.setHeaderMessage(typeOfItem);
     }, [id, typeOfItem])
@@ -100,29 +103,53 @@ export default function ItemDetailsPage(props) {
 
     const handleAddToEvent = () => {
         if (typeOfItem === "Venue") {
-            props.setLocation(itemDetails);
-            history.push('/newEventPage');
+            window.localStorage.setItem('locationDetails', JSON.stringify(itemDetails));
+            history.push('/EventDetailsPage/new');
         } else if (typeOfItem === "Catering") {
-            try {
-                props.setCatering(itemDetails);
-                history.push('/newEventPage');
-            } catch (e) {
+            if (forEventId === undefined) {
+                alert('You have to pick venue first');
                 history.push('/ListPage/Venues');
-                alert('You have to pick venue first')
+            } else {
+                if (window.localStorage.getItem('cateringInfo') !== null && window.localStorage.getItem('cateringInfo') !== undefined) {
+                    let t = JSON.parse(window.localStorage.getItem('cateringInfo'));
+                    if (t.indexOf(itemDetails) === -1) {
+                        t.push(itemDetails);
+                        window.localStorage.setItem("cateringInfo", JSON.stringify(t));
+                    }
+                    history.push(`/EventDetailsPage/${forEventId}`)
+                } else {
+                    let t = [];
+                    t.push(itemDetails);
+                    window.localStorage.setItem("cateringInfo", JSON.stringify(t));
+                    history.push(`/EventDetailsPage/${forEventId}`)
+                }
+
             }
         } else if (typeOfItem === "Service") {
-            try {
-                props.setService(itemDetails);
-                history.push('/newEventPage');
-            } catch (e) {
+            if (forEventId === undefined) {
+                alert('You have to pick venue first');
                 history.push('/ListPage/Venues');
-                alert('You have to pick venue first')
+            } else {
+                if (window.localStorage.getItem('serviceInfo') !== null && window.localStorage.getItem('serviceInfo') !== undefined) {
+                    let t = JSON.parse(window.localStorage.getItem('serviceInfo'));
+                    if (t.indexOf(itemDetails) === -1) {
+                        t.push(itemDetails);
+                        window.localStorage.setItem("serviceInfo", JSON.stringify(t));
+                    }
+                    history.push(`/EventDetailsPage/${forEventId}`)
+                } else {
+                    let t = [];
+                    t.push(itemDetails);
+                    window.localStorage.setItem("serviceInfo", JSON.stringify(t));
+                    history.push(`/EventDetailsPage/${forEventId}`)
+                }
+
             }
+
         }
-        
     }
 
-    const handleItemChoice = (id) => {
+    const handleAliasItemChoice = (id) => {
         if (aliasItemType === 'locations') {
             history.push(`/ItemDetails/Venue/${id}`);
         } else if (aliasItemType === 'services') {
@@ -208,13 +235,19 @@ export default function ItemDetailsPage(props) {
 
                             </div>
                         </div>
-                        {props.authorized === false &&
-                            <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
-                        }
-                        {props.authorized === true && props.userData.type === 'C' &&
-                            <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
-                        }
-
+                        {typeOfItem !== 'Event' && <>
+                            {props.authorized === false &&
+                                <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
+                            }
+                            {props.authorized === true && props.userData.type === 'C' &&
+                                <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
+                            }
+                        </>}
+                        {typeOfItem === 'Event' && <>
+                            {props.authorized === true && props.userData.type === 'C' &&
+                                <input type='button' className='add-to-event-button' value='Edit event' onClick={() => history.push(`/EventDetailsPage/${id}`)} />
+                            }
+                        </>}
                     </div>
                 </div>
             </div>
@@ -236,7 +269,7 @@ export default function ItemDetailsPage(props) {
             {(typeOfItem === "Venue" || typeOfItem === "Catering") &&
                 <div className='block'>
                     <p className='item-review-heading'>Available {aliasItemType}</p>
-                    {itemDetails[aliasItemType] && itemDetails[aliasItemType].map(c => <div key={c.id} className='list-element' style={{ width: '1420px', marginBottom: '30px' }} onClick={() => handleItemChoice(c.id)}>
+                    {itemDetails[aliasItemType] && itemDetails[aliasItemType].map(c => <div key={c.id} className='list-element' style={{ width: '1420px', marginBottom: '30px' }} onClick={() => handleAliasItemChoice(c.id)}>
                         <div className='list-item' style={{ width: '1420px' }}>
                             <div className='overlay-listing' style={{ width: '1420px' }}>
                                 <div className='overlay-listing-left'>
@@ -277,48 +310,51 @@ export default function ItemDetailsPage(props) {
                     </div>)}
                 </div>
             }
-            {itemDetails.businessHours !== null && <> {itemDetails.businessHours !== undefined && <div className='block'>
-                <p className='item-info-heading'>Business hours</p>
-            </div>}</>}
-            <div className='block'>
-                <p className='item-review-heading'>Reviews</p>
-                {reviews.length > 0 &&
-                    reviews.map(r =>
-                        <div key={r.id} className='item-review-div'>
-                            <div className='reviewer-info'>
-                                <img alt='acc-pic' src={accIcon} className='contact-acc-pic1' />
-                                <p className='reviewer-name'> {r.customer.firstName} {r.customer.lastName} <br /> "{r.title}" {'\u{2605}'.repeat(r.starRating)} </p>
+            {typeOfItem !== 'Event' && <>
+                {itemDetails.businessHours !== null && <> {itemDetails.businessHours !== undefined && <div className='block'>
+                    <p className='item-info-heading'>Business hours</p>
+                </div>}</>}
+                <div className='block'>
+                    <p className='item-review-heading'>Reviews</p>
+                    {reviews.length > 0 &&
+                        reviews.map(r =>
+                            <div key={r.id} className='item-review-div'>
+                                <div className='reviewer-info'>
+                                    <img alt='acc-pic' src={accIcon} className='contact-acc-pic1' />
+                                    <p className='reviewer-name'> {r.customer.firstName} {r.customer.lastName} <br /> "{r.title}" {'\u{2605}'.repeat(r.starRating)} </p>
+                                </div>
+                                <div className='item-review-text'>
+                                    {r.comment}
+                                </div>
                             </div>
-                            <div className='item-review-text'>
-                                {r.comment}
-                            </div>
+                        )}
+                    {props.authorized === true && props.userData.type === "C" && <>
+                        <div className='reviewer-info'>
+                            <img alt='acc-pic' src={accIcon} className='contact-acc-pic1' />
+                            <div className='reviewer-name'> {props.user && props.user.firstName + " " + props.user.lastName} <br /> <input className='write-title-div' placeholder='Write a title here' onChange={e => setTitle(e.target.value)} />
+                                <StarRatings
+                                    rating={rating}
+                                    starRatedColor={getComputedStyle(document.querySelector(':root')).getPropertyValue('--txt')}
+                                    changeRating={changeRating}
+                                    numberOfStars={5}
+                                    name='rating'
+                                    starDimension="40px"
+                                    starSpacing="15px"
+                                    starHoverColor={getComputedStyle(document.querySelector(':root')).getPropertyValue('--txt')}
+                                    starEmptyColor={getComputedStyle(document.querySelector(':root')).getPropertyValue('--bg')}
+                                /> </div>
                         </div>
-                    )}
-                {props.authorized === true && props.userData.type === "C" &&<>
-                    <div className='reviewer-info'>
-                        <img alt='acc-pic' src={accIcon} className='contact-acc-pic1' />
-                        <div className='reviewer-name'> {props.user && props.user.firstName + " " + props.user.lastName} <br /> <input className='write-title-div' placeholder='Write a title here' onChange={e => setTitle(e.target.value)} />
-                            <StarRatings
-                                rating={rating}
-                                starRatedColor={getComputedStyle(document.querySelector(':root')).getPropertyValue('--txt')}
-                                changeRating={changeRating}
-                                numberOfStars={5}
-                                name='rating'
-                                starDimension="40px"
-                                starSpacing="15px"
-                                starHoverColor={getComputedStyle(document.querySelector(':root')).getPropertyValue('--txt')}
-                                starEmptyColor={getComputedStyle(document.querySelector(':root')).getPropertyValue('--bg')}
-                            /> </div>
-                    </div>
-                    <textarea className='write-review-div' type='text' placeholder='Write your review here' onChange={e => setReview(e.target.value)} />
-                    {reviewMessage}
-                    <input className='review-submit-button' type='button' value='Submit' onClick={handleSubmitReview} />
-                </>}
-                {props.authorized === false &&
-                    <div className='reviewer-name' style={{ textAlign: 'center' }}>
-                        <Link to='/SignIn'>Sign in</Link> to leave a review
-                    </div>
-                }
-            </div>
+                        <textarea className='write-review-div' type='text' placeholder='Write your review here' onChange={e => setReview(e.target.value)} />
+                        {reviewMessage}
+                        <input className='review-submit-button' type='button' value='Submit' onClick={handleSubmitReview} />
+                    </>}
+                    {props.authorized === false &&
+                        <div className='reviewer-name' style={{ textAlign: 'center' }}>
+                            <Link to='/SignIn'>Sign in</Link> to leave a review
+                        </div>
+                    }
+                </div>
+            </>}
+
         </div>)
 }
