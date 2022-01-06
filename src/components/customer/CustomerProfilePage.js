@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../../styles/customer/CustomerProfilePage.css';
 import accIcon from '../../images/accIcon250.png'
 import { Link } from 'react-router-dom'
+import apiFetch from '../../api';
 
 export default function CustomerProfilePage(props) {
     const [changes, setChanges] = useState(true);
@@ -20,31 +21,15 @@ export default function CustomerProfilePage(props) {
 
     const handlePasswordSubmit = () => {
         if (newPassword === confirmPassword && newPassword !== '') {
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
 
-            var raw = JSON.stringify({ "oldPassword": password, "newPassword": newPassword });
+            const raw = JSON.stringify({ "oldPassword": password, "newPassword": newPassword });
 
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow',
-                credentials: 'include'
-            };
-
-            fetch(`http://localhost:8080/api/password/change?id=${props.userId}`, requestOptions)
-                .then(response => response.text()
-                    .then(result => {
-                        console.log(result);
-                        if (!response.ok) {
-                            setPasswordMessage('Password is incorrect')
-                        } else {
-                            setPasswordMessageColor(getComputedStyle(document.querySelector(':root')).getPropertyValue('--txt'));
-                            setPasswordMessage('Password is changed');
-                        }
-                    }))
-                .catch(error => console.log('error', error));
+            apiFetch(`password/change?id=${props.userId}`, "POST", raw)
+                .then(() => {
+                    setPasswordMessageColor(getComputedStyle(document.querySelector(':root')).getPropertyValue('--txt'));
+                    setPasswordMessage('Password is changed');
+                })
+                .catch(error => { console.log('error', error); setPasswordMessage('Password is incorrect') });
         } else {
             setPasswordMessage('New passwords should match and not be empty')
         }
@@ -53,18 +38,7 @@ export default function CustomerProfilePage(props) {
 
     useEffect(() => {
         props.setHeaderMessage('Profile');
-
-        var myHeaders = new Headers();
-
-        var requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow',
-            credentials: 'include'
-        };
-
-        fetch(`http://localhost:8080/api/customers?id=${props.userId}`, requestOptions)
-            .then(response => response.json())
+        apiFetch(`customers?id=${props.userId}`)
             .then(res => {
                 if (res.firstName !== undefined) {
                     setName(res.firstName);
@@ -79,22 +53,9 @@ export default function CustomerProfilePage(props) {
     }, [props]);
 
     const handleSubmit = () => {
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
+        const raw = JSON.stringify({ "address": { "county": " ", "city": " ", "streetName": " ", "streetNumber": " ", "zipCode": " " }, "firstName": name, "lastName": surname, "birthdate": birthdate, "phoneNumber": phoneNumber });
 
-        var raw = JSON.stringify({ "address": { "county": " ", "city": " ", "streetName": " ", "streetNumber": " ", "zipCode": " " }, "firstName": name, "lastName": surname, "birthdate": birthdate, "phoneNumber": phoneNumber });
-
-        var requestOptions = {
-            method: 'PUT',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow',
-            credentials: 'include'
-        };
-
-        fetch(`http://localhost:8080/api/customers?id=${props.userId}`, requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
+        apiFetch(`customers?id=${props.userId}`, "PUT", raw)
             .catch(error => console.log('error', error));
     }
 

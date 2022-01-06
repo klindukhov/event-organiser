@@ -4,6 +4,7 @@ import acc from '../../images/accIcon.png';
 import Sidebar from './Sidebar';
 import '../../styles/general/Header.css';
 import { useState } from 'react/cjs/react.development';
+import apiFetch from '../../api';
 
 const Header = (props) => {
   const [userPageLink, setUserPageLink] = useState('/SignIn');
@@ -12,9 +13,12 @@ const Header = (props) => {
   const [accType, setAccType] = useState('');
   const [logoLink, setLogoLink] = useState('/');
 
+  //  eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { if (userName === 'Sign in' && props.myProps.authorized) { props.myProps.setUnauth(); window.location.reload() } }, [])
+
   const [theme, setTheme] = useState('');
   useEffect(() => {
-    var r = document.querySelector(':root');
+    let r = document.querySelector(':root');
     if (window.sessionStorage.getItem('theme') !== null) {
       setTheme(window.sessionStorage.getItem('theme'));
       if (window.sessionStorage.getItem('theme') === '\u263E') {
@@ -35,7 +39,7 @@ const Header = (props) => {
   }, [])
 
   const handleThemeChange = () => {
-    var r = document.querySelector(':root');
+    let r = document.querySelector(':root');
     if (theme === '\u263C') {
       r.style.setProperty('--bg', '#e5e5e5');
       r.style.setProperty('--txt', '#47525e');
@@ -59,18 +63,7 @@ const Header = (props) => {
         setMyAccount('/CustomerProfilePage');
         setAccType('C');
 
-
-        var myHeaders = new Headers();
-
-        var requestOptions = {
-          method: 'GET',
-          headers: myHeaders,
-          redirect: 'follow',
-          credentials: 'include'
-        };
-
-        fetch(`http://localhost:8080/api/customers?id=${props.myProps.userId}`, requestOptions)
-          .then(response => response.json())
+        apiFetch(`customers?id=${props.myProps.userId}`)
           .then(res => {
             if (res.firstName !== undefined) {
               setUserName(res.firstName + ' ' + res.lastName);
@@ -85,25 +78,12 @@ const Header = (props) => {
         setMyAccount('/BusinessProfilePage');
         setLogoLink('/BusinessHomePage');
 
-        var myHeaderss = new Headers();
-
-        var requestOptionss = {
-          method: 'GET',
-          headers: myHeaderss,
-          redirect: 'follow',
-          credentials: 'include'
-        };
-
-        fetch(`http://localhost:8080/api/business/${props.myProps.userId}/detail`, requestOptionss)
-          .then(response => response.json())
+        apiFetch(`business/${props.myProps.userId}/detail`)
           .then(res => {
-            if (res.firstName !== undefined) {
-              setUserName(res.firstName + ' ' + res.lastName);
-              props.myProps.setUser(res);
-            } else {
-              props.myProps.setUnauth();
-            }
-          }).catch(error => console.log('error', error));
+            setUserName(res.firstName + ' ' + res.lastName);
+            props.myProps.setUser(res);
+          })
+          .catch(error => { console.log('error', error); props.myProps.setUnauth(); });
       } else if (props.myProps.userData.type === 'A') {
         setAccType('A');
         setUserName('admin');
@@ -111,17 +91,9 @@ const Header = (props) => {
         setMyAccount('/ProblemsPage');
         setLogoLink('/ProblemsPage');
 
-        var myHeders = new Headers();
-        var requestOptins = {
-          method: 'GET',
-          headers: myHeders,
-          redirect: 'follow',
-          credentials: 'include'
-        };
-
-        fetch("http://localhost:8080/api/problems?status=ALL", requestOptins)
+        apiFetch(`problems?status=ALL`)
           .then(response => { if (response.status === 403) { props.myProps.setUnauth() } })
-          .catch(error => console.log('error', error));
+          .catch(error => { console.log('error', error); props.myProps.setUnauth() });
 
       }
 

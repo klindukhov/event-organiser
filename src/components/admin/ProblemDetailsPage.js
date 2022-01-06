@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import apiFetch from "../../api";
 import '../../styles/admin/ProblemDetailsPage.css'
 
 export default function ProblemDetailsPage() {
@@ -8,31 +9,14 @@ export default function ProblemDetailsPage() {
 
     const [details, setDetails] = useState({});
     useEffect(() => {
-        var requestOptions = {
-            method: 'GET',
-            redirect: 'follow',
-            credentials: 'include'
-        };
-
-        fetch(`http://localhost:8080/api/problems?id=${id}`, requestOptions)
-            .then(response => response.json())
+        apiFetch(`problems?id=${id}`)
             .then(result => setDetails(result))
             .catch(error => console.log('error', error));
         // eslint-disable-next-line
     }, [])
 
     const handleResolve = () => {
-        var myHeaders = new Headers();
-
-        var requestOptions = {
-            method: 'PUT',
-            headers: myHeaders,
-            redirect: 'follow',
-            credentials: 'include'
-        };
-
-        fetch(`http://localhost:8080/api/problems?id=${id}`, requestOptions)
-            .then(response => response.text())
+        apiFetch(`problems?id=${id}`, 'PUT')
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
 

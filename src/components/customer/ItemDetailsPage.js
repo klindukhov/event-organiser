@@ -9,6 +9,7 @@ import StarRatings from 'react-star-ratings';
 import pplIcon from '../../images/pplIcon.png';
 
 import accIcon from '../../images/accIcon250.png'
+import apiFetch from "../../api";
 
 export default function ItemDetailsPage(props) {
     const { typeOfItem } = useParams();
@@ -46,16 +47,7 @@ export default function ItemDetailsPage(props) {
 
     useEffect(() => {
         if (itemType !== '') {
-            var myHeaders = new Headers();
-            var requestOptions = {
-                method: 'GET',
-                headers: myHeaders,
-                redirect: 'follow',
-                credentials: 'include'
-            };
-
-            fetch(`http://localhost:8080/api/${itemType}/allowed/${id}/detail`, requestOptions)
-                .then(response => response.json())
+            apiFetch(`${itemType}/allowed/${id}/detail`)
                 .then(result => {
                     setItemDetails(result);
                     setSlideImages(result.images);
@@ -63,9 +55,8 @@ export default function ItemDetailsPage(props) {
                 .catch(error => { console.log('error', error); setItemDetails({}); setSlideImages([]); });
 
 
-            fetch(`http://localhost:8080/api/reviews/${itemType.substring(0, itemType.length - 1)}/allowed/all?${itemType.substring(0, itemType.length - 1) + 'Id'}=${id}`, requestOptions)
-                .then(response => response.json())
-                .then(result => setReviews(result))
+            apiFetch(`reviews/${itemType.substring(0, itemType.length - 1)}/allowed/all?${itemType.substring(0, itemType.length - 1) + 'Id'}=${id}`)
+                .then(result => setReviews(result.items))
                 .catch(error => { console.log('error', error); setReviews([]) });
         }
     }, [itemType])
@@ -76,22 +67,9 @@ export default function ItemDetailsPage(props) {
 
     const handleSubmitReview = () => {
         if (title.length >= 3 && rating >= 1) {
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
+            let raw = JSON.stringify({ "title": title, "comment": review, "starRating": rating });
 
-            var raw = JSON.stringify({ "title": title, "comment": review, "starRating": rating });
-
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow',
-                credentials: 'include'
-            };
-
-            fetch(`http://localhost:8080/api/reviews/${itemType.substring(0, itemType.length - 1)}?customerId=${props.userData.id}&${itemType.substring(0, itemType.length - 1)}Id=${id}`, requestOptions)
-                .then(response => response.text())
-                .then(result => console.log(result))
+            apiFetch(`reviews/${itemType.substring(0, itemType.length - 1)}?customerId=${props.userData.id}&${itemType.substring(0, itemType.length - 1)}Id=${id}`, "POST", raw)
                 .catch(error => console.log('error', error));
 
             window.location.reload();

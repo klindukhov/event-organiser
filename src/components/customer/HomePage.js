@@ -6,6 +6,7 @@ import entertainment from '../../images/entertainment.png';
 import catering from '../../images/catering.png';
 import { useEffect } from 'react';
 import { useState } from 'react/cjs/react.development';
+import apiFetch from '../../api';
 
 
 export default function HomePage(props) {
@@ -22,21 +23,11 @@ export default function HomePage(props) {
   const [cities, setCities] = useState([]);
   const [eventTypes, setEventTypes] = useState([]);
   useEffect(() => {
-    var myHeaders = new Headers();
-
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    };
-
-    fetch("http://localhost:8080/api/locations/allowed/cities", requestOptions)
-      .then(response => response.json())
+    apiFetch(`locations/allowed/cities`)
       .then(result => setCities(result))
       .catch(error => console.log('error', error));
 
-    fetch("http://localhost:8080/api/events/types/allowed/all", requestOptions)
-      .then(response => response.json())
+      apiFetch(`events/types/allowed/all`)
       .then(result => setEventTypes(result))
       .catch(error => console.log('error', error));
   }, [])

@@ -50,7 +50,7 @@
     height: 35px;
     font-size: 22pt;
     margin: 10px;
-
+    color: var(--txt);
 }
 .business-profile-field-label{
     height: 35px;
@@ -127,7 +127,7 @@
     height: 35px;
     font-size: 22pt;
     margin: 10px;
-
+    color: var(--txt);
 }
 .business-field-label{
     height: 35px;

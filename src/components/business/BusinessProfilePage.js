@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../../styles/business/BusinessProfilePage.css';
 import accIcon from '../../images/accIcon250.png'
 import { Link } from 'react-router-dom'
+import apiFetch from '../../api';
 
 export default function BusinessProfilePage(props) {
     const [changes, setChanges] = useState(true);
@@ -21,18 +22,7 @@ export default function BusinessProfilePage(props) {
 
     useEffect(() => {
         props.setHeaderMessage('Profile');
-
-        var myHeaders = new Headers();
-
-        var requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow',
-            credentials: 'include'
-        };
-
-        fetch(`http://localhost:8080/api/business/${props.userId}/detail`, requestOptions)
-            .then(response => response.json())
+        apiFetch(`business/${props.userId}/detail`)
             .then(res => {
                 if (res.firstName !== undefined) {
                     setName(res.firstName);
@@ -65,31 +55,14 @@ export default function BusinessProfilePage(props) {
 
     const handlePasswordSubmit = () => {
         if (newPassword === confirmPassword && newPassword !== '') {
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
+            const raw = JSON.stringify({ "oldPassword": password, "newPassword": newPassword });
 
-            var raw = JSON.stringify({ "oldPassword": password, "newPassword": newPassword });
-
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow',
-                credentials: 'include'
-            };
-
-            fetch(`http://localhost:8080/api/password/change?id=${props.userId}`, requestOptions)
-                .then(response => response.text()
-                    .then(result => {
-                        console.log(result);
-                        if (!response.ok) {
-                            setPasswordMessage('Password is incorrect')
-                        } else {
-                            setPasswordMessageColor('#47525e');
-                            setPasswordMessage('Password is changed');
-                        }
-                    }))
-                .catch(error => console.log('error', error));
+            apiFetch(`password/change?id=${props.userId}`, "POST", raw)
+                .then(() => {
+                    setPasswordMessageColor(getComputedStyle(document.querySelector(':root')).getPropertyValue('--txt'));
+                    setPasswordMessage('Password is changed');
+                })
+                .catch(error => { console.log('error', error); setPasswordMessage('Password is incorrect'); setPasswordMessageColor('red') });
         } else {
             setPasswordMessage('New passwords should match and not be empty')
         }
@@ -97,23 +70,13 @@ export default function BusinessProfilePage(props) {
     }
 
     const handleSubmitChanges = () => {
-        var myHeaders = new Headers();
-        myHeaders.append("Accept", "application/json");
-        myHeaders.append("Content-Type", "application/json");
+        const raw = JSON.stringify({ "firstName": name, "lastName": surname, "businessName": businessName, "phoneNumber": phoneNumber, "address": { "country": country, "city": city, "streetName": streetName, "streetNumber": streetNumber, "zipCode": postCode } });
 
-        var raw = JSON.stringify({ "firstName": name, "lastName": surname, "businessName": businessName, "phoneNumber": phoneNumber, "address": { "country": country, "city": city, "streetName": streetName, "streetNumber": streetNumber, "zipCode": postCode } });
-
-        var requestOptions = {
-            method: 'PUT',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow', 
-            credentials: 'include'
-        };
-
-        fetch(`http://localhost:8080/api/business?id=${props.userId}`, requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
+        apiFetch(`business?id=${props.userId}`, "PUT", raw)
+            .then(() => {
+                setChanges(true);
+                setButtonColor('#e5e5e5');
+            })
             .catch(error => console.log('error', error));
     }
 
@@ -130,9 +93,9 @@ export default function BusinessProfilePage(props) {
                         </div>
                     </div>
                     <div className='business-profile-info-fields'>
-                        <input className='business-profile-field-input' type='text' defaultValue={name} onChange={e => {handleInput(); setName(e.target.value)}} />
-                        <input className='business-profile-field-input' type='text' defaultValue={surname} onChange={e => {handleInput(); setSurname(e.target.value)}} />
-                        <input className='business-profile-field-input' type='text' defaultValue={phoneNumber} onChange={e => {handleInput(); setPhoneNumber(e.target.value)}} />
+                        <input className='business-profile-field-input' type='text' defaultValue={name} onChange={e => { handleInput(); setName(e.target.value) }} />
+                        <input className='business-profile-field-input' type='text' defaultValue={surname} onChange={e => { handleInput(); setSurname(e.target.value) }} />
+                        <input className='business-profile-field-input' type='text' defaultValue={phoneNumber} onChange={e => { handleInput(); setPhoneNumber(e.target.value) }} />
                     </div>
                 </div>
                 <p className='business-info-heading'>Business information</p>
@@ -148,24 +111,24 @@ export default function BusinessProfilePage(props) {
                         <p className='business-field-label'>Status:</p>
                     </div>
                     <div className='business-info-fields'>
-                        <input className='business-field-input' type='text' defaultValue={businessName} onChange={e => {handleInput(); setBusinessName(e.target.value)}} />
-                        <input className='business-field-input' type='text' defaultValue={country} onChange={e => {handleInput(); setCountry(e.target.value)}} />
-                        <input className='business-field-input' type='text' defaultValue={city} onChange={e => {handleInput(); setCity(e.target.value)}} />
-                        <input className='business-field-input' type='text' defaultValue={streetName} onChange={e => {handleInput(); setStreetName(e.target.value)}} />
-                        <input className='business-field-input' type='text' defaultValue={streetNumber} onChange={e => {handleInput(); setStreetNumber(e.target.value)}} />
-                        <input className='business-field-input' type='text' defaultValue={postCode} onChange={e => {handleInput(); setPostCode(e.target.value)}} />
+                        <input className='business-field-input' type='text' defaultValue={businessName} onChange={e => { handleInput(); setBusinessName(e.target.value) }} />
+                        <input className='business-field-input' type='text' defaultValue={country} onChange={e => { handleInput(); setCountry(e.target.value) }} />
+                        <input className='business-field-input' type='text' defaultValue={city} onChange={e => { handleInput(); setCity(e.target.value) }} />
+                        <input className='business-field-input' type='text' defaultValue={streetName} onChange={e => { handleInput(); setStreetName(e.target.value) }} />
+                        <input className='business-field-input' type='text' defaultValue={streetNumber} onChange={e => { handleInput(); setStreetNumber(e.target.value) }} />
+                        <input className='business-field-input' type='text' defaultValue={postCode} onChange={e => { handleInput(); setPostCode(e.target.value) }} />
                         <p className='business-field-label'>{status}</p>
 
                     </div>
                 </div>
 
-                <input type='button' className='submit-business-info' value='Submit changes' disabled={changes} style={{ backgroundColor: buttonColor }} onClick={() => { setChanges(true); setButtonColor('#e5e5e5'); handleSubmitChanges() }}></input>
+                <input type='button' className='submit-business-info' value='Submit changes' disabled={changes} style={{ backgroundColor: buttonColor }} onClick={handleSubmitChanges}></input>
 
                 <p className='change-password-p' >Change password</p>
                 <div className='customer-password-change'>
-                    <input className='cust-password-change-field' type='password' onChange={e => setPassword(e.target.value)} placeholder='Password'></input>
-                    <input className='cust-password-change-field' type='password' onChange={e => setNewPassword(e.target.value)} placeholder='New password'></input>
-                    <input className='cust-password-change-field' type='password' onChange={e => setConfirmPassword(e.target.value)} placeholder='Confirm password'></input>
+                    <input className='cust-password-change-field' type='password' defaultValue={password} onChange={e => setPassword(e.target.value)} placeholder='Password'></input>
+                    <input className='cust-password-change-field' type='password' defaultValue={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder='New password'></input>
+                    <input className='cust-password-change-field' type='password' defaultValue={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder='Confirm password'></input>
                     <input className='cust-password-submit-button' type='button' onClick={handlePasswordSubmit} value='Change password'></input>
                 </div>
                 <p style={{ color: passwordMessageColor, justifySelf: 'center' }}>{passwordMessage}</p>

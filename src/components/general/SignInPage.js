@@ -2,6 +2,7 @@ import React from 'react';
 import { useHistory, Link } from 'react-router-dom'
 import { useState } from 'react/cjs/react.development';
 import '../../styles/general/SignInPage.css';
+import apiFetch from '../../api'
 
 
 function SignInPageContent(props) {
@@ -19,21 +20,10 @@ function SignInPageContent(props) {
 
 
     const handleLogIn = () => {
-        let myHeaders = new Headers();
-        myHeaders.append("Accept", "application/json");
-        myHeaders.append("Content-Type", "application/json");
 
         let raw = JSON.stringify({ "email": loginField, "password": passwordField });
 
-        let requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow',
-            credentials: 'include'
-        };
-
-        fetch("http://localhost:8080/api/login", requestOptions)
+        apiFetch( 'login', 'POST', raw)
             .then(response => response.json().then(data => {
                 console.log(response.status);
                 if (response.status !== 200) {

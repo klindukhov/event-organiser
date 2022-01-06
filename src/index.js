@@ -4,6 +4,7 @@ import { BrowserRouter} from 'react-router-dom';
 import './styles/general/index.css';
 import App from './components/main/App';
 import Header from './components/main/Header';
+import apiFetch from './api.js'
 
 
 const Main = () => {
@@ -41,17 +42,8 @@ const Main = () => {
     window.localStorage.setItem('auth', false);
     window.localStorage.clear();
 
-    var requestOptions = {
-      method: 'GET',
-      redirect: 'follow',
-      credentials: 'include'
-    };
+    apiFetch('logout', 'GET').catch(error => console.log('error', error));
 
-    fetch("http://localhost:8080/api/logout", requestOptions)
-      .then(response => response.text())
-      .catch(error => console.log('error', error));
-
-    
     window.location.href = '/';
   }
 

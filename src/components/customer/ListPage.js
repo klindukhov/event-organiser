@@ -4,6 +4,7 @@ import { useParams, useHistory } from "react-router-dom";
 import '../../styles/customer/ListPage.css'
 
 import pplIcon from '../../images/pplIcon.png';
+import apiFetch from "../../api";
 
 
 export default function ListPage(props) {
@@ -32,22 +33,13 @@ export default function ListPage(props) {
     useEffect(() => {
         if (listType !== '' && listType !== 'events') {
             if (props.userData && props.userData.type === 'B') {
-                var myHeaders = new Headers();
-                var requestOptions = {
-                    method: 'GET',
-                    headers: myHeaders,
-                    redirect: 'follow',
-                    credentials: 'include'
-                };
-
-                fetch(`http://localhost:8080/api/${listType}/business?id=${props.userId}`, requestOptions)
-                    .then(response => response.json())
+                apiFetch(`${listType}/business?id=${props.userId}`)
                     .then(result => setItems(result))
                     .catch(error => console.log('error', error));
             } else {
-                fetch(`http://localhost:8080/api/${listType}/allowed/all`).then(res => res.json()).then(result => {
-                    setItems(result);
-                }).catch(error => console.log('error', error));
+                apiFetch(`${listType}/allowed/all`)
+                .then(result => {setItems(result.items)})
+                .catch(error => console.log('error', error));
             }
         } else if (listType === 'events') {
             getAllEvents();
@@ -62,15 +54,7 @@ export default function ListPage(props) {
 
     useEffect(() => {
         if (typeOfList === "Venues") {
-            var myHeaders = new Headers();
-            var requestOptions = {
-                method: 'GET',
-                headers: myHeaders,
-                redirect: 'follow'
-            };
-
-            fetch("http://localhost:8080/api/locations/allowed/cities", requestOptions)
-                .then(response => response.json())
+            apiFetch(`locations/allowed/cities`)
                 .then(result => setCities(result))
                 .catch(error => console.log('error', error));
 
@@ -85,21 +69,13 @@ export default function ListPage(props) {
 
     const [eventsTab, setEventsTab] = useState('ALL');
     useEffect(() => {
-        getAllEvents();
+        if(typeOfList === 'Events'){
+            getAllEvents();
+        }
         // eslint-disable-next-line
     }, [eventsTab])
     const getAllEvents = () => {
-        var myHeaderss = new Headers();
-
-        var requestOptionss = {
-            method: 'GET',
-            headers: myHeaderss,
-            redirect: 'follow',
-            credentials: 'include'
-        };
-
-        fetch(`http://localhost:8080/api/events/customer?customerId=${props.userId}&tab=${eventsTab}`, requestOptionss)
-            .then(response => response.json())
+        apiFetch(`events/customer?customerId=${props.userId}&tab=${eventsTab}`)
             .then(result => setItems(result))
             .catch(error => console.log('error', error));
     }
@@ -260,8 +236,8 @@ export default function ListPage(props) {
                             </div>
                         </div>
                         <div className='list-item-pics'>
-                            {typeOfList === "Venues" && c.images.map(i => <div key={i.image}>
-                                <img alt={i.alt} className='list-item-pic' src={i.image} />
+                            {typeOfList === "Venues" && c.images.map(i => <div key={i.name}>
+                                <img alt={i.name} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
                             </div>)}
                         </div>
                     </div>

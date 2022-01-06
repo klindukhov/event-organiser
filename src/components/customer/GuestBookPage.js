@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import apiFetch from "../../api";
 import '../../styles/customer/GuestBookPage.css'
 
 export default function GuestBook(props) {
@@ -10,22 +11,10 @@ export default function GuestBook(props) {
     const [email, setEmail] = useState('');
 
     const handleAddGuest = () => {
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
 
-        var raw = JSON.stringify({ "firstName": name, "lastName": surname, "email": email });
+        const raw = JSON.stringify({ "firstName": name, "lastName": surname, "email": email });
 
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow',
-            credentials: 'include'
-        };
-
-        fetch(`http://localhost:8080/api/guests/new?customerId=${props.userId}`, requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
+        apiFetch(`guests/new?customerId=${props.userId}`, "POST", raw)
             .catch(error => console.log('error', error));
 
         window.location.reload();
@@ -33,35 +22,14 @@ export default function GuestBook(props) {
     }
 
     useEffect(() => {
-        var myHeaders = new Headers();
-
-        var requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow',
-            credentials: 'include'
-        };
-
-        fetch(`http://localhost:8080/api/guests/customer?customerId=${props.userId}`, requestOptions)
-            .then(response => response.json())
+        apiFetch(`guests/customer?customerId=${props.userId}`)
             .then(result => setGuests(result))
             .catch(error => console.log('error', error));
         // eslint-disable-next-line
     }, [props.userId])
 
     const deleteGuest = (id) => {
-        var myHeaders = new Headers();
-
-        var requestOptions = {
-            method: 'DELETE',
-            headers: myHeaders,
-            redirect: 'follow',
-            credentials: 'include'
-        };
-
-        fetch(`http://localhost:8080/api/guests?customerId=${props.userId}&id=${id}`, requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
+        apiFetch(`guests?customerId=${props.userId}&id=${id}`, "DELETE")
             .catch(error => console.log('error', error));
 
         window.location.reload();

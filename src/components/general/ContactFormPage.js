@@ -1,5 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react/cjs/react.development";
+import apiFetch from "../../api";
 import "../../styles/general/ContactFormPage.css"
 
 export default function ContactFormPage(props) {
@@ -8,39 +9,15 @@ export default function ContactFormPage(props) {
     const [description, setDescription] = useState('');
 
     useEffect(() => {
-        var myHeaders = new Headers();
-
-        var requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow',
-            credentials: 'include'
-        };
-
-        fetch("http://localhost:8080/api/problems/types", requestOptions)
-            .then(response => response.json())
+        apiFetch(`problems/types`)
             .then(result => setConcerns(result))
             .catch(error => console.log('error', error));
     }, [])
 
     const handleSubmit = () => {
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
+        const raw = JSON.stringify({ "concern": concern, "description": description });
 
-        var raw = JSON.stringify({ "concern": concern, "description": description });
-
-        var requestOptions = {
-            method: 'POST',
-            credentials: 'include',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-
-        };
-
-        fetch(`http://localhost:8080/api/problems?userId=${props.userId}`, requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
+        apiFetch(`problems?userId=${props.userId}`, "POST", raw)
             .catch(error => console.log('error', error));
 
          window.location.reload();

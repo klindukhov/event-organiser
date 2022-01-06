@@ -3,6 +3,7 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import '../../styles/admin/UserDetailsPage.css'
 
 import pplIcon from '../../images/pplIcon.png';
+import apiFetch from "../../api";
 
 
 export default function UserDetailsPage() {
@@ -21,46 +22,23 @@ export default function UserDetailsPage() {
     //  const [reservations, setReservations] = useState([]);
 
     useEffect(() => {
-        var myHeaders = new Headers();
-
-        var requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow',
-            credentials: 'include'
-        };
-
-        fetch(`http://localhost:8080/api/users?id=${id}`, requestOptions)
-            .then(response => response.json())
+        apiFetch(`users?id=${id}`)
             .then(result => setDetails(result))
             .catch(error => console.log('error', error));
-
         // eslint-disable-next-line
     }, [])
 
     useEffect(() => {
         if (details.type === 'B') {
-            var myHeaders = new Headers();
-
-            var requestOptions = {
-                method: 'GET',
-                headers: myHeaders,
-                redirect: 'follow',
-                credentials: 'include'
-            };
-
-            fetch(`http://localhost:8080/api/caterings/business?id=${id}`, requestOptions)
-                .then(response => response.json())
+            apiFetch(`caterings/business?id=${id}`)
                 .then(result => setCaterings(result))
                 .catch(error => console.log('error', error));
 
-            fetch(`http://localhost:8080/api/locations/business?id=${id}`, requestOptions)
-                .then(response => response.json())
-                .then(result => setLocations(result))
-                .catch(error => console.log('error', error));
-
-            fetch(`http://localhost:8080/api/services/business?id=${id}`, requestOptions)
-                .then(response => response.json())
+            apiFetch(`locations/business?id=${id}`)
+            .then(result => setLocations(result))
+            .catch(error => console.log('error', error));
+            
+            apiFetch(`services/business?id=${id}`)
                 .then(result => setServices(result))
                 .catch(error => console.log('error', error));
         } else if (details.type === 'C') {
@@ -71,41 +49,20 @@ export default function UserDetailsPage() {
     }, [details])
 
     useEffect(() => {
-        getAllEvents();
+        if(details.type === 'C'){
+            getAllEvents();
+        }
         // eslint-disable-next-line
     }, [eventsTab])
 
     const getAllEvents = () => {
-        var myHeaderss = new Headers();
-
-        var requestOptionss = {
-            method: 'GET',
-            headers: myHeaderss,
-            redirect: 'follow',
-            credentials: 'include'
-        };
-
-        fetch(`http://localhost:8080/api/events/customer?customerId=${id}&tab=${eventsTab}`, requestOptionss)
-            .then(response => response.json())
+        apiFetch(`events/customer?customerId=${id}&tab=${eventsTab}`)
             .then(result => setEvents(result))
             .catch(error => console.log('error', error));
     }
 
     const handleVerify = () => {
-        var myHeaders = new Headers();
-        myHeaders.append("Accept", "application/json");
-        myHeaders.append("Content-Type", "application/json");
-
-        var requestOptions = {
-            method: 'PUT',
-            headers: myHeaders,
-            redirect: 'follow',
-            credentials: 'include'
-        };
-
-        fetch(`http://localhost:8080/api/business/verify?id=${id}`, requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
+        apiFetch(`business/verify?id=${id}`, "PUT")
             .catch(error => console.log('error', error));
 
         window.location.reload();
@@ -122,7 +79,6 @@ export default function UserDetailsPage() {
     const [eventFutureBackColor, setEventFutureBackColor] = useState('#e5e5e5');
     const [eventAllBackColor, setEventAllBackrColor] = useState('#47525e');
     const handleEvents = (e) => {
-        console.log(e.target.value);
         if (e.target.value === "all") {
             setEventPastColor('#47525e');
             setEventFutureColor('#47525e');
@@ -198,25 +154,25 @@ export default function UserDetailsPage() {
                 </div>)}
             </div>
         }
-        {details.type === 'B' && locations.length !== 0 &&
+        {details.type === 'B' && locations.length > 0 && 
             <div className="block">
                 <p className="problem-heading">Locations</p>
                 {locations.map(c => <div key={c.id} className='item-list-element' style={{ justifySelf: 'center', width: '1420px', marginBottom: '30px' }} >
-                    <Link to={`/ItemDetails/Venue/${Object.values(c)[0]}`} style={{ textDecoration: 'none' }}>
+                    <Link to={`/ItemDetails/Venue/${c.id}`} style={{ textDecoration: 'none' }}>
                         <div className='list-item' style={{ width: '1420px' }}>
                             <div className='overlay-listing' style={{ width: '1420px' }}>
                                 <div className='overlay-listing-left' >
-                                    {Object.values(c)[1]} , {Object.values(c)[10].city}, {Object.values(c)[10].streetName}/{Object.values(c)[10].streetNumber}<br />
-                                    {Object.values(c)[6]}
+                                    {c.name} , {c.address.city}, {c.address.streetName}, {c.address.streetNumber}<br />
+                                    {c.description}
                                     <img className='ppl-icon' alt='ppl-icon' src={pplIcon} />
-                                    {Object.values(c)[4]}
+                                    {c.seatingCapacity}
                                 </div>
                                 <div className='overlay-listing-right'>
-                                    From {Object.values(c)[8]}pln/day
+                                    From {c.dailyRentCost}pln/day
                                 </div>
                             </div>
                             <div className='list-item-pics' style={{ width: '1420px' }}>
-                                {Object.values(c)[18].map(i => <div key={i.alt}>
+                                {c.images.map(i => <div key={i.alt}>
                                     <img alt={Object.values(i)[1]} className='list-item-pic' src={Object.values(i)[0]} />
                                 </div>)}
                             </div>

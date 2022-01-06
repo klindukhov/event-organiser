@@ -1,0 +1,28 @@
+.business-hours{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto;
+    justify-items: center;
+}
+.business-images{
+    width:1420px;
+    background-color: var(--bg);
+    display: flex;
+    width: 100%;
+    min-height: 400px;
+    padding: 15px;
+    overflow: auto;
+    align-items: center;
+}
+.add-images-label{
+    color: var(--txt);
+    font-size: 50pt;
+    cursor: pointer;
+}
+.add-images-input{
+    z-index: -100;
+    position: relative;
+}
+.add-images-list{
+    max-height: 370px;
+    margin-right: 15px;
+}

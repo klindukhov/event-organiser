@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/general/SignUpPage.css';
 import { useHistory } from 'react-router-dom'
+import apiFetch from '../../api';
 
 
 
@@ -97,11 +98,7 @@ function SignUpPageContent(props) {
     }, [accType]);
 
     const createUser = () => {
-        var myHeaders = new Headers();
-        myHeaders.append("Accept", "application/json");
-        myHeaders.append("Content-Type", "application/json");
         let raw;
-        let requestOptions;
         let accT;
         if (accType === 'C') {
             raw = JSON.stringify({ "email": email, "password": password, "firstName": uName, "lastName": uSurname, "birthdate": uBirthdate, "phoneNumber": uPhoneNum, "address": { "country": country, "city": city, "streetName": street, "streetNumber": house, "zipCode": zip } });
@@ -110,45 +107,25 @@ function SignUpPageContent(props) {
             raw = JSON.stringify({ "email": email, "password": password, "firstName": uName, "lastName": uSurname, "businessName": bName, "phoneNumber": uPhoneNum, "address": { "country": country, "city": city, "streetName": street, "streetNumber": house, "zipCode": zip } });
             accT = 'business';
         }
+        apiFetch(`register/${accT}`, "POST", raw)
+            .then(res => {
+                if (res.ok) {
+                    let login = JSON.stringify({ "email": email, "password": password });
 
-        requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-
-        fetch(`http://localhost:8080/api/register/${accT}`, requestOptions)
-            .then(response => response.text().then(result => {
-                console.log(result);
-                if (response.ok) {
-                    raw = JSON.stringify({ "email": email, "password": password });
-
-                    requestOptions = {
-                        method: 'POST',
-                        headers: myHeaders,
-                        body: raw,
-                        redirect: 'follow',
-                        credentials: 'include'
-                    };
-
-                    fetch("http://localhost:8080/api/login", requestOptions)
-                        .then(response => response.json().then(data => {
-                            console.log(response.status);
-                            if (response.status !== 200) {
-                                alert('problem');
-                            } else {
-                                props.setAuth(data); if (data.type === 'C') {
-                                    history.push('/');
-                                } else if (data.type === 'B') {
-                                    history.push('/BusinessHomePage');
-                                }
+                    apiFetch('login', 'POST', login)
+                    .then(res => res.json())
+                        .then(data => {
+                            props.setAuth(data);
+                            if (data.type === 'C') {
+                                history.push('/');
+                            } else if (data.type === 'B') {
+                                history.push('/BusinessHomePage');
                             }
-                        }))
+                        })
                         .catch(error => console.log('error-login', error));
                 }
-            })).catch(error => console.log('error-register', error));
 
+            }).catch(error => console.log('error-register', error));
     }
 
 

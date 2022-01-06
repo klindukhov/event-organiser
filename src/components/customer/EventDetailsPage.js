@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import pplIcon from '../../images/pplIcon.png';
 import { useParams } from 'react-router-dom';
+import apiFetch from '../../api';
 
 
 export default function EventDetailsPage(props) {
@@ -33,69 +34,59 @@ export default function EventDetailsPage(props) {
 
     const [isServicePicked, setIsServicePicked] = useState(false);
 
-    
-        const [newGuestPanel, setNewGuestPanel] = useState(false);
-        const [guestList, setGuestList] = useState([]);
-        useEffect(() => { if (JSON.parse(window.localStorage.getItem('guestList'))){if (JSON.parse(window.localStorage.getItem('guestList')).length > 0) { setGuestList(JSON.parse(window.localStorage.getItem('guestList'))) }}}, [])
-    
-        const [guestBook, setGuestBook] = useState([]);
-        useEffect(() => {
-            var myHeaders = new Headers();
-    
-            var requestOptions = {
-                method: 'GET',
-                headers: myHeaders,
-                redirect: 'follow',
-                credentials: 'include'
-            };
-    
-            fetch(`http://localhost:8080/api/guests/customer?customerId=${props.userId}`, requestOptions)
-                .then(response => response.json())
-                .then(result => setGuestBook(result))
-                .catch(error => console.log('error', error));
-        }, [props.userId])
-    
-    
-        const [name, setGuestName] = useState('')
-        const [surname, setGuestSurname] = useState('')
-        const [email, setGuestEmail] = useState('')
-    
-        const addNewGuest = () => {
-            setGuestList([
-                ...guestList,
-                {
-                    name: name,
-                    surname: surname,
-                    email: email
-                }
-            ]);
-            setNewGuestPanel(false);
-        }
-    
-        useEffect(() => {
-            if (guestList.length > 0) {
-                window.localStorage.setItem('guestList', JSON.stringify(guestList));
+
+    const [newGuestPanel, setNewGuestPanel] = useState(false);
+    const [guestList, setGuestList] = useState([]);
+    useEffect(() => { if (JSON.parse(window.localStorage.getItem('guestList'))) { if (JSON.parse(window.localStorage.getItem('guestList')).length > 0) { setGuestList(JSON.parse(window.localStorage.getItem('guestList'))) } } }, [])
+
+    const [guestBook, setGuestBook] = useState([]);
+    useEffect(() => {
+        apiFetch(`guests/customer?customerId=${props.userId}`)
+            .then(result => setGuestBook(result))
+            .catch(error => console.log('error', error));
+    }, [props.userId])
+
+
+    const [name, setGuestName] = useState('')
+    const [surname, setGuestSurname] = useState('')
+    const [email, setGuestEmail] = useState('')
+
+    const addNewGuest = () => {
+        setGuestList([
+            ...guestList,
+            {
+                name: name,
+                surname: surname,
+                email: email
             }
-        }, [guestList])
-    
-        const handleSelectGuestFromBook = e => {
-            document.getElementById('newGuestName').defaultValue = JSON.parse(e.target.value).firstName;
-            setGuestName(JSON.parse(e.target.value).firstName)
-            document.getElementById('newGuestSurname').defaultValue = JSON.parse(e.target.value).lastName;
-            setGuestSurname(JSON.parse(e.target.value).lastName)
-            document.getElementById('newGuestEmail').defaultValue = JSON.parse(e.target.value).email;
-            setGuestEmail(JSON.parse(e.target.value).email)
+        ]);
+        setNewGuestPanel(false);
+    }
+
+    useEffect(() => {
+        if (guestList.length > 0) {
+            window.localStorage.setItem('guestList', JSON.stringify(guestList));
         }
-    
-        const handleGuestDelete = id => {
-            let temp = [...guestList];
-            temp.splice(id, 1);
-            setGuestList(temp);
-            if (temp.length === 0) {
-                props.setGuests([]);
-            }
+    }, [guestList])
+
+    const handleSelectGuestFromBook = e => {
+        document.getElementById('newGuestName').defaultValue = JSON.parse(e.target.value).firstName;
+        setGuestName(JSON.parse(e.target.value).firstName)
+        document.getElementById('newGuestSurname').defaultValue = JSON.parse(e.target.value).lastName;
+        setGuestSurname(JSON.parse(e.target.value).lastName)
+        document.getElementById('newGuestEmail').defaultValue = JSON.parse(e.target.value).email;
+        setGuestEmail(JSON.parse(e.target.value).email)
+    }
+
+    const handleGuestDelete = id => {
+        let temp = [...guestList];
+        temp.splice(id, 1);
+        setGuestList(temp);
+        if (temp.length === 0) {
+            props.setGuests([]);
         }
-    
+    }
+
 
     const [eventName, setEventName] = useState('');
     useEffect(() => { if (eventName !== '') { window.localStorage.setItem('eventName', eventName) } else { setEventName(window.localStorage.getItem('eventName')) } }, [eventName])
@@ -112,16 +103,7 @@ export default function EventDetailsPage(props) {
     const [eventTypes, setEventTypes] = useState([]);
 
     useEffect(() => {
-        var myHeaders = new Headers();
-
-        var requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow'
-        };
-
-        fetch("http://localhost:8080/api/events/types/allowed/all", requestOptions)
-            .then(response => response.json())
+        apiFetch(`events/types/allowed/all`)
             .then(result => setEventTypes(result))
             .catch(error => console.log('error', error));
     }, [])
@@ -140,21 +122,10 @@ export default function EventDetailsPage(props) {
         if (props.authorized === false) {
             history.push('/SignIn');
         } else if (eventType !== '' && eventType !== 'Event type' && eventName !== '' && eDate !== '' && eStart !== '' && eEnd !== '' && guestNum !== '') {
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
+            const raw = JSON.stringify({ "name": eventName, "date": eDate, "startTime": eStart, "endTime": eEnd, "guestCount": guestNum, "eventType": eventType });
 
-            var raw = JSON.stringify({ "name": eventName, "date": eDate, "startTime": eStart + ':00', "endTime": eEnd + ':00', "guestCount": guestNum, "eventType": eventType });
-
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow',
-                credentials: 'include'
-            };
-
-            fetch(`http://localhost:8080/api/events?customerId=${props.userId}`, requestOptions)
-                .then(response => response.json())
+            apiFetch(`events?customerId=${props.userId}`, "POST", raw)
+                .then(res => res.json())
                 .then(result => {
                     console.log(result);
                     history.push(`/EventDetailsPage/${result.id}`);
@@ -173,10 +144,10 @@ export default function EventDetailsPage(props) {
     useEffect(() => { if (window.localStorage.serviceInfo && JSON.parse(window.localStorage.serviceInfo).length > 0) { setIsServicePicked(true) } }, [window.localStorage.serviceInfo])
 
     const today = () => {
-        var today = new Date();
-        var d = today.getDate() + 1;
-        var m = today.getMonth() + 1;
-        var y = today.getFullYear();
+        let today = new Date();
+        let d = today.getDate() + 1;
+        let m = today.getMonth() + 1;
+        let y = today.getFullYear();
         if (d < 10) {
             d = '0' + d
         }
@@ -290,7 +261,7 @@ export default function EventDetailsPage(props) {
                     {isServicePicked &&
                         <div>
                             {JSON.parse(window.localStorage.getItem('serviceInfo')).map && JSON.parse(window.localStorage.getItem('serviceInfo')).map(c =>
-                                <div key={c.id} className='list-item' style={{ justifySelf: 'center', width: '1420px', marginBottom: '30px', display: 'grid', gridTemplateColumns: 'auto auto'  }} >
+                                <div key={c.id} className='list-item' style={{ justifySelf: 'center', width: '1420px', marginBottom: '30px', display: 'grid', gridTemplateColumns: 'auto auto' }} >
                                     <div className='list-item' style={{ width: '1420px' }} onClick={() => history.push(`/ItemDetails/Service/${c.id}`)}>
                                         <div className='overlay-listing' style={{ width: '1420px' }}>
                                             <div className='overlay-listing-left'>
