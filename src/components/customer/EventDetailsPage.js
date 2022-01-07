@@ -121,7 +121,7 @@ export default function EventDetailsPage(props) {
     const handleCreateEvent = () => {
         if (props.authorized === false) {
             history.push('/SignIn');
-        } else if (eventType !== '' && eventType !== 'Event type' && eventName !== '' && eDate !== '' && eStart !== '' && eEnd !== '' && guestNum !== '') {
+        } else if (eventType !== '' && eventType !== 'Event type' && eventName !== '' && eDate !== '' && eStart !== '' && eEnd !== '' && guestNum !== '' && eventType !== null && eventName !== null && eDate !== null && eStart !== null && eEnd !== null && guestNum !== null ) {
             const raw = JSON.stringify({ "name": eventName, "date": eDate, "startTime": eStart, "endTime": eEnd, "guestCount": guestNum, "eventType": eventType });
 
             apiFetch(`events?customerId=${props.userId}`, "POST", raw)
@@ -201,19 +201,19 @@ export default function EventDetailsPage(props) {
                         <div className='list-item' style={{ width: '1420px' }}>
                             <div className='overlay-listing' style={{ width: '1420px' }}>
                                 <div className='overlay-listing-left' >
-                                    {Object.values(JSON.parse(window.localStorage.getItem('locationDetails')))[1]} , {Object.values(JSON.parse(window.localStorage.getItem('locationDetails')))[10].city}, {Object.values(JSON.parse(window.localStorage.getItem('locationDetails')))[10].streetName}/{Object.values(JSON.parse(window.localStorage.getItem('locationDetails')))[10].streetNumber}<br />
-                                    {Object.values(JSON.parse(window.localStorage.getItem('locationDetails')))[6]}
+                                    {JSON.parse(window.localStorage.getItem('locationDetails')).name} , {JSON.parse(window.localStorage.getItem('locationDetails')).address.city}, {JSON.parse(window.localStorage.getItem('locationDetails')).address.streetName}, {JSON.parse(window.localStorage.getItem('locationDetails')).address.streetNumber}<br />
+                                    {JSON.parse(window.localStorage.getItem('locationDetails')).description}
                                     <img className='ppl-icon' alt='ppl-icon' src={pplIcon} />
-                                    {Object.values(JSON.parse(window.localStorage.getItem('locationDetails')))[4]}
+                                    {JSON.parse(window.localStorage.getItem('locationDetails')).seatingCapacity}
                                 </div>
                                 <div className='overlay-listing-right'>
-                                    From {Object.values(JSON.parse(window.localStorage.getItem('locationDetails')))[8]}pln/day<br />
+                                    From {JSON.parse(window.localStorage.getItem('locationDetails')).dailyRentCost}pln/day<br />
 
                                 </div>
                             </div>
                             <div className='list-item-pics' style={{ width: '1420px' }}>
-                                {Object.values(JSON.parse(window.localStorage.getItem('locationDetails')))[18].map(i => <div key={i.alt}>
-                                    <img alt={Object.values(i)[1]} className='list-item-pic' src={Object.values(i)[0]} />
+                                {JSON.parse(window.localStorage.getItem('locationDetails')).images.map(i => <div key={i.name}>
+                                    <img alt={i.encodedImage} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
                                 </div>)}
                             </div>
                         </div>

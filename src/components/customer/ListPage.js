@@ -32,7 +32,7 @@ export default function ListPage(props) {
 
     useEffect(() => {
         if (listType !== '' && listType !== 'events') {
-            if (props.userData && props.userData.type === 'B') {
+            if (props.userData && props.userData.user.type === 'B') {
                 apiFetch(`${listType}/business?id=${props.userId}`)
                     .then(result => setItems(result))
                     .catch(error => console.log('error', error));
@@ -123,7 +123,7 @@ export default function ListPage(props) {
 
     return (
         <div className="main">
-            {(props.authorized === false || (props.authorized === true && props.userData.type === 'C')) && <>
+            {(props.authorized === false || (props.authorized === true && props.userData.user.type === 'C')) && <>
                 {typeOfList === "Venues" &&
                     <div className="block">
                         City:
@@ -236,7 +236,7 @@ export default function ListPage(props) {
                             </div>
                         </div>
                         <div className='list-item-pics'>
-                            {typeOfList === "Venues" && c.images.map(i => <div key={i.name}>
+                            {typeOfList === "Venues" && c.images.map(i => <div key={i.encodedImage}>
                                 <img alt={i.name} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
                             </div>)}
                         </div>
@@ -245,12 +245,12 @@ export default function ListPage(props) {
             </>}
 
 
-            {props.authorized === true && props.userData.type === 'B' &&
+            {props.authorized === true && props.userData.user.type === 'B' &&
                 <div className='block' style={{ textAlign: 'center' }} onClick={() => history.push('/AddBusinessPage/' + typeOfList.substring(0, typeOfList.length - 1))}>
                     Add {typeOfList.substring(0, typeOfList.length - 1)}
                 </div>
             }
-            {props.authorized === true && props.userData.type === 'C' && typeOfList === 'Events' &&
+            {props.authorized === true && props.userData.user.type === 'C' && typeOfList === 'Events' &&
                 <div className='block' style={{ textAlign: 'center' }} onClick={() => history.push('/EventDetailsPage/new')}>
                     Add {typeOfList.substring(0, typeOfList.length - 1)}
                 </div>

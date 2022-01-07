@@ -149,10 +149,10 @@ export default function ItemDetailsPage(props) {
             <div className='gallery-info-div'>
                 <div className='item-gallery-rect'>
                     <div>
-                        {typeOfItem === 'Venue' && slideImages && <Slide >
+                        {slideImages && <Slide >
                             {slideImages.map(i =>
-                                <div key={i.alt} className="each-slide">
-                                    <div style={{ backgroundImage: `url(${i.image})` }}>
+                                <div key={i.name} className="each-slide">
+                                    <div style={{ backgroundImage: `url(${'data:image/png;base64,' + i.encodedImage})` }}>
                                     </div>
                                 </div>
                             )}
@@ -217,12 +217,12 @@ export default function ItemDetailsPage(props) {
                             {props.authorized === false &&
                                 <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
                             }
-                            {props.authorized === true && props.userData.type === 'C' &&
+                            {props.authorized === true && props.userData.user.type === 'C' &&
                                 <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
                             }
                         </>}
                         {typeOfItem === 'Event' && <>
-                            {props.authorized === true && props.userData.type === 'C' &&
+                            {props.authorized === true && props.userData.user.type === 'C' &&
                                 <input type='button' className='add-to-event-button' value='Edit event' onClick={() => history.push(`/EventDetailsPage/${id}`)} />
                             }
                         </>}
@@ -281,7 +281,7 @@ export default function ItemDetailsPage(props) {
                             </div>
                             <div className='list-item-pics' style={{ width: '1420px' }}>
                                 {aliasItemType === "locations" && c.images.map(i => <div key={i.image}>
-                                    <img alt={i.alt} className='list-item-pic' src={i.image} />
+                                    <img alt={i.name} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
                                 </div>)}
                             </div>
                         </div>
@@ -309,7 +309,7 @@ export default function ItemDetailsPage(props) {
                     {props.authorized === true && props.userData.type === "C" && <>
                         <div className='reviewer-info'>
                             <img alt='acc-pic' src={accIcon} className='contact-acc-pic1' />
-                            <div className='reviewer-name'> {props.user && props.user.firstName + " " + props.user.lastName} <br /> <input className='write-title-div' placeholder='Write a title here' onChange={e => setTitle(e.target.value)} />
+                            <div className='reviewer-name'> {props.userData && props.userData.firstName + " " + props.userData.lastName} <br /> <input className='write-title-div' placeholder='Write a title here' onChange={e => setTitle(e.target.value)} />
                                 <StarRatings
                                     rating={rating}
                                     starRatedColor={getComputedStyle(document.querySelector(':root')).getPropertyValue('--txt')}

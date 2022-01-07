@@ -172,8 +172,8 @@ export default function UserDetailsPage() {
                                 </div>
                             </div>
                             <div className='list-item-pics' style={{ width: '1420px' }}>
-                                {c.images.map(i => <div key={i.alt}>
-                                    <img alt={Object.values(i)[1]} className='list-item-pic' src={Object.values(i)[0]} />
+                                {c.images.map(i => <div key={i.name}>
+                                    <img alt={i.name} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
                                 </div>)}
                             </div>
                         </div>

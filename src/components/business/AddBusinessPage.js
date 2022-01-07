@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import apiFetch from "../../api";
 import '../../styles/business/AddBusinessPage.css'
 
 export default function AddBusinessPage(props) {
+    const history = useHistory();
     const { businessType } = useParams();
     const [typeOfBusiness, setTypeOfBusiness] = useState('');
     useEffect(() => { if (businessType === 'Venue') { setTypeOfBusiness('locations') } else if (businessType === 'Catering') { setTypeOfBusiness('caterings/new') } else if (businessType === 'Service') { setTypeOfBusiness('services') } }, [])
@@ -22,9 +23,9 @@ export default function AddBusinessPage(props) {
 
     const [formErrorMessage, setFormErrorMessage] = useState('');
     const handleCreateBusiness = () => {
-        if (name !== '' && email !== '' && phoneNumber !== '' && seatingCap !== '' && standingCap !== '' && description !== '' && dailyRentCost !== '' && size !== '' && country !== '' && city !== '' && streetName !== '' && streetNum !== '' && postCode !== '' && descriptions !== []) {
-            let body = JSON.stringify({ "address": { "country": country, "city": city, "streetName": streetName, "streetNumber": streetNum, "zipCode": postCode }, "businessHours": businessHours, "email": email, "description": description });
-            if (businessType === 'Venue') {
+        if (name !== '' && email !== '' && phoneNumber !== '' &&  description !== '' && dailyRentCost !== ''  && country !== '' && city !== '' && streetName !== '' && streetNum !== '' && postCode !== '') {
+            let body = { "address": { "country": country, "city": city, "streetName": streetName, "streetNumber": streetNum, "zipCode": postCode }, "businessHours": businessHours, "email": email, "description": description };
+            if (businessType === 'Venue' && seatingCap !== '' && standingCap !== ''&& size !== '' && descriptions !== []) {
                 body.dailyRentCost = dailyRentCost;
                 body.name = name;
                 body.phoneNumber = phoneNumber;
@@ -32,27 +33,37 @@ export default function AddBusinessPage(props) {
                 body.seatingCapacity = seatingCap;
                 body.standingCapacity = standingCap;
                 body.sizeInSqMeters = size;
-
             } else if (businessType === 'Catering') {
                 body.serviceCost = dailyRentCost;
                 body.name = name;
                 body.offersOutsideCatering = outsideCatering;
                 body.phoneNumber = phoneNumber;
                 body.cuisines = cuisines;
-
-
             } else if (businessType === "Service") {
                 body.serviceCost = dailyRentCost;
                 body.firstName = name;
                 body.lastName = surname;
                 body.alias = alias;
                 body.type = type;
-
-
             }
-            apiFetch(typeOfBusiness, "POST", body)
-                .then(res => { if (res.ok) { res.json() } })
-                .then(data => apiFetch(businessType.toLowerCase(), "POST", pics))
+            apiFetch(typeOfBusiness, "POST", JSON.stringify(body))
+                .then(res => res.json())
+                .then(res => {
+                    if (businessType !== "Venue" && false) {
+                        pics.forEach(p => {
+                            let data = new FormData();
+                            data.append("file", p.file, p.file.name);
+                            apiFetch(`images/${businessType.toLowerCase()}/upload?${businessType.toLowerCase()}Id=${res.id}`, "POST", data, 's')
+                        })
+                    } else {
+                        pics.forEach(p => {
+                            let data = new FormData();
+                            data.append("file", p.file, p.file.name);
+                            apiFetch(`images/location/upload?locationId=${res.id}`, "POST", data, 's');
+                        })
+                    }
+                    history.push('/ListPage/Venues')
+                })
                 .catch(e => console.log('error', e));
 
             setFormErrorMessage(false);
@@ -139,15 +150,15 @@ export default function AddBusinessPage(props) {
             console.log(e.target.files);
             let temp = pics.slice();
             if (e.target.files.length > 1) {
-                Object.values(e.target.files).forEach(f => temp.push(URL.createObjectURL(f)))
+                Object.values(e.target.files).forEach(f => temp.push({ 'pic': URL.createObjectURL(f), 'file': f }))
             } else {
-                temp.push(URL.createObjectURL(e.target.files[0]));
+                temp.push({ 'pic': URL.createObjectURL(e.target.files[0]), 'file': e.target.files[0] });
             }
             setPics(temp);
         }
     }
 
-    const handleDeleteImage = (e) =>{
+    const handleDeleteImage = (e) => {
         let temp = pics.slice();
         temp.splice(temp.indexOf(e), 1);
         setPics(temp);
@@ -178,7 +189,7 @@ export default function AddBusinessPage(props) {
                     <input className="input" onChange={e => setPhoneNumber(e.target.value)} /><br />
                 </>
             }
-            {typeOfBusiness === "Venue" &&
+            {businessType === "Venue" &&
                 <>
                     Seating capacity
                     <input className="input" onChange={e => setSeatingCap(e.target.value)} /><br />
@@ -217,7 +228,7 @@ export default function AddBusinessPage(props) {
             {businessType === 'Catering' &&
                 <>
                     <p style={{ textAlign: 'center' }}>Cuisines </p>
-                    {availableCuisines.map(o => <div key={o.name}><input type='checkbox' value={o.name} onChange={handleCuisines} /> {o.name}</div>)}
+                    {availableCuisines.map(o => <div key={o.name}><input type='checkbox' value={o} onChange={handleCuisines} /> {o.name}</div>)}
                 </>
             }
             <p style={{ textAlign: 'center' }}>Business Hours</p>
@@ -232,9 +243,9 @@ export default function AddBusinessPage(props) {
             <p style={{ textAlign: 'center' }}>Images </p>
             <div className="business-images">
                 {pics.map(p =>
-                <div className="image-added">
-                    <img alt={p} key={p} src={p} className="add-images-list" onClick={() => handleDeleteImage(p)}/>
-                </div>
+                    <div className="image-added" key={p}>
+                        <img alt={p.pic} key={p.pic} src={p.pic} className="add-images-list" onClick={() => handleDeleteImage(p)} />
+                    </div>
                 )}
                 <div className="add-images-wrapper">
                     <label htmlFor='add-images' className="add-images-label">+</label>

@@ -12,7 +12,6 @@ const Main = () => {
   const [authorized, setAuthorized] = useState(false);
   const [userId, setUserId] = useState(); 
   const [userData, setUserData] = useState();
-  const [user, setUser] = useState();
 
   useEffect(() => {
     if (window.localStorage.getItem('auth') === 'true') {
@@ -51,8 +50,6 @@ const Main = () => {
     authorized: authorized,
     userId: userId,
     userData: userData,
-    user: user,
-    setUser: setUser,
     setAuth: setAuth,
     setUnauth: setUnauth,
     setHeaderMessage: setHeaderMessage,

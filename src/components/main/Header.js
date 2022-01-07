@@ -13,9 +13,6 @@ const Header = (props) => {
   const [accType, setAccType] = useState('');
   const [logoLink, setLogoLink] = useState('/');
 
-  //  eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { if (userName === 'Sign in' && props.myProps.authorized) { props.myProps.setUnauth(); window.location.reload() } }, [])
-
   const [theme, setTheme] = useState('');
   useEffect(() => {
     let r = document.querySelector(':root');
@@ -58,30 +55,24 @@ const Header = (props) => {
 
   useEffect(() => {
     if (props.myProps.authorized === true) {
-      if (props.myProps.userData.type === 'C') {
+      if (props.myProps.userData.user && props.myProps.userData.user.type === 'C') {
         setUserPageLink('/CustomerProfilePage');
         setMyAccount('/CustomerProfilePage');
         setAccType('C');
 
-        apiFetch(`customers?id=${props.myProps.userId}`)
+        apiFetch(`customers?id=${props.myProps.userData.id}`)
           .then(res => {
-            if (res.firstName !== undefined) {
-              setUserName(res.firstName + ' ' + res.lastName);
-              props.myProps.setUser(res);
-            } else {
-              props.myProps.setUnauth();
-            }
-          }).catch(error => console.log('error', error));
-      } else if (props.myProps.userData.type === 'B') {
+            setUserName(res.firstName + ' ' + res.lastName);
+          }).catch(error => { console.log('error', error); props.myProps.setUnauth(); });
+      } else if (props.myProps.userData.user && props.myProps.userData.user.type === 'B') {
         setAccType('B');
         setUserPageLink('/BusinessProfilePage');
         setMyAccount('/BusinessProfilePage');
         setLogoLink('/BusinessHomePage');
 
-        apiFetch(`business/${props.myProps.userId}/detail`)
+        apiFetch(`business/${props.myProps.userData.id}/detail`)
           .then(res => {
             setUserName(res.firstName + ' ' + res.lastName);
-            props.myProps.setUser(res);
           })
           .catch(error => { console.log('error', error); props.myProps.setUnauth(); });
       } else if (props.myProps.userData.type === 'A') {
@@ -92,11 +83,8 @@ const Header = (props) => {
         setLogoLink('/ProblemsPage');
 
         apiFetch(`problems?status=ALL`)
-          .then(response => { if (response.status === 403) { props.myProps.setUnauth() } })
           .catch(error => { console.log('error', error); props.myProps.setUnauth() });
-
       }
-
     } else if (props.myProps.authorized === false) {
       setUserPageLink('/SignIn');
       setUserName('Sign in');
