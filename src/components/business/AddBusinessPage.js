@@ -18,14 +18,34 @@ export default function AddBusinessPage(props) {
             apiFetch('cuisines/allowed/all').then(res => setAvailableCuisines(res)).catch(e => console.log('error', e))
         } else if (businessType === 'Service') {
             apiFetch('services/allowed/types').then(res => setAvailableTypes(res)).catch(e => console.log('error', e))
+            apiFetch('services/allowed/kid/performer/types').then(res => setAvailableKidTypes(res)).catch(e => console.log('error', e))
+            apiFetch('services/allowed/languages').then(res => setAvailableLanguages(res)).catch(e => console.log('error', e))
+            apiFetch('services/allowed/music/styles').then(res => setAvailableMusicStyles(res)).catch(e => console.log('error', e))
         }
     }, [])
 
+    
+
     const [formErrorMessage, setFormErrorMessage] = useState('');
     const handleCreateBusiness = () => {
-        if (name !== '' && email !== '' && phoneNumber !== '' &&  description !== '' && dailyRentCost !== ''  && country !== '' && city !== '' && streetName !== '' && streetNum !== '' && postCode !== '') {
+        if (name !== '' && email !== '' && description !== '' && dailyRentCost !== '' && country !== '' && city !== '' && streetName !== '' && streetNum !== '' && postCode !== '' &&
+            (
+                (businessType === 'Venue' && seatingCap !== '' && phoneNumber !== '' && standingCap !== '' && size !== '' && descriptions.length > 0) ||
+                (businessType === 'Catering' && phoneNumber !== '' && cuisines.length > 0) ||
+                (businessType === "Service" && surname !== '' && alias !== '' && type !== '' &&
+                    (
+                        (type === "KIDS PERFORMER" && kidType !== '' && ageTo !== '' && ageFrom !== '') ||
+                        (type === "MUSIC BAND" && bandPeople !== '' && musicStyles.length > 0) ||
+                        (type === 'MUSICIAN' && musicStyles.length > 0 && instrument !== '') ||
+                        (type === 'SINGER' && musicStyles.length > 0) ||
+                        (type === 'INTERPRETER' && languages.length > 0)
+                    )
+                )
+            )
+        ) {
+
             let body = { "address": { "country": country, "city": city, "streetName": streetName, "streetNumber": streetNum, "zipCode": postCode }, "businessHours": businessHours, "email": email, "description": description };
-            if (businessType === 'Venue' && seatingCap !== '' && standingCap !== ''&& size !== '' && descriptions !== []) {
+            if (businessType === 'Venue' && seatingCap !== '' && phoneNumber !== '' && standingCap !== '' && size !== '' && descriptions !== []) {
                 body.dailyRentCost = dailyRentCost;
                 body.name = name;
                 body.phoneNumber = phoneNumber;
@@ -45,11 +65,18 @@ export default function AddBusinessPage(props) {
                 body.lastName = surname;
                 body.alias = alias;
                 body.type = type;
+                body.kidPerformerType = kidType;
+                body.kidAgeFrom = ageFrom;
+                body.kidAgeTo = ageTo;
+                body.translationLanguages = languages;
+                body.musicBandPeopleCount = bandPeople;
+                body.musicStyle = musicStyles;
+                body.instrument = instrument;
             }
             apiFetch(typeOfBusiness, "POST", JSON.stringify(body))
                 .then(res => res.json())
                 .then(res => {
-                    if (businessType !== "Venue" && false) {
+                    if (businessType !== "Venue") {
                         pics.forEach(p => {
                             let data = new FormData();
                             data.append("file", p.file, p.file.name);
@@ -62,7 +89,7 @@ export default function AddBusinessPage(props) {
                             apiFetch(`images/location/upload?locationId=${res.id}`, "POST", data, 's');
                         })
                     }
-                    history.push('/ListPage/Venues')
+                    history.push(`/ListPage/${businessType}s`)
                 })
                 .catch(e => console.log('error', e));
 
@@ -70,9 +97,18 @@ export default function AddBusinessPage(props) {
         } else {
             setFormErrorMessage(true);
         }
-
     }
 
+    const [kidType, setKidType] = useState('');
+    const [availableKidTypes, setAvailableKidTypes] = useState([]);
+    const [ageFrom, setAgeFrom] = useState('');
+    const [ageTo, setAgeTo] = useState('');
+    const [availableLanguages, setAvailableLanguages] = useState([]);
+    const [languages, setLanguages] = useState([]);
+    const [bandPeople, setBandPeople] = useState('');
+    const [availableMusicStyles, setAvailableMusicStyles] = useState([]);
+    const [musicStyles, setMusicStyles] = useState([]);
+    const [instrument, setInstrument] = useState('');
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
     const [type, setType] = useState('');
@@ -119,11 +155,31 @@ export default function AddBusinessPage(props) {
     const handleCuisines = (e) => {
         let t = new Array(...cuisines);
         if (e.target.checked) {
-            t.push(e.target.value);
+            t.push({ "name": e.target.value });
         } else {
-            t.splice(t.indexOf(e.target.value), 1);
+            t.splice(t.indexOf({ "name": e.target.value }), 1);
         }
         setCuisines(t);
+    }
+
+    const handleMusicStyles = (e) => {
+        let t = new Array(...musicStyles);
+        if (e.target.checked) {
+            t.push({ "name": e.target.value });
+        } else {
+            t.splice(t.indexOf({ "name": e.target.value }), 1);
+        }
+        setMusicStyles(t);
+    }
+
+    const handleLanguages = (e) => {
+        let t = new Array(...languages);
+        if (e.target.checked) {
+            t.push({ "name": e.target.value });
+        } else {
+            t.splice(t.indexOf({ "name": e.target.value }), 1);
+        }
+        setLanguages(t);
     }
 
     const handleOpenTime = (e) => {
@@ -147,7 +203,6 @@ export default function AddBusinessPage(props) {
 
     const handleAddPics = (e) => {
         if (e.target.files && e.target.files[0]) {
-            console.log(e.target.files);
             let temp = pics.slice();
             if (e.target.files.length > 1) {
                 Object.values(e.target.files).forEach(f => temp.push({ 'pic': URL.createObjectURL(f), 'file': f }))
@@ -164,6 +219,8 @@ export default function AddBusinessPage(props) {
         setPics(temp);
     }
 
+
+
     return (<div className="main">
         <div className="block">
             Name
@@ -172,14 +229,53 @@ export default function AddBusinessPage(props) {
                 <>
                     Surname
                     <input className="input" onChange={e => setSurname(e.target.value)} /><br />
+                    Alias
+                    <input className="input" onChange={e => setAlias(e.target.value)} /><br />
                     Type
                     <select className="input" onChange={e => setType(e.target.value)}>
+                        <option value=''>choose</option>
                         {availableTypes.map(t =>
                             <option key={t} value={t}>{t}</option>
                         )}
                     </select><br />
-                    Alias
-                    <input className="input" onChange={e => setAlias(e.target.value)} /><br />
+                    {type === 'KIDS PERFORMER' &&
+                        <div>
+                            Type of kids performer
+                            <select className="input" onChange={e => setKidType(e.target.value)}>
+                                {availableKidTypes.map(t =>
+                                    <option key={t} value={t}>{t}</option>
+                                )}
+                            </select><br />
+                            Age
+                            <input className="input" onChange={e => setAgeFrom(e.target.value)} />
+                            to
+                            <input className="input" onChange={e => setAgeTo(e.target.value)} /><br />
+                        </div>
+                    }
+                    {type === "INTERPRETER" &&
+                        <div>
+                            {availableLanguages.map(o => <div key={o}><input type='checkbox' value={o} onChange={handleLanguages} /> {o}</div>)}
+                        </div>
+                    }
+                    {type === 'MUSIC BAND' &&
+                        <div>
+                            Number of people
+                            <input className="input" onChange={e => setBandPeople(e.target.value)} /><br />
+                            {availableMusicStyles.map(o => <div key={o}><input type='checkbox' value={o} onChange={handleMusicStyles} /> {o}</div>)}
+                        </div>
+                    }
+                    {type === 'MUSICIAN' &&
+                        <div>
+                            Instrument
+                            <input className="input" onChange={e => setInstrument(e.target.value)} /><br />
+                            {availableMusicStyles.map(o => <div key={o}><input type='checkbox' value={o} onChange={handleMusicStyles} /> {o}</div>)}
+                        </div>
+                    }
+                    {(type === 'SINGER' || type === "DJ") &&
+                        <div>
+                            {availableMusicStyles.map(o => <div key={o}><input type='checkbox' value={o} onChange={handleMusicStyles} /> {o}</div>)}
+                        </div>
+                    }
                 </>
             }
             Email
@@ -228,7 +324,7 @@ export default function AddBusinessPage(props) {
             {businessType === 'Catering' &&
                 <>
                     <p style={{ textAlign: 'center' }}>Cuisines </p>
-                    {availableCuisines.map(o => <div key={o.name}><input type='checkbox' value={o} onChange={handleCuisines} /> {o.name}</div>)}
+                    {availableCuisines.map(o => <div key={o.name}><input type='checkbox' value={o.name} onChange={handleCuisines} /> {o.name}</div>)}
                 </>
             }
             <p style={{ textAlign: 'center' }}>Business Hours</p>
@@ -243,8 +339,8 @@ export default function AddBusinessPage(props) {
             <p style={{ textAlign: 'center' }}>Images </p>
             <div className="business-images">
                 {pics.map(p =>
-                    <div className="image-added" key={p}>
-                        <img alt={p.pic} key={p.pic} src={p.pic} className="add-images-list" onClick={() => handleDeleteImage(p)} />
+                    <div className="image-added" key={p.file.name}>
+                        <img alt={p.pic} key={p} src={p.pic} className="add-images-list" onClick={() => handleDeleteImage(p)} />
                     </div>
                 )}
                 <div className="add-images-wrapper">

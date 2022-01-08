@@ -236,7 +236,7 @@ export default function ListPage(props) {
                             </div>
                         </div>
                         <div className='list-item-pics'>
-                            {typeOfList === "Venues" && c.images.map(i => <div key={i.encodedImage}>
+                            {c.images && c.images.map(i => <div key={i.encodedImage}>
                                 <img alt={i.name} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
                             </div>)}
                         </div>

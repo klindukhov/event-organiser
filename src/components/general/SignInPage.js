@@ -30,11 +30,11 @@ function SignInPageContent(props) {
                     setLoginMessage('Login or password is incorrect');
                 } else {
                     props.setAuth(data);
-                    if (data.user.type === 'C') {
-                        history.goBack();
-                    } else if (data.user.type === 'A') {
+                    if (data.type === 'A') {
                         history.push('/ProblemsPage');
-                    } else if (data.user.type === 'B') {
+                    }else if (data.user.type === 'C') {
+                        history.goBack();
+                    } else  if (data.user.type === 'B') {
                         history.push('/BusinessHomePage');
                     }
                 }

@@ -44,6 +44,7 @@ export default function ItemDetailsPage(props) {
     const [reviewMessage, setReviewMessage] = useState('');
 
     const [cateringItemTypes, setCateringItemTypes] = useState([]);
+    const [businessHours, setBusinessHours] = useState([]);
 
     useEffect(() => {
         if (itemType !== '') {
@@ -60,6 +61,15 @@ export default function ItemDetailsPage(props) {
                 .catch(error => { console.log('error', error); setReviews([]) });
         }
     }, [itemType])
+
+    useEffect(() => {
+        if (itemDetails.businessHours) {
+            let days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
+            let bh = new Array(...itemDetails.businessHours);
+            bh.sort((a, b) => (days.indexOf(a.day) > days.indexOf(b.day)) ? 1 : -1);
+            setBusinessHours(bh);
+        }
+    }, [itemDetails])
 
     const changeRating = (newRating, name) => {
         setRating(newRating);
@@ -143,6 +153,38 @@ export default function ItemDetailsPage(props) {
         }
     }, [itemDetails])
 
+    const handleDeleteBusiness = () => {
+        if (typeOfItem === 'Catering') {
+            apiFetch(`caterings/delete?id=${id}`, 'DELETE').then(() => history.push('/ListPage/Caterings')).catch(error => console.log('error', error))
+        }
+        if (typeOfItem !== 'Catering') {
+            apiFetch(`${itemType}?id=${id}`, 'DELETE').then(() => history.push(`/ListPage/${typeOfItem}s`)).catch(error => console.log('error', error))
+        }
+    }
+
+    const [isMenuEdited, setIsMenuEdited] = useState(false);
+    const [dishName, setDishName] = useState(false);
+    const [dishDescription, setDishDescription] = useState('');
+    const [dishPrice, setDishPrice] = useState('');
+    const [dishType, setDishType] = useState('');
+    const [dishVegan, setDishVegan] = useState(false);
+    const [dishVegetarian, setDishVegetarian] = useState(false);
+    const [dishGlutenFree, setDishGlutenFree] = useState(false);
+    const [availableDishTypes, setAvailableDishTypes] = useState([]);
+    const handleMenuEdit = () => {
+        apiFetch('catering/items/allowed/types').then(res => { setAvailableDishTypes(res) }).catch(e => console.log('error', e));
+        setIsMenuEdited(true);
+    }
+
+    const handleSubmitMenu = () => {
+        let body = JSON.stringify({ "name": dishName, "description": dishDescription, "servingPrice": dishPrice, "isVegan": dishVegan, "isVegetarian": dishVegetarian, "isGlutenFree": dishGlutenFree, "type": dishType });
+        apiFetch(`catering/items?cateringId=${id}`, "POST", body).then(() => window.location.reload()).catch(e => console.log('error', e));
+    }
+
+    const handleDeleteMenuItem = (itemId) => {
+        apiFetch(`catering/items?id=${itemId}`, "DELETE").then(() => window.location.reload()).catch(e => console.log('error', e));
+    }
+
 
     return (
         <div className='main'>
@@ -220,6 +262,9 @@ export default function ItemDetailsPage(props) {
                             {props.authorized === true && props.userData.user.type === 'C' &&
                                 <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
                             }
+                            {props.authorized === true && props.userData.user.type === 'B' &&
+                                <input type='button' className='add-to-event-button' value={`Delete ${typeOfItem}`} onClick={handleDeleteBusiness} />
+                            }
                         </>}
                         {typeOfItem === 'Event' && <>
                             {props.authorized === true && props.userData.user.type === 'C' &&
@@ -230,19 +275,40 @@ export default function ItemDetailsPage(props) {
                 </div>
             </div>
             {typeOfItem === "Catering" && <>
-                {itemDetails.cateringItems !== undefined && itemDetails.cateringItems !== null && itemDetails.cateringItems.length > 0 && <div className='block'>
-                    <p className='item-review-heading'>Menu</p>
-                    {cateringItemTypes.map(t => <div key={t}>
-                        <p className='item-info-heading'>{t}s</p>
-                        {itemDetails.cateringItems.filter(l => l.type === t).map(c => <div className="catering-menu-item" key={c.id}>
-                            <div className="menu-item-left">{c.name}<br />
-                                {c.description}<br /></div>
-                            <div className="menu-item-right">{c.servingPrice}<br />
-                                {Object.keys(c).filter(k => c[k] === true).map(i => '"' + i + '" ')}<br /></div>
+                {itemDetails.cateringItems !== undefined && ((itemDetails.cateringItems !== null && itemDetails.cateringItems.length > 0) || (props.authorized === true && props.userData.user.type === "B")) &&
+                    <div className='block'>
+                        <p className='item-review-heading'>Menu{props.authorized === true && props.userData.user.type === "B" && !isMenuEdited && <input type='button' class='x-button' value='✎' onClick={handleMenuEdit} />}</p>
+                        {cateringItemTypes.map(t => <div key={t}>
+                            <p className='item-info-heading'>{t}s</p>
+                            {itemDetails.cateringItems.filter(l => l.type === t).map(c => <div className="catering-menu-item" key={c.id}>
+                                <div className="menu-item-left">{c.name}{isMenuEdited && <input type='button' class='x-button' value='x' onClick={() => handleDeleteMenuItem(c.id)} />}<br />
+                                    {c.description}<br /></div>
+                                <div className="menu-item-right">{c.servingPrice}<br />
+                                    {Object.keys(c).filter(k => c[k] === true).map(i => '"' + i + '" ')}<br /></div>
+                            </div>)}
                         </div>)}
-                    </div>)
-                    }
-                </div>}
+                        {isMenuEdited &&
+                            <>
+                                <p className='item-info-heading'>New menu entry</p>
+                                Name
+                                <input className="input" onChange={e => setDishName(e.target.value)} />
+                                Price
+                                <input className="input" onChange={e => setDishPrice(e.target.value)} />
+                                Type
+                                <select className="input" onChange={e => setDishType(e.target.value)}>
+                                    <option value=''>choose</option>
+                                    {availableDishTypes.map(t => <option value={t}>{t}</option>)}
+                                </select><br />
+                                Description
+                                <textarea className="input" onChange={e => setDishDescription(e.target.value)} />
+                                Vegan
+                                <input type="checkbox" onChange={e => setDishVegan(e.target.value === 'on' ? true : false)} /> Vegeterian
+                                <input type="checkbox" onChange={e => setDishVegetarian(e.target.value === 'on' ? true : false)} /> Gluten free
+                                <input type="checkbox" onChange={e => setDishGlutenFree(e.target.value === 'on' ? true : false)} /><br />
+                                <input type="button" value='Submit' className="button" onClick={handleSubmitMenu} style={{marginRight: "15px"}}/>
+                                <input type="button" value='Cancel' className="button" onClick={() => setIsMenuEdited(false)} />
+                            </>}
+                    </div>}
             </>}
             {(typeOfItem === "Venue" || typeOfItem === "Catering") &&
                 <div className='block'>
@@ -291,6 +357,15 @@ export default function ItemDetailsPage(props) {
             {typeOfItem !== 'Event' && <>
                 {itemDetails.businessHours !== null && <> {itemDetails.businessHours !== undefined && <div className='block'>
                     <p className='item-info-heading'>Business hours</p>
+                    <div className="business-hours">
+                        {businessHours.map(d =>
+                            <div key={d}>
+                                {d.day}<br />
+                                {d.timeFrom}<br />
+                                {d.timeTo}<br />
+                            </div>)}
+                    </div>
+
                 </div>}</>}
                 <div className='block'>
                     <p className='item-review-heading'>Reviews</p>
@@ -306,7 +381,7 @@ export default function ItemDetailsPage(props) {
                                 </div>
                             </div>
                         )}
-                    {props.authorized === true && props.userData.type === "C" && <>
+                    {props.authorized === true && props.userData.user.type === "C" && <>
                         <div className='reviewer-info'>
                             <img alt='acc-pic' src={accIcon} className='contact-acc-pic1' />
                             <div className='reviewer-name'> {props.userData && props.userData.firstName + " " + props.userData.lastName} <br /> <input className='write-title-div' placeholder='Write a title here' onChange={e => setTitle(e.target.value)} />

@@ -109,21 +109,19 @@ function SignUpPageContent(props) {
         }
         apiFetch(`register/${accT}`, "POST", raw)
             .then(res => {
-                if (res.ok) {
-                    let login = JSON.stringify({ "email": email, "password": password });
+                let login = JSON.stringify({ "email": email, "password": password });
 
-                    apiFetch('login', 'POST', login)
-                    .then(res => res.json())
-                        .then(data => {
-                            props.setAuth(data);
-                            if (data.type === 'C') {
-                                history.push('/');
-                            } else if (data.type === 'B') {
-                                history.push('/BusinessHomePage');
-                            }
-                        })
-                        .catch(error => console.log('error-login', error));
-                }
+                apiFetch('login', 'POST', login)
+                    .then(resp => resp.json())
+                    .then(data => {
+                        props.setAuth(data);
+                        if (data.user.type === 'C') {
+                            history.push('/');
+                        } else if (data.user.type === 'B') {
+                            history.push('/BusinessHomePage');
+                        }
+                    })
+                    .catch(error => console.log('error-login', error));
 
             }).catch(error => console.log('error-register', error));
     }
