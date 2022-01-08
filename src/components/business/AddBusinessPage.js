@@ -13,7 +13,7 @@ export default function AddBusinessPage(props) {
     const [descriptionOptions, setDescriptionOptions] = useState([]);
     useEffect(() => {
         if (businessType === 'Venue') {
-            apiFetch('location_description').then(res => setDescriptionOptions(res)).catch(e => console.log('error', e))
+            apiFetch('location_description/allowed/all').then(res => setDescriptionOptions(res)).catch(e => console.log('error', e))
         } else if (businessType === 'Catering') {
             apiFetch('cuisines/allowed/all').then(res => setAvailableCuisines(res)).catch(e => console.log('error', e))
         } else if (businessType === 'Service') {

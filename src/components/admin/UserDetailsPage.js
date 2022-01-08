@@ -69,7 +69,7 @@ export default function UserDetailsPage() {
 
     }
     const handleBan = () => {
-
+        apiFetch(`${id}/block`, "POST").then(() => history.push('UsersPage')).catch(error => console.log('error', error));
     }
 
     const [eventPastColor, setEventPastColor] = useState('#47525e');
@@ -126,7 +126,7 @@ export default function UserDetailsPage() {
                 Verification: {details.business.verificationStatus} {details.business.verificationStatus !== 'VERIFIED' && <input type='button' className="button" value='Mark verified' onClick={handleVerify} />}<br />
                 Address: {details.business.address.streetName} {details.business.address.streetNumber}, {details.business.address.city}, {details.business.address.zipCode},  {details.business.address.country}<br />
             </>}
-            Active: {'' + details.active} <input type='button' className="button" value='Deactivate' onClick={handleBan} />
+            Active: {'' + details.active} {details.active && <input type='button' className="button" value='Deactivate' onClick={handleBan} />}
         </div>
         {details.type === 'C' &&
             <div className="block">
