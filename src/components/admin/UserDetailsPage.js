@@ -35,9 +35,9 @@ export default function UserDetailsPage() {
                 .catch(error => console.log('error', error));
 
             apiFetch(`locations/business?id=${id}`)
-            .then(result => setLocations(result))
-            .catch(error => console.log('error', error));
-            
+                .then(result => setLocations(result))
+                .catch(error => console.log('error', error));
+
             apiFetch(`services/business?id=${id}`)
                 .then(result => setServices(result))
                 .catch(error => console.log('error', error));
@@ -49,7 +49,7 @@ export default function UserDetailsPage() {
     }, [details])
 
     useEffect(() => {
-        if(details.type === 'C'){
+        if (details.type === 'C') {
             getAllEvents();
         }
         // eslint-disable-next-line
@@ -136,7 +136,7 @@ export default function UserDetailsPage() {
                     <input type='button' className='e-c-button-c' value='all' onClick={handleEvents} style={{ color: eventAllColor, backgroundColor: eventAllBackColor }} />
                     <input type='button' className='e-c-button-r' value='future' onClick={handleEvents} style={{ color: eventFutureColor, backgroundColor: eventFutureBackColor }} />
                 </div>
-                {events.map(c => <div key={c.id} className='item-list-element' style={{ justifySelf: 'center', width: '1420px', marginBottom: '30px' }} onClick={() => history.push(`/ItemDetails/Event/${c.id}`)}>
+                {events.map(c => <div key={c.id} className='item-list-element' style={{ justifySelf: 'center', width: '1420px', marginBottom: '30px' }} onClick={() => history.push(`/EventDetailsPage/${c.id}`)}>
                     <div className='list-item' style={{ width: '1420px' }}>
                         <div className='overlay-listing' style={{ width: '1420px' }}>
                             <div className='overlay-listing-left'>
@@ -149,12 +149,15 @@ export default function UserDetailsPage() {
                             </div>
                         </div>
                         <div className='list-item-pics' style={{ width: '1420px' }}>
+                            {c.location.location.images && c.location.location.images.map(i => <div key={i.encodedImage}>
+                                <img alt={i.name} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
+                            </div>)}
                         </div>
                     </div>
                 </div>)}
             </div>
         }
-        {details.type === 'B' && locations.length > 0 && 
+        {details.type === 'B' && locations.length > 0 &&
             <div className="block">
                 <p className="problem-heading">Locations</p>
                 {locations.map(c => <div key={c.id} className='item-list-element' style={{ justifySelf: 'center', width: '1420px', marginBottom: '30px' }} >
@@ -196,6 +199,9 @@ export default function UserDetailsPage() {
                             </div>
                         </div>
                         <div className='list-item-pics' style={{ width: '1420px' }}>
+                            {c.images && c.images.map(i => <div key={i.encodedImage}>
+                                <img alt={i.name} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
+                            </div>)}
                         </div>
                     </div>
                 </div>)}
@@ -215,6 +221,9 @@ export default function UserDetailsPage() {
                             </div>
                         </div>
                         <div className='list-item-pics'>
+                            {c.images && c.images.map(i => <div key={i.encodedImage}>
+                                <img alt={i.name} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
+                            </div>)}
                         </div>
                     </div>
                 </div>)}

@@ -11,7 +11,6 @@ import CustomerProfile from '../customer/CustomerProfilePage'
 import BusinessProfile from '../business/BusinessProfilePage';
 import ContactFormPage from '../general/ContactFormPage';
 import EventDetailsPage from '../customer/EventDetailsPage';
-import BusinessHomePage from '../business/BusinessHomePage';
 import UsersPage from '../admin/UsersPage';
 import ProblemsPage from '../admin/ProblemsPage';
 import VerificationRequestsPage from '../admin/VerificationRequestsPage';
@@ -20,9 +19,12 @@ import ProblemDetailsPage from '../admin/ProblemDetailsPage';
 import UserDetailsPage from '../admin/UserDetailsPage'
 import ReservationRequestsPage from '../business/ReservationRequestsPage';
 import AddBusinessPage from '../business/AddBusinessPage';
+import ForgotPassword from '../general/ForgotPassword';
 
 import ItemDetailsPage from '../customer/ItemDetailsPage';
 import ListPage from '../customer/ListPage';
+
+import ResetPasswordPage from '../general/ResetPassword';
 
 const ROUTES = {
   '/': HomePage,
@@ -32,7 +34,6 @@ const ROUTES = {
   '/BusinessProfilePage': BusinessProfile,
   '/ContactFormPage': ContactFormPage,
   '/EventDetailsPage/:id': EventDetailsPage,
-  '/BusinessHomePage': BusinessHomePage,
   '/UsersPage': UsersPage,
   '/ProblemsPage': ProblemsPage,
   '/VerificationRequestsPage': VerificationRequestsPage,
@@ -43,6 +44,9 @@ const ROUTES = {
   '/AddBusinessPage/:businessType': AddBusinessPage,
   '/ItemDetails/:typeOfItem/:id/:forEventId?': ItemDetailsPage,
   '/ListPage/:typeOfList/:forEventId?': ListPage,
+  '/reset:token' : ResetPasswordPage,
+  '/forgotPassword' : ForgotPassword,
+  '*': NotFound
 }
 
 export default function App({ myProps }) {
@@ -55,3 +59,10 @@ export default function App({ myProps }) {
   )
 }
 
+function NotFound(){
+  return(
+    <div className='main'>
+      <h1>404</h1>
+    </div>
+  )
+}

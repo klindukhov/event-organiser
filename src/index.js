@@ -4,6 +4,7 @@ import { BrowserRouter} from 'react-router-dom';
 import './styles/general/index.css';
 import App from './components/main/App';
 import Header from './components/main/Header';
+import Footer from './components/main/Footer';
 import apiFetch from './api.js'
 
 
@@ -60,6 +61,7 @@ const Main = () => {
     <BrowserRouter>
       <Header myProps={myProps} />
       <App myProps={myProps} />
+      <Footer myProps={myProps}/>
     </BrowserRouter>
   );
 }

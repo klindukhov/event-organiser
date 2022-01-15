@@ -29,6 +29,8 @@ function SignUpPageContent(props) {
     const [house, setHouse] = useState(' ');
     const [zip, setZip] = useState(' ');
 
+    const [errorMessage, setErrorMessage] = useState();
+
 
     const [passwordConf, setPasswordConf] = useState('');
     const [accType, setAccType] = useState('C');
@@ -38,8 +40,8 @@ function SignUpPageContent(props) {
 
     const handleSignUp = () => {
         if (password !== confirmPassword || password === '') {
-            setPasswordConf('passwords have to match and not be empty');
-        } else {
+            setPasswordConf('Passwords have to match and contain at least one digit, one uppercase letter and a special character');
+        } else{
 
             createUser();
         }
@@ -116,15 +118,18 @@ function SignUpPageContent(props) {
                     .then(data => {
                         props.setAuth(data);
                         if (data.user.type === 'C') {
-                            history.push('/');
+                            history.goBack();
                         } else if (data.user.type === 'B') {
-                            history.push('/BusinessHomePage');
+                            history.push('/ReservationRequestsPage');
                         }
                     })
                     .catch(error => console.log('error-login', error));
 
-            }).catch(error => console.log('error-register', error));
+            }).catch(error => {console.log('error-register', error); setErrorMessage('Please fill all the fields of the form');});
     }
+
+    const [isPassShow, setIsPassShow] = useState(false);
+    const [isCPassShow, setIsCPassShow] = useState(false);
 
 
     return (
@@ -146,12 +151,19 @@ function SignUpPageContent(props) {
                 </input>
                 <br />
                 <p className='signup-input-label'>Password</p>
-                <input className="input-register" type="password" onChange={(event) => setPassword(event.target.value)}>
+                <input className="input-register" type={isPassShow ? "text" : "password"} onChange={(event) => setPassword(event.target.value)}>
                 </input>
                 <br />
+                <button onClick={() => setIsPassShow(!isPassShow)} style={{position: 'relative', backgroundColor: 'transparent', borderColor: 'transparent' , left: '180px', top: '-40px'}}>
+                👁
+                </button>
                 <p className='signup-input-label'>Confirm password</p>
-                <input className="input-register" type="password" onChange={(event) => setConfirmPassword(event.target.value)}>
+                <input className="input-register" type={isCPassShow ? "text" : "password"} onChange={(event) => setConfirmPassword(event.target.value)}>
                 </input>
+                <br/>
+                <button onClick={() => setIsCPassShow(!isCPassShow)} style={{position: 'relative', backgroundColor: 'transparent', borderColor: 'transparent' , left: '180px', top: '-40px'}}>
+                👁
+                </button>
                 <p className='passwords-dont-match'>{passwordConf}</p>
                 <br />
                 <p className="signup-input-label">Name</p>
@@ -173,6 +185,8 @@ function SignUpPageContent(props) {
                 <button className="input-register-button" onClick={() => handleSignUp()}>
                     Sign up
                 </button>
+                <br/>
+                <p style={{color: "red", fontSize: "20pt"}}>{errorMessage}</p>
 
             </div>
         </div>

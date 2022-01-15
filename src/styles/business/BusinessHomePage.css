@@ -1,8 +1,0 @@
-.business-home-main{
-    background-color: var(--bg);
-    min-height: calc(100vh - 100px);
-    display: grid;
-    align-content: start;
-    padding: 50px;
-    justify-content: center;
-}

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import '../../styles/customer/ListPage.css'
 
 import pplIcon from '../../images/pplIcon.png';
@@ -34,14 +34,20 @@ export default function ListPage(props) {
             .catch(error => console.log('error', error));
     }
 
-    const [pageNo, setPageNo] = useState('1');
-    const [pageSize, setPageSize] = useState('5');
-    const [sortBy, setSortBy] = useState('id');
-    const [order, setOrder] = useState('asc');
-    const getItemsWithFilters = () => {
+    const [pageNo, setPageNo] = useState('');
+    const [pageSize, setPageSize] = useState('');
+    const [totalRes, setTotalRes] = useState('');
+    const [sortBy, setSortBy] = useState('');
+    const [order, setOrder] = useState('');
+    const getItemsWithFilters = (sorting) => {
         let body = {};
         if (location) { body.city = location };
-        if (date) { body.date = date }
+        if (forEventId) {
+            setDate(JSON.parse(window.sessionStorage.filters).date);
+            body.date = JSON.parse(window.sessionStorage.filters).date;
+        } else {
+            if (date) { body.date = date }
+        }
         if (lowestPriceFilter) { body.minPrice = lowestPriceFilter }
         if (highestPriceFilter) { body.maxPrice = highestPriceFilter }
         switch (typeOfList) {
@@ -65,30 +71,66 @@ export default function ListPage(props) {
                 break;
             case 'Events':
                 break;
-            // ?pageNo=${pageNo}&pageSize=${pageSize}&sortBy=${sortBy}&order=${order}
         }
-        console.log(body);
         apiFetch(`${listType}/allowed/search`, "POST", JSON.stringify(body))
             .then(res => res.json())
-            .then(result => { setItems(result) })
+            .then(result => {
+                if (sorting) {
+                    switch (sorting) {
+                        default:
+                            result.items.sort((e, a) => e.id - a.id);
+                            break;
+                        case "priceLow":
+                            result.items.sort((e, a) => e[typeOfList === 'Venues' ? "dailyRentCost" : 'serviceCost'] - a[typeOfList === 'Venues' ? "dailyRentCost" : 'serviceCost']);
+                            break;
+                        case "priceHigh":
+                            result.items.sort((e, a) => a[typeOfList === 'Venues' ? "dailyRentCost" : 'serviceCost'] - e[typeOfList === 'Venues' ? "dailyRentCost" : 'serviceCost']);
+                            break;
+                        case "ratingHigh":
+                            result.items.sort((e, a) => e.rating > a.rating);
+                            break;
+                        case "ratingLow":
+                            result.items.sort((e, a) => e.rating > a.rating);
+                            break;
+                    }
+                }
+
+                setItems(result.items);
+                setTotalRes(result.meta.total);
+                setPageSize(null);
+            })
             .catch(error => console.log('error', error));
+    }
+
+    const getList = () => {
+        if (props.userData && props.userData.user.type === 'B') {
+            apiFetch(`${listType}/business?id=${props.userId}`)
+                .then(result => setItems(result))
+                .catch(error => console.log('error', error));
+        } else {
+            apiFetch(`${listType}/allowed/all?sortBy=${sortBy === "" ? 'id' : sortBy}&order=${order === '' ? 'acs' : order}&pageNo=${pageNo === '' ? 0 : pageNo}&pageSize=${pageSize === '' ? 5 : pageSize}`)
+                .then(result => {
+                    setItems(result.items);
+                    setPageSize(result.meta.pageSize);
+                    setTotalRes(result.meta.total);
+                    setPageNo(result.meta.pageNo);
+                    setSortBy(result.meta.sortBy);
+                })
+                .catch(error => console.log('error', error));
+        }
     }
 
     useEffect(() => {
         if (listType !== '' && listType !== 'events') {
-            if (props.userData && props.userData.user.type === 'B') {
-                apiFetch(`${listType}/business?id=${props.userId}`)
-                    .then(result => setItems(result))
-                    .catch(error => console.log('error', error));
+            if (forEventId) {
+                getItemsWithFilters();
             } else {
-                apiFetch(`${listType}/allowed/all`)
-                    .then(result => { setItems(result.items) })
-                    .catch(error => console.log('error', error));
+                getList();
             }
         } else if (listType === 'events') {
             getAllEvents();
         }
-    }, [props.userData, listType])
+    }, [props.userData, listType, pageNo, sortBy, order])
 
     //location filters
     const [guestNum, setGuestNum] = useState('');
@@ -162,7 +204,9 @@ export default function ListPage(props) {
     }
 
     const handleItemChoice = (id) => {
-        if (forEventId === undefined) {
+        if (typeOfList === 'Events') {
+            history.push(`/EventDetailsPage/${id}`)
+        } else if (forEventId === undefined) {
             history.push(`/ItemDetails/${typeOfList.substring(0, typeOfList.length - 1)}/${id}`)
         } else {
             history.push(`/ItemDetails/${typeOfList.substring(0, typeOfList.length - 1)}/${id}/${forEventId}`)
@@ -184,9 +228,9 @@ export default function ListPage(props) {
     const handleCuisines = (e) => {
         let t = new Array(...cuisines);
         if (e.target.checked) {
-            t.push( e.target.value );
+            t.push(e.target.value);
         } else {
-            t.splice(t.indexOf(e.target.value ), 1);
+            t.splice(t.indexOf(e.target.value), 1);
         }
         setCuisines(t);
     }
@@ -204,9 +248,9 @@ export default function ListPage(props) {
     const handleMusicStyles = (e) => {
         let t = new Array(...musicStyles);
         if (e.target.checked) {
-            t.push(e.target.value );
+            t.push(e.target.value);
         } else {
-            t.splice(t.indexOf(e.target.value ), 1);
+            t.splice(t.indexOf(e.target.value), 1);
         }
         setMusicStyles(t);
     }
@@ -214,37 +258,40 @@ export default function ListPage(props) {
     const handleLanguages = (e) => {
         let t = new Array(...languages);
         if (e.target.checked) {
-            t.push(e.target.value );
+            t.push(e.target.value);
         } else {
-            t.splice(t.indexOf(e.target.value ), 1);
+            t.splice(t.indexOf(e.target.value), 1);
         }
         setLanguages(t);
     }
 
     const handleSorting = (e) => {
-        switch (e.target.value) {
-            default:
-                setSortBy('id');
-                setOrder('asc');
-                break;
-            case "priceLow":
-                setSortBy();
-                setOrder('asc');
-                break;
-            case "priceHigh":
-                setSortBy();
-                setOrder('asc');
-                break;
-            case "ratingHigh":
-                setSortBy('rating');
-                setOrder('desc');
-                break;
-            case "ratingLow":
-                setSortBy('rating');
-                setOrder('asc');
-                break;
+        if (pageSize === null) {
+            getItemsWithFilters(e.target.value);
+        } else {
+            switch (e.target.value) {
+                default:
+                    setSortBy('id');
+                    setOrder('asc');
+                    break;
+                case "priceLow":
+                    setSortBy(typeOfList === "Venues" ? 'dailyRentCost' : 'serviceCost');
+                    setOrder('asc');
+                    break;
+                case "priceHigh":
+                    setSortBy(typeOfList === "Venues" ? 'dailyRentCost' : 'serviceCost');
+                    setOrder('desc');
+                    break;
+                case "ratingHigh":
+                    setSortBy('rating');
+                    setOrder('desc');
+                    break;
+                case "ratingLow":
+                    setSortBy('rating');
+                    setOrder('asc');
+                    break;
+            }
         }
-        getItemsWithFilters();
     }
 
     return (
@@ -261,7 +308,7 @@ export default function ListPage(props) {
                         <div className="guests-choice">
                             {typeOfList === "Venues" && <>Number of guests:
                                 <input type="number" className='venue-input-number' defaultValue={guestNum} onChange={e => setGuestNum(e.target.value)} />
-                                <input type="checkbox" className='venue-input-seat' onChange={e => setSeatedOnly(e.target.value === 'on')} />
+                                <input type="checkbox" className='venue-input-seat' onChange={e => setSeatedOnly(e.target.checked)} />
                                 Seated only<br />
                                 Daily rent</>}{typeOfList !== "Venues" && "Service"} price <input className='venue-input-number' type="number" onChange={e => setLowestPriceFilter(e.target.value)} /> -<input className='venue-input-number' type="number" onChange={e => setHighestPriceFilter(e.target.value)} />
 
@@ -269,7 +316,7 @@ export default function ListPage(props) {
 
                         <div className="event-date">
                             Date:
-                            <input defaultValue={date} type="date" className='venue-input-date' />
+                            <input defaultValue={date} type="date" className='venue-input-date' onChange={e => setDate(e.target.value)} />
                         </div>
                         {typeOfList === "Services" &&
                             <>
@@ -319,7 +366,7 @@ export default function ListPage(props) {
                         }
                         {typeOfList === 'Caterings' &&
                             <>
-                                Cuisisnes:
+                                Cuisisnes (inclusive):
                                 <br />
                                 <div className="must-haves">
                                     {availableCuisines.map(d => <div key={d.name}>
@@ -333,7 +380,7 @@ export default function ListPage(props) {
                 }
             </>}
             <div className='list-sorting-rect'>
-                <p className='list-displaying-info'>Displaying 1-{pageSize} results out of {items && items.length}</p>
+                <p className='list-displaying-info'>{pageSize !== null ? `Displaying ${1 + pageNo * pageSize}-${(pageNo + 1) * pageSize > totalRes ? totalRes : (pageNo + 1) * pageSize} results out of` : 'Found results: '} {totalRes}</p>
                 <div className='select-list-sorting'>
                     Sort by:
                     <select className='select-list-sorting' onChange={handleSorting}>
@@ -372,8 +419,10 @@ export default function ListPage(props) {
                                 </>}
                                 {c.description}
                                 {typeOfList === "Venues" && <>
+                                    {' ' + c.seatingCapacity}
+                                    ⑁
+                                    {' ' + c.standingCapacity}
                                     <img className='ppl-icon' alt='ppl-icon' src={pplIcon} />
-                                    {c.seatingCapacity}
                                 </>}
                             </div>
                             <div className='overlay-listing-right'>
@@ -394,7 +443,10 @@ export default function ListPage(props) {
                             </div>
                         </div>
                         <div className='list-item-pics'>
-                            {c.images && c.images.map(i => <div key={i.encodedImage}>
+                            {typeOfList !== 'Events' && c.images && c.images.map(i => <div key={i.encodedImage}>
+                                <img alt={i.name} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
+                            </div>)}
+                            {typeOfList === 'Events' && c.location.location.images && c.location.location.images.map(i => <div key={i.encodedImage}>
                                 <img alt={i.name} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
                             </div>)}
                         </div>
@@ -403,14 +455,31 @@ export default function ListPage(props) {
             </>}
 
 
-            {props.authorized === true && props.userData.user.type === 'B' &&
+            {props.authorized === true && props.userData.user.type === 'B' && props.userData.verificationStatus === "VERIFIED" &&
                 <div className='block' style={{ textAlign: 'center' }} onClick={() => history.push('/AddBusinessPage/' + typeOfList.substring(0, typeOfList.length - 1))}>
                     Add {typeOfList.substring(0, typeOfList.length - 1)}
+                </div>
+            }
+            {props.authorized === true && props.userData.user.type === 'B' && props.userData.verificationStatus === "NOT_VERIFIED" &&
+                <div className='block' style={{ textAlign: 'center' }} >
+                    ⓘ You will be able to add businesses to the website after verification.<br />
+                    If it doesn't happen within 4 business days, please contact us throught the
+                    <Link to="/ContactFormPage"> form</Link>.
                 </div>
             }
             {props.authorized === true && props.userData.user.type === 'C' && typeOfList === 'Events' &&
                 <div className='block' style={{ textAlign: 'center' }} onClick={() => history.push('/EventDetailsPage/new')}>
                     Add {typeOfList.substring(0, typeOfList.length - 1)}
+                </div>
+            }
+            {((props.authorized === true && props.userData.user.type === 'C' && typeOfList !== 'Events' && pageSize !== null) || (typeOfList !== 'Events' && pageSize !== null)) &&
+                <div className='block' style={{ display: "grid", gridTemplateColumns: 'auto auto' }} >
+                    <button style={{ justifySelf: 'start' }} className="button" disabled={pageNo < 1} onClick={() => { setPageNo(pageNo - 1) }}>
+                        Previous page
+                    </button>
+                    <button style={{ justifySelf: 'end' }} className="button" disabled={items.length < pageSize} onClick={() => { setPageNo(pageNo + 1) }}>
+                        Next page
+                    </button>
                 </div>
             }
         </div>)

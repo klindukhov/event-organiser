@@ -68,7 +68,7 @@ const Header = (props) => {
         setAccType('B');
         setUserPageLink('/BusinessProfilePage');
         setMyAccount('/BusinessProfilePage');
-        setLogoLink('/BusinessHomePage');
+        setLogoLink('/ReservationRequestsPage');
 
         apiFetch(`business/${props.myProps.userData.id}/detail`)
           .then(res => {

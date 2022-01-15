@@ -35,7 +35,7 @@ function SignInPageContent(props) {
                     }else if (data.user.type === 'C') {
                         history.goBack();
                     } else  if (data.user.type === 'B') {
-                        history.push('/BusinessHomePage');
+                        history.push('/ReservationRequestsPage');
                     }
                 }
             }))
@@ -81,7 +81,7 @@ function SignInPageContent(props) {
                 Don't have an account?
                 <Link to="/SignUp">Register</Link>
                 <br />
-                <Link to="/SignUp">Forgot password?</Link>
+                <Link to="/ForgotPassword">Forgot password?</Link>
             </div>
 
         </div>

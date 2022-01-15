@@ -38,7 +38,9 @@ export default function AddBusinessPage(props) {
                         (type === "MUSIC BAND" && bandPeople !== '' && musicStyles.length > 0) ||
                         (type === 'MUSICIAN' && musicStyles.length > 0 && instrument !== '') ||
                         (type === 'SINGER' && musicStyles.length > 0) ||
-                        (type === 'INTERPRETER' && languages.length > 0)
+                        (type === 'DJ' && musicStyles.length > 0) ||
+                        (type === 'INTERPRETER' && languages.length > 0) ||
+                        (type === 'HOST' || type === 'OTHER')
                     )
                 )
             )
