@@ -92,7 +92,7 @@ export default function ItemDetailsPage(props) {
     const handleAddToEvent = () => {
         if (typeOfItem === "Venue") {
             window.localStorage.setItem('locationDetails', JSON.stringify(itemDetails));
-            history.push('/EventDetailsPage/new');
+            history.push(`/EventDetailsPage/${forEventId}`);
         } else if (typeOfItem === "Catering") {
             if (forEventId === undefined) {
                 alert('You have to pick venue first');
@@ -183,6 +183,16 @@ export default function ItemDetailsPage(props) {
 
     const handleDeleteMenuItem = (itemId) => {
         apiFetch(`catering/items?id=${itemId}`, "DELETE").then(() => window.location.reload()).catch(e => console.log('error', e));
+    }
+
+    const [emailText, setEmailText] = useState('');
+    const [emailSubject, setEmailSubject] = useState('');
+
+    const sendEmail = () => {
+        if (emailSubject !== '' && emailText !== '') {
+            let body = JSON.stringify({"subject": emailSubject, "content":emailText});
+            apiFetch(`customers/message/${itemType.substring(0, itemType.length - 1)}/send?customerId=${props.userId}&${itemType.substring(0, itemType.length - 1)}Id=${id}`, "POST", body).catch(e => console.log('error' + e));
+        }
     }
 
 
@@ -305,7 +315,7 @@ export default function ItemDetailsPage(props) {
                                 <input type="checkbox" onChange={e => setDishVegan(e.target.value === 'on' ? true : false)} /> Vegeterian
                                 <input type="checkbox" onChange={e => setDishVegetarian(e.target.value === 'on' ? true : false)} /> Gluten free
                                 <input type="checkbox" onChange={e => setDishGlutenFree(e.target.value === 'on' ? true : false)} /><br />
-                                <input type="button" value='Submit' className="button" onClick={handleSubmitMenu} style={{marginRight: "15px"}}/>
+                                <input type="button" value='Submit' className="button" onClick={handleSubmitMenu} style={{ marginRight: "15px" }} />
                                 <input type="button" value='Cancel' className="button" onClick={() => setIsMenuEdited(false)} />
                             </>}
                     </div>}
@@ -352,6 +362,15 @@ export default function ItemDetailsPage(props) {
                             </div>
                         </div>
                     </div>)}
+                </div>
+            }
+
+            {props.authorized === true && props.userData.user.type === 'C' &&
+                <div className='block'>
+                    <p>You can contact the business through the form below</p>
+                    <input placeholder="Subject" onChange={e => setEmailSubject(e.target.value)} /><br/><br/>
+                    <textarea placeholder="Body" onChange={e => setEmailText(e.target.value)} style={{width:'100%'}} /><br/><br/>
+                    <button className='button' onClick={sendEmail}>Send</button>
                 </div>
             }
             {typeOfItem !== 'Event' && <>

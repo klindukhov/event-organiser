@@ -77,12 +77,11 @@ export default function ReservationRequestsPage(props) {
     useEffect(() => { console.log(items) }, [items])
 
     const handleConfirm = (i) => {
-        console.log(i);
         apiFetch(`event/${iType}/confirm?${iType === 'catering' ? 'cateringI' : 'i'}d=${bType === "Services"? i.optionalService.id :i[iType].id}&eventId=${bType === 'Venues' ? i.event.id : bType === 'Caterings' ? i.eventLocation.event.id : i.locationForEvent.event.id}`, "PUT").then(() => window.location.reload()).catch(e => console.log('error', e))
     }
 
-    const handleReject = () =>{
-
+    const handleReject = (i) =>{
+        apiFetch(`event/${iType}/cancel?id=${i.id}`, "DELETE").then(res => res.json()).then(res=>window.location.reload()).catch(e=>console.log('error', e))
     }
 
 

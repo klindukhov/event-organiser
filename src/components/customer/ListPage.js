@@ -41,11 +41,14 @@ export default function ListPage(props) {
     const [order, setOrder] = useState('');
     const getItemsWithFilters = (sorting) => {
         let body = {};
-        if (location) { body.city = location };
         if (forEventId) {
             setDate(JSON.parse(window.sessionStorage.filters).date);
             body.date = JSON.parse(window.sessionStorage.filters).date;
+
+            setLocation(JSON.parse(window.sessionStorage.filters).location);
+            body.city = JSON.parse(window.sessionStorage.filters).location;
         } else {
+            if (location) { body.city = location };
             if (date) { body.date = date }
         }
         if (lowestPriceFilter) { body.minPrice = lowestPriceFilter }
@@ -301,7 +304,7 @@ export default function ListPage(props) {
                     <div className="block">
                         City:
                         <select name="City" id="city-select" className='input' onChange={e => setLocation(e.target.value)}>
-                            <option value=" ">{location !== '' && location}</option>
+                            <option value={location}>{location}</option>
                             {cities.map(c => <option value={c} key={c}>{c}</option>)}
                         </select>
                         <br />
@@ -446,7 +449,7 @@ export default function ListPage(props) {
                             {typeOfList !== 'Events' && c.images && c.images.map(i => <div key={i.encodedImage}>
                                 <img alt={i.name} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
                             </div>)}
-                            {typeOfList === 'Events' && c.location.location.images && c.location.location.images.map(i => <div key={i.encodedImage}>
+                            {typeOfList === 'Events' && c.location[0].location.images && c.location[0].location.images.map(i => <div key={i.encodedImage}>
                                 <img alt={i.name} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
                             </div>)}
                         </div>
