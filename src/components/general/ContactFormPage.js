@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import React from "react";
 import { useEffect, useState } from "react/cjs/react.development";
 import apiFetch from "../../api";
@@ -17,10 +18,15 @@ export default function ContactFormPage(props) {
     const handleSubmit = () => {
         const raw = JSON.stringify({ "concern": concern, "description": description });
 
-        apiFetch(`problems?userId=${props.userId}`, "POST", raw)
-            .catch(error => console.log('error', error));
+        apiFetch(`problems?userId=${props.userId}`, "POST", raw).then(() => {
+            props.togglePopup(<div>
+                The form was submitted<br />
+                <Button className='button' onClick={() => window.location.reload()}>ok</Button>
+            </div>);
+        }).catch(error => console.log('error', error));
 
-         window.location.reload();
+
+
     }
 
     return (
@@ -30,7 +36,7 @@ export default function ContactFormPage(props) {
 
                 <select className='problem-concern-input' onChange={(e) => setConcern(e.target.value)}>
                     <option value=''>Choose problem type</option>
-                {concerns.map(c => <option key={c} value={c}>{c}</option>)}
+                    {concerns.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
 
                 <textarea className='problem-description-input' placeholder='Detailed description of a problem' onChange={(e) => setDescription(e.target.value)} />

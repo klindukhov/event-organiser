@@ -5,11 +5,12 @@ import apiFetch from "../../api";
 import '../../styles/business/AddBusinessPage.css'
 
 export default function AddBusinessPage(props) {
+    const { id } = useParams();
     const history = useHistory();
     const { businessType } = useParams();
     const [typeOfBusiness, setTypeOfBusiness] = useState('');
     useEffect(() => { if (businessType === 'Venue') { setTypeOfBusiness('locations') } else if (businessType === 'Catering') { setTypeOfBusiness('caterings/new') } else if (businessType === 'Service') { setTypeOfBusiness('services') } }, [])
-    useEffect(() => { props.setHeaderMessage('New ' + businessType) }, []);
+    useEffect(() => { props.setHeaderMessage((id === undefined ? 'New ' : 'Edit ') + businessType) }, []);
     const [descriptionOptions, setDescriptionOptions] = useState([]);
     useEffect(() => {
         if (businessType === 'Venue') {
@@ -23,8 +24,63 @@ export default function AddBusinessPage(props) {
             apiFetch('services/allowed/music/styles').then(res => setAvailableMusicStyles(res)).catch(e => console.log('error', e))
         }
     }, [])
+    useEffect(() => {
+        if (id !== undefined) {
+            apiFetch(`${businessType !== 'Catering' ? typeOfBusiness : 'caterings'}/allowed/${id}/detail`).then(res => {
+                console.log(businessType);
+                setEmail(res.email)
+                setDescription(res.description)
+                if (res.address !== null) {
+                    setCity(res.address.city)
+                    setCountry(res.address.country)
+                    setStreetName(res.address.streetName)
+                    setStreetNum(res.address.streetNumber)
+                    setPostCode(res.address.zipCode)
+                }
+                setBusinessHours(res.businessHours)
+                let temp = pics.slice();
+                res.images.forEach(i => {
+                    temp.push({ 'pic': 'data:image/png;base64,' + i.encodedImage, 'file': 'none' });
+                })
+                setPics(temp)
+                switch (businessType) {
+                    case 'Venue':
+                        setName(res.name)
+                        setDailyRentCost(res.dailyRentCost)
+                        setPhoneNumber(res.phoneNumber)
+                        setDescriptions(res.descriptions)
+                        setSeatingCap(res.seatingCapacity)
+                        setStandingCap(res.standingCapacity)
+                        setSize(res.sizeInSqMeters)
+                        break;
+                    case 'Catering':
+                        setName(res.name)
+                        setDailyRentCost(res.serviceCost)
+                        setOutsideCatering(res.offersOutsideCatering)
+                        setPhoneNumber(res.phoneNumber)
+                        setCuisines(res.cuisines.map(c => c.name))
+                        break;
+                    case 'Service':
+                        setDailyRentCost(res.serviceCost)
+                        setName(res.firstName)
+                        setSurname(res.lastName)
+                        setAlias(res.alias)
+                        setType(res.type)
+                        setKidType(res.kidPerformerType)
+                        setAgeFrom(res.kidAgeFrom)
+                        setAgeTo(res.kidAgeTo)
+                        setLanguages(res.translationLanguages)
+                        setBandPeople(res.musicBandPeopleCount)
+                        setMusicStyles(res.musicStyle)
+                        setInstrument(res.instrument)
+                        break;
+                    default:
+                        break;
+                }
 
-    
+            }).catch(e => console.log('error', e));
+        }
+    }, [typeOfBusiness])
 
     const [formErrorMessage, setFormErrorMessage] = useState('');
     const handleCreateBusiness = () => {
@@ -45,7 +101,6 @@ export default function AddBusinessPage(props) {
                 )
             )
         ) {
-
             let body = { "address": { "country": country, "city": city, "streetName": streetName, "streetNumber": streetNum, "zipCode": postCode }, "businessHours": businessHours, "email": email, "description": description };
             if (businessType === 'Venue' && seatingCap !== '' && phoneNumber !== '' && standingCap !== '' && size !== '' && descriptions !== []) {
                 body.dailyRentCost = dailyRentCost;
@@ -94,7 +149,6 @@ export default function AddBusinessPage(props) {
                     history.push(`/ListPage/${businessType}s`)
                 })
                 .catch(e => console.log('error', e));
-
             setFormErrorMessage(false);
         } else {
             setFormErrorMessage(true);
@@ -221,21 +275,33 @@ export default function AddBusinessPage(props) {
         setPics(temp);
     }
 
+    const handleDeleteBusiness = () => {
+        if (businessType === 'Catering') {
+            apiFetch(`caterings/delete?id=${id}`, 'DELETE').then(() => history.push('/ListPage/Caterings')).catch(error => console.log('error', error))
+        }
+        if (businessType !== 'Catering') {
+            apiFetch(`${typeOfBusiness}?id=${id}`, 'DELETE').then(() => history.push(`/ListPage/${businessType}s`)).catch(error => console.log('error', error))
+        }
+    }
+
+    const handleSubmitChanges = () => {
+
+    }
 
 
     return (<div className="main">
         <div className="block">
             Name
-            <input className="input" onChange={e => setName(e.target.value)} /><br />
+            <input className="input" defaultValue={name} onChange={e => setName(e.target.value)} /><br />
             {businessType === "Service" &&
                 <>
                     Surname
-                    <input className="input" onChange={e => setSurname(e.target.value)} /><br />
+                    <input className="input" defaultValue={surname} onChange={e => setSurname(e.target.value)} /><br />
                     Alias
-                    <input className="input" onChange={e => setAlias(e.target.value)} /><br />
+                    <input className="input" defaultValue={alias} onChange={e => setAlias(e.target.value)} /><br />
                     Type
                     <select className="input" onChange={e => setType(e.target.value)}>
-                        <option value=''>choose</option>
+                        <option value={type}>{id === undefined ? 'choose' : type}</option>
                         {availableTypes.map(t =>
                             <option key={t} value={t}>{t}</option>
                         )}
@@ -244,100 +310,101 @@ export default function AddBusinessPage(props) {
                         <div>
                             Type of kids performer
                             <select className="input" onChange={e => setKidType(e.target.value)}>
+                                <option value={kidType}>{kidType}</option>
                                 {availableKidTypes.map(t =>
                                     <option key={t} value={t}>{t}</option>
                                 )}
                             </select><br />
                             Age
-                            <input className="input" onChange={e => setAgeFrom(e.target.value)} />
+                            <input className="input" defaultValue={ageFrom} onChange={e => setAgeFrom(e.target.value)} />
                             to
-                            <input className="input" onChange={e => setAgeTo(e.target.value)} /><br />
+                            <input className="input" defaultValue={ageTo} onChange={e => setAgeTo(e.target.value)} /><br />
                         </div>
                     }
                     {type === "INTERPRETER" &&
                         <div>
-                            {availableLanguages.map(o => <div key={o}><input type='checkbox' value={o} onChange={handleLanguages} /> {o}</div>)}
+                            {availableLanguages.map(o => <div key={o}><input type='checkbox' checked={languages.includes(o)} value={o} onChange={handleLanguages} /> {o}</div>)}
                         </div>
                     }
                     {type === 'MUSIC BAND' &&
                         <div>
                             Number of people
-                            <input className="input" onChange={e => setBandPeople(e.target.value)} /><br />
-                            {availableMusicStyles.map(o => <div key={o}><input type='checkbox' value={o} onChange={handleMusicStyles} /> {o}</div>)}
+                            <input className="input" defaultValue={bandPeople} onChange={e => setBandPeople(e.target.value)} /><br />
+                            {availableMusicStyles.map(o => <div key={o}><input type='checkbox' checked={musicStyles.includes(o)} value={o} onChange={handleMusicStyles} /> {o}</div>)}
                         </div>
                     }
                     {type === 'MUSICIAN' &&
                         <div>
                             Instrument
-                            <input className="input" onChange={e => setInstrument(e.target.value)} /><br />
-                            {availableMusicStyles.map(o => <div key={o}><input type='checkbox' value={o} onChange={handleMusicStyles} /> {o}</div>)}
+                            <input className="input" defaultValue={instrument} onChange={e => setInstrument(e.target.value)} /><br />
+                            {availableMusicStyles.map(o => <div key={o}><input type='checkbox' checked={musicStyles.includes(o)} value={o} onChange={handleMusicStyles} /> {o}</div>)}
                         </div>
                     }
                     {(type === 'SINGER' || type === "DJ") &&
                         <div>
-                            {availableMusicStyles.map(o => <div key={o}><input type='checkbox' value={o} onChange={handleMusicStyles} /> {o}</div>)}
+                            {availableMusicStyles.map(o => <div key={o}><input type='checkbox' checked={musicStyles.includes(o)} value={o} onChange={handleMusicStyles} /> {o}</div>)}
                         </div>
                     }
                 </>
             }
             Email
-            <input className="input" onChange={e => setEmail(e.target.value)} /><br />
+            <input className="input" defaultValue={email} onChange={e => setEmail(e.target.value)} /><br />
             {businessType !== 'Service' &&
                 <>Phone number
-                    <input className="input" onChange={e => setPhoneNumber(e.target.value)} /><br />
+                    <input className="input" defaultValue={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} /><br />
                 </>
             }
             {businessType === "Venue" &&
                 <>
                     Seating capacity
-                    <input className="input" onChange={e => setSeatingCap(e.target.value)} /><br />
+                    <input className="input" defaultValue={seatingCap} onChange={e => setSeatingCap(e.target.value)} /><br />
                     Standing capasity
-                    <input className="input" onChange={e => setStandingCap(e.target.value)} /><br />
+                    <input className="input" defaultValue={standingCap} onChange={e => setStandingCap(e.target.value)} /><br />
                     Size(square meters)
-                    <input className="input" onChange={e => setSize(e.target.value)} /><br />
+                    <input className="input" defaultValue={size} onChange={e => setSize(e.target.value)} /><br />
                 </>
             }
             Description<br />
-            <textarea className="input" onChange={e => setDescription(e.target.value)} /><br />
+            <textarea className="input" defaultValue={description} onChange={e => setDescription(e.target.value)} /><br />
             {businessType === "Venue" && 'Daily rent cost'}
             {(businessType === "Catering" || businessType === "Service") && 'Service cost'}
-            <input className="input" onChange={e => setDailyRentCost(e.target.value)} /><br />
+            <input className="input" defaultValue={dailyRentCost} onChange={e => setDailyRentCost(e.target.value)} /><br />
             Country
-            <input className="input" onChange={e => setCountry(e.target.value)} /><br />
+            <input className="input" defaultValue={country} onChange={e => setCountry(e.target.value)} /><br />
             City
-            <input className="input" onChange={e => setCity(e.target.value)} /><br />
+            <input className="input" defaultValue={city} onChange={e => setCity(e.target.value)} /><br />
             Street name
-            <input className="input" onChange={e => setStreetName(e.target.value)} /><br />
+            <input className="input" defaultValue={streetName} onChange={e => setStreetName(e.target.value)} /><br />
             Street number
-            <input className="input" onChange={e => setStreetNum(e.target.value)} /><br />
+            <input className="input" defaultValue={streetNum} onChange={e => setStreetNum(e.target.value)} /><br />
             Postal code
-            <input className="input" onChange={e => setPostCode(e.target.value)} /><br />
+            <input className="input" defaultValue={postCode} onChange={e => setPostCode(e.target.value)} /><br />
             {businessType === 'Catering' &&
                 <>
                     Offers outside catering
-                    <input type='checkbox' onChange={e => setOutsideCatering(e.target.checked)} />
+                    <input type='checkbox' checked={outsideCatering} onChange={e => setOutsideCatering(e.target.checked)} />
                 </>}
             {businessType === 'Venue' &&
                 <>
                     <p style={{ textAlign: 'center' }}>Descriptions </p>
-                    {descriptionOptions.map(o => <div key={o}><input type='checkbox' value={o} onChange={handleDescriptions} /> {o}</div>)}
+                    {descriptionOptions.map(o => <div key={o}><input type='checkbox' value={o} checked={descriptions.includes(o)} onChange={handleDescriptions} /> {o}</div>)}
                 </>
             }
             {businessType === 'Catering' &&
                 <>
                     <p style={{ textAlign: 'center' }}>Cuisines </p>
-                    {availableCuisines.map(o => <div key={o.name}><input type='checkbox' value={o.name} onChange={handleCuisines} /> {o.name}</div>)}
+                    {availableCuisines.map(o => <div key={o.name}><input type='checkbox' checked={cuisines.includes(o.name)} value={o.name} onChange={handleCuisines} /> {o.name}</div>)}
                 </>
             }
             <p style={{ textAlign: 'center' }}>Business Hours</p>
-            <div className="business-hours">
+            {businessHours !== '' && <div className="business-hours">
                 {['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'].map(d =>
                     <div key={d}>
                         {d}<br />
-                        <input type='time' id={d} onChange={handleOpenTime} />
-                        <input type='time' id={d} onChange={handleCloseTime} />
+                        <input type='time' id={d} value={businessHours.find(b => b.day === d).timeFrom} onChange={handleOpenTime} />
+                        <input type='time' id={d} value={businessHours.find(b => b.day === d).timeTo} onChange={handleCloseTime} />
                     </div>)}
-            </div>
+            </div>}
             <p style={{ textAlign: 'center' }}>Images </p>
             <div className="business-images">
                 {pics.map(p =>
@@ -355,7 +422,19 @@ export default function AddBusinessPage(props) {
 
 
         </div>
-        <div className="block" onClick={handleCreateBusiness} style={{ cursor: 'pointer', textAlign: 'center' }}>Add {businessType}<br />{formErrorMessage && <p style={{ color: 'red' }}>Please fill all the form fields</p>}</div>
+        {id === undefined &&
+            <div className="block" onClick={handleCreateBusiness} style={{ cursor: 'pointer', textAlign: 'center' }}>
+                Add {businessType}<br />
+                {formErrorMessage && <p style={{ color: 'red' }}>Please fill all the form fields</p>}
+            </div>
+        }
+        {id !== undefined &&
+            <div className="block" style={{ display: 'grid', gridTemplateColumns: 'auto auto auto', justifyItems: 'center' }}>
+                <input type='button' className="button" value='Cancel' onClick={() => history.push(`/ListPage/${businessType}s`)} />
+                <input type='button' className="button" value='Submit changes' onClick={handleSubmitChanges} />
+                <input type='button' className="button" value={'Delete' + businessType} onClick={handleDeleteBusiness} />
+            </div>
+        }
 
     </div>)
 }

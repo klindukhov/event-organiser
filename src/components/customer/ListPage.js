@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory, Link } from "react-router-dom";
 import '../../styles/customer/ListPage.css'
+import AirlineSeatLegroomNormalIcon from '@mui/icons-material/AirlineSeatLegroomNormal';
 
 import pplIcon from '../../images/pplIcon.png';
 import apiFetch from "../../api";
@@ -423,7 +424,7 @@ export default function ListPage(props) {
                                 {c.description}
                                 {typeOfList === "Venues" && <>
                                     {' ' + c.seatingCapacity}
-                                    ⑁
+                                    <AirlineSeatLegroomNormalIcon />
                                     {' ' + c.standingCapacity}
                                     <img className='ppl-icon' alt='ppl-icon' src={pplIcon} />
                                 </>}
@@ -475,7 +476,7 @@ export default function ListPage(props) {
                     Add {typeOfList.substring(0, typeOfList.length - 1)}
                 </div>
             }
-            {((props.authorized === true && props.userData.user.type === 'C' && typeOfList !== 'Events' && pageSize !== null) || (typeOfList !== 'Events' && pageSize !== null)) &&
+            {((props.authorized === true && props.userData.user.type === 'C' && typeOfList !== 'Events' && pageSize !== null) || (props.authorized === false && typeOfList !== 'Events' && pageSize !== null)) &&
                 <div className='block' style={{ display: "grid", gridTemplateColumns: 'auto auto' }} >
                     <button style={{ justifySelf: 'start' }} className="button" disabled={pageNo < 1} onClick={() => { setPageNo(pageNo - 1) }}>
                         Previous page

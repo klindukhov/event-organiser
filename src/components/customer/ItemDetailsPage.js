@@ -153,15 +153,6 @@ export default function ItemDetailsPage(props) {
         }
     }, [itemDetails])
 
-    const handleDeleteBusiness = () => {
-        if (typeOfItem === 'Catering') {
-            apiFetch(`caterings/delete?id=${id}`, 'DELETE').then(() => history.push('/ListPage/Caterings')).catch(error => console.log('error', error))
-        }
-        if (typeOfItem !== 'Catering') {
-            apiFetch(`${itemType}?id=${id}`, 'DELETE').then(() => history.push(`/ListPage/${typeOfItem}s`)).catch(error => console.log('error', error))
-        }
-    }
-
     const [isMenuEdited, setIsMenuEdited] = useState(false);
     const [dishName, setDishName] = useState(false);
     const [dishDescription, setDishDescription] = useState('');
@@ -273,7 +264,7 @@ export default function ItemDetailsPage(props) {
                                 <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
                             }
                             {props.authorized === true && props.userData.user.type === 'B' &&
-                                <input type='button' className='add-to-event-button' value={`Delete ${typeOfItem}`} onClick={handleDeleteBusiness} />
+                                <input type='button' className='add-to-event-button' value={`Edit ${typeOfItem}`} onClick={() => {history.push(`/AddBusinessPage/${typeOfItem}/${id}`)}} />
                             }
                         </>}
                         {typeOfItem === 'Event' && <>

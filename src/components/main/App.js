@@ -41,7 +41,7 @@ const ROUTES = {
   '/ProblemDetailsPage:id': ProblemDetailsPage,
   '/UserDetailsPage:id': UserDetailsPage,
   '/ReservationRequestsPage': ReservationRequestsPage,
-  '/AddBusinessPage/:businessType': AddBusinessPage,
+  '/AddBusinessPage/:businessType/:id?': AddBusinessPage,
   '/ItemDetails/:typeOfItem/:id/:forEventId?': ItemDetailsPage,
   '/ListPage/:typeOfList/:forEventId?': ListPage,
   '/reset:token' : ResetPasswordPage,
