@@ -18,9 +18,9 @@ export default function ReservationRequestsPage(props) {
     const [bookingsColor, setBookingsColor] = useState('#47525e');
     const [eventAllColor, setEventAllColor] = useState('white');
     const [requestsColor, setRequestsColor] = useState('white');
-    const [eventPastBackColor, setEventPastBackColor] = useState('#e5e5e5');
-    const [eventFutureBackColor, setEventFutureBackColor] = useState('#e5e5e5');
-    const [bookingsBackColor, setBookingsBackColor] = useState('#e5e5e5');
+    const [eventPastBackColor, setEventPastBackColor] = useState('#F2F4F5');
+    const [eventFutureBackColor, setEventFutureBackColor] = useState('#F2F4F5');
+    const [bookingsBackColor, setBookingsBackColor] = useState('#F2F4F5');
     const [eventAllBackColor, setEventAllBackrColor] = useState('#47525e');
     const [requestsBackColor, setRequestsBackColor] = useState('#47525e');
     const handleEvents = (e) => {
@@ -28,8 +28,8 @@ export default function ReservationRequestsPage(props) {
             setEventPastColor('#47525e');
             setEventFutureColor('#47525e');
             setEventAllColor('white');
-            setEventPastBackColor('#e5e5e5');
-            setEventFutureBackColor('#e5e5e5');
+            setEventPastBackColor('#F2F4F5');
+            setEventFutureBackColor('#F2F4F5');
             setEventAllBackrColor('#47525e');
             setIType('service');
             setBType('Services')
@@ -38,28 +38,28 @@ export default function ReservationRequestsPage(props) {
             setEventFutureColor('#47525e');
             setEventAllColor('#47525e');
             setEventPastBackColor('#47525e');
-            setEventFutureBackColor('#e5e5e5');
-            setEventAllBackrColor("#e5e5e5");
+            setEventFutureBackColor('#F2F4F5');
+            setEventAllBackrColor("#F2F4F5");
             setIType('catering')
             setBType('Caterings')
         } else if (e.target.value === "Venues") {
             setEventPastColor('#47525e');
             setEventFutureColor('white');
             setEventAllColor('#47525e');
-            setEventPastBackColor('#e5e5e5');
+            setEventPastBackColor('#F2F4F5');
             setEventFutureBackColor('#47525e');
-            setEventAllBackrColor('#e5e5e5');
+            setEventAllBackrColor('#F2F4F5');
             setIType('location')
             setBType('Venues')
         } else if (e.target.value === "requests") {
             setRequestsColor('white');
             setRequestsBackColor('#47525e')
-            setBookingsBackColor('#e5e5e5')
+            setBookingsBackColor('#F2F4F5')
             setBookingsColor('#47525e')
             setIsRequests(true);
         } else if (e.target.value === "bookings") {
             setRequestsColor('#47525e');
-            setRequestsBackColor('#e5e5e5')
+            setRequestsBackColor('#F2F4F5')
             setBookingsBackColor('#47525e')
             setBookingsColor('white')
             setIsRequests(false);

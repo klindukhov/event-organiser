@@ -21,7 +21,7 @@ const Header = (props) => {
     if (window.sessionStorage.getItem('theme') !== null) {
       setTheme(window.sessionStorage.getItem('theme'));
       if (window.sessionStorage.getItem('theme') === '\u263E') {
-        r.style.setProperty('--bg', '#e5e5e5');
+        r.style.setProperty('--bg', '#F2F4F5');
         r.style.setProperty('--txt', '#47525e');
         r.style.setProperty('--blockbg', 'white');
       } else if (window.sessionStorage.getItem('theme') === '\u263C') {
@@ -30,7 +30,7 @@ const Header = (props) => {
         r.style.setProperty('--blockbg', '#47525e');
       }
     } else {
-      r.style.setProperty('--bg', '#e5e5e5');
+      r.style.setProperty('--bg', '#F2F4F5');
       r.style.setProperty('--txt', '#47525e');
       r.style.setProperty('--blockbg', 'white');
       setTheme('\u263E');
@@ -40,7 +40,7 @@ const Header = (props) => {
   const handleThemeChange = () => {
     let r = document.querySelector(':root');
     if (theme === '\u263C') {
-      r.style.setProperty('--bg', '#e5e5e5');
+      r.style.setProperty('--bg', '#F2F4F5');
       r.style.setProperty('--txt', '#47525e');
       r.style.setProperty('--blockbg', 'white');
       setTheme('\u263E');

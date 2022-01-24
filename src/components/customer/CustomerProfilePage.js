@@ -6,7 +6,7 @@ import apiFetch from '../../api';
 
 export default function CustomerProfilePage(props) {
     const [changes, setChanges] = useState(true);
-    const [buttonColor, setButtonColor] = useState('#e5e5e5')
+    const [buttonColor, setButtonColor] = useState('#F2F4F5')
 
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');

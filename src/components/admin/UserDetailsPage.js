@@ -75,16 +75,16 @@ export default function UserDetailsPage() {
     const [eventPastColor, setEventPastColor] = useState('#47525e');
     const [eventFutureColor, setEventFutureColor] = useState('#47525e');
     const [eventAllColor, setEventAllColor] = useState('white');
-    const [eventPastBackColor, setEventPastBackColor] = useState('#e5e5e5');
-    const [eventFutureBackColor, setEventFutureBackColor] = useState('#e5e5e5');
+    const [eventPastBackColor, setEventPastBackColor] = useState('#F2F4F5');
+    const [eventFutureBackColor, setEventFutureBackColor] = useState('#F2F4F5');
     const [eventAllBackColor, setEventAllBackrColor] = useState('#47525e');
     const handleEvents = (e) => {
         if (e.target.value === "all") {
             setEventPastColor('#47525e');
             setEventFutureColor('#47525e');
             setEventAllColor('white');
-            setEventPastBackColor('#e5e5e5');
-            setEventFutureBackColor('#e5e5e5');
+            setEventPastBackColor('#F2F4F5');
+            setEventFutureBackColor('#F2F4F5');
             setEventAllBackrColor('#47525e');
             setEventsTab('ALL')
         } else if (e.target.value === "past") {
@@ -92,16 +92,16 @@ export default function UserDetailsPage() {
             setEventFutureColor('#47525e');
             setEventAllColor('#47525e');
             setEventPastBackColor('#47525e');
-            setEventFutureBackColor('#e5e5e5');
-            setEventAllBackrColor("#e5e5e5");
+            setEventFutureBackColor('#F2F4F5');
+            setEventAllBackrColor("#F2F4F5");
             setEventsTab('PAST')
         } else if (e.target.value === "future") {
             setEventPastColor('#47525e');
             setEventFutureColor('white');
             setEventAllColor('#47525e');
-            setEventPastBackColor('#e5e5e5');
+            setEventPastBackColor('#F2F4F5');
             setEventFutureBackColor('#47525e');
-            setEventAllBackrColor('#e5e5e5');
+            setEventAllBackrColor('#F2F4F5');
             setEventsTab('CURRENT')
         }
     }

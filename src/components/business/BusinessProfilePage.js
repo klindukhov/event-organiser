@@ -6,7 +6,7 @@ import apiFetch from '../../api';
 
 export default function BusinessProfilePage(props) {
     const [changes, setChanges] = useState(true);
-    const [buttonColor, setButtonColor] = useState('#e5e5e5')
+    const [buttonColor, setButtonColor] = useState('#F2F4F5')
 
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
@@ -75,7 +75,7 @@ export default function BusinessProfilePage(props) {
         apiFetch(`business?id=${props.userId}`, "PUT", raw)
             .then(() => {
                 setChanges(true);
-                setButtonColor('#e5e5e5');
+                setButtonColor('#F2F4F5');
             })
             .catch(error => console.log('error', error));
     }
