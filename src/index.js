@@ -7,6 +7,10 @@ import Header from './components/main/Header';
 import Footer from './components/main/Footer';
 import apiFetch from './api.js'
 import Popup from './components/main/Popup';
+import { createTheme } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material';
+
+
 
 
 const Main = () => {
@@ -14,6 +18,22 @@ const Main = () => {
   const [authorized, setAuthorized] = useState(false);
   const [userId, setUserId] = useState();
   const [userData, setUserData] = useState();
+
+  const theme = createTheme({
+    status: {
+      danger: '#e53e3e',
+    },
+    palette: {
+      primary: {
+        main: '#47525e',
+        darker: '#053e85',
+      },
+      neutral: {
+        main: '#64748B',
+        contrastText: '#fff',
+      },
+    },
+  });
 
   useEffect(() => {
     if (window.localStorage.getItem('auth') === 'true') {
@@ -68,17 +88,19 @@ const Main = () => {
   }
 
   return (
-    <BrowserRouter>
-      <Header myProps={myProps} />
-      <App myProps={myProps} />
-      {isOpen &&
-        <Popup
-          content={popupContent}
-          handleClose={togglePopup}
-        />
-      }
-      <Footer myProps={myProps} />
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Header myProps={myProps} />
+        <App myProps={myProps} />
+        {isOpen &&
+          <Popup
+            content={popupContent}
+            handleClose={togglePopup}
+          />
+        }
+        <Footer myProps={myProps} />
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

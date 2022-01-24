@@ -6,6 +6,10 @@ import { useHistory } from 'react-router';
 import pplIcon from '../../images/pplIcon.png';
 import { useParams } from 'react-router-dom';
 import apiFetch from '../../api';
+import { TextField, Button, IconButton, Select, FormControl, InputLabel, MenuItem } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete';
+
+
 
 
 export default function EventDetailsPage(props) {
@@ -407,25 +411,28 @@ export default function EventDetailsPage(props) {
     return (
         <div className='main'>
             <div className='block'>
-                Event Name: <input className='input' defaultValue={eventName} onChange={e => setEventName(e.target.value)} disabled={!isNew} /><br />
-                Number of guests: <input className='input' type='number' defaultValue={guestNum} onChange={e => setGuestNum(e.target.value)} disabled={!isNew} /><br />
-                Date: <input className='input' type='date' min={today()} defaultValue={eDate} onChange={e => setEDate(e.target.value)} disabled={!isNew} /><br />
-                Start time: <input className='input' type='time' defaultValue={eStart} onChange={e => setEStart(e.target.value)} disabled={!isNew} /><br />
-                End time: <input className='input' type='time' defaultValue={eEnd} onChange={e => setEEnd(e.target.value)} disabled={!isNew} /><br />
-                Event type: <select name="Event type" className='input' onChange={(event) => setEventType(event.target.value)} disabled={!isNew}>
-                    <option value={eventType}>{eventType}</option>
-                    {eventTypes.map(t => <option value={t.type} key={t.type}>{t.type}</option>)}
-                </select><br />
-                {!isNew && <input type='button' className='button' onClick={cancelEvent} value='Cancel event' />}
+                <TextField size='small' margin='dense' label='Event name' InputLabelProps={!isNew ? { shrink: !isNew } : ''} style={{ width: '250px' }} value={eventName} onChange={e => setEventName(e.target.value)} disabled={!isNew} /><br />
+                <TextField size='small' margin='dense' label='Guests' InputLabelProps={!isNew ? { shrink: !isNew } : ''} style={{ width: '250px' }} type='number' value={guestNum} onChange={e => setGuestNum(e.target.value)} disabled={!isNew} /><br />
+                <TextField size='small' margin='dense' label='Date' InputLabelProps={{ shrink: true }} style={{ width: '250px' }} type='date' min={today()} value={eDate} onChange={e => setEDate(e.target.value)} disabled={!isNew} /><br />
+                <TextField size='small' margin='dense' label='Start' InputLabelProps={{ shrink: true }} type='time' value={eStart} onChange={e => setEStart(e.target.value)} disabled={!isNew} />{' _ '}
+                <TextField size='small' margin='dense' label='End' InputLabelProps={{ shrink: true }} type='time' value={eEnd} onChange={e => setEEnd(e.target.value)} disabled={!isNew} /><br />
+                <FormControl size='small' margin='dense'>
+                    <InputLabel>Event type</InputLabel>
+                    <Select name="Event type" label='Event type' style={{ width: '250px' }} size='small' margin='dense' value={eventType} onChange={(event) => setEventType(event.target.value)} disabled={!isNew}>
+                        {eventTypes.map(t => <MenuItem value={t.type} key={t.type}>{t.type}</MenuItem>)}
+                    </Select>
+                </FormControl>
+                <br />
+                {!isNew && <Button variant='contained' onClick={cancelEvent}>Cancel event</Button>}
                 {formError && <p style={{ color: 'red', textAlign: 'center' }}><br />Please fill in all the fields</p>}
             </div>
             <div className='block'>
                 <p className='venue-choice-heading'>
                     Venue
-                    {isLocPicked && isNew && <input type='button' value='x' style={{ backgroundColor: 'transparent', borderColor: 'transparent' }} onClick={() => {
+                    {isLocPicked && isNew && <IconButton onClick={() => {
                         window.localStorage.setItem('locationDetails', null);
                         setIsLocPicked(false);
-                    }} />}
+                    }}><DeleteIcon /></IconButton>}
                 </p>
                 {canceledLocs.length > 0 && canceledLocs.map(l => <p key={l.id}>
                     ⓘ Venue "{l.location.name}" reservation request is cancelled, please pick another venue
@@ -454,22 +461,22 @@ export default function EventDetailsPage(props) {
                     </div>
                 }
                 {isLocPicked && !isNew && JSON.parse(window.localStorage.getItem('locationDetails')) !== null &&
-                    <p className='venue-choice-heading'>{locStatus !== '' && <>Status: {locStatus}</>}<br />
-                        {(locStatus === 'CONFIRMED' || locStatus === 'NOT_CONFIRMED') && <button className='button' onClick={() => handleCancel('location', locResId)}>
+                    <p style={{ fontSize: '14pt' }}>{locStatus !== '' && <><br />Status: {locStatus}<br /><br /></>}
+                        {(locStatus === 'CONFIRMED' || locStatus === 'NOT_CONFIRMED') && <Button variant='contained' size='small' className='button' onClick={() => handleCancel('location', locResId)}>
                             Cancel request
-                        </button>}<br />
-                        <p style={{ color: 'red' }}>{locationCancellationMessage}</p>
-                        {(locStatus === '') && <button className='button' onClick={() => bookVenue('location', locResId)}>
+                        </Button>}
+                        {locationCancellationMessage !== '' && <p style={{ color: 'red', fontSize: '12pt' }}>{locationCancellationMessage}</p>}
+                        {(locStatus === '') && <Button variant='contained' size='small' className='button' onClick={() => bookVenue('location', locResId)}>
                             Book venue
-                        </button>}<br />
+                        </Button>}
                         {locStatus === '' &&
-                            <input type='button' value='+' className='add-button' onClick={() => history.push(`/ListPage/Venues/${id}`)} />
+                            <Button style={{ fontSize: '30pt' }} onClick={() => history.push(`/ListPage/Venues/${id}`)} >+</Button>
                         }
                         {locStatus === 'NOT_CONFIRMED' && 'ⓘ You will be able to pick caterigs, services, and invite guests to your event after the reservation is confirmed by venue provider'}
                     </p>
                 }
                 {(!isLocPicked || JSON.parse(window.localStorage.getItem('locationDetails')) === null) &&
-                    <input type='button' value='+' className='add-button' onClick={() => history.push(`/ListPage/Venues/${id}`)} />
+                    <Button style={{ fontSize: '30pt' }} onClick={() => history.push(`/ListPage/Venues/${id}`)} >+</Button>
                 }
             </div>
             {isLocPicked && !isNew && locStatus === 'CONFIRMED' &&
@@ -501,18 +508,32 @@ export default function EventDetailsPage(props) {
                                         </div>
                                     </div>
                                     <div>
-                                        Message for catering provider: <br />
-                                        "{c.comment}"<br />
-                                        Serving time: {c.time}<br />
-                                        Status: {c.confirmationStatus}<br />
-                                        <button className='button' onClick={() => handleCancel('catering', c.id)}>
+                                        <br />
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'auto auto', justifyContent: 'start', columnGap: '10px', alignItems: 'end' }}>
+                                            <span style={{ fontSize: '12pt', justifySelf: 'start' }}>
+                                                Message: </span>
+                                            "{c.comment}"<br />
+                                            <span style={{ fontSize: '12pt' }}>
+                                                Serving time: </span>
+                                            {c.time}<br />
+                                            <span style={{ fontSize: '12pt' }}>
+                                                Status: </span>
+                                            {c.confirmationStatus}<br />
+                                        </div>
+                                        <br />
+                                        <Button variant='contained' size='small' className='button' onClick={() => handleCancel('catering', c.id)}>
                                             Cancel request
-                                        </button><br />
-                                        {c.confirmationStatus === "NOT_CONFIRMED" && 'ⓘ You will be able to make an order after the reservation is confirmed by catering provider'}
-                                        {c.confirmationStatus === "CONFIRMED" && c.order.length === 0 && !menuEditing.value && <input type='button' className='button' value='Make order' onClick={() => setMenuEditing({ 'value': true, 'id': c.id })} />}
-                                        {c.order.length > 0 && "Order status:"}<br />
-                                        {c.order.length > 0 && 'Order:'}
-                                        {c.order.length > 0 && c.order.map(item => <li key={item.id}>{item.amount}/{item.item.name}</li>)}
+                                        </Button><br />
+                                        {c.confirmationStatus === "NOT_CONFIRMED" && <p style={{ fontSize: '12pt' }}>
+                                            ⓘ You will be able to make an order after the reservation is confirmed by catering provider
+                                        </p>
+                                        }
+                                        {c.confirmationStatus === "CONFIRMED" && c.order.length === 0 && !menuEditing.value &&
+                                            <Button className='button' onClick={() => setMenuEditing({ 'value': true, 'id': c.id })}>Open menu</Button>
+                                        }
+                                        {c.order.length > 0 && <span style={{ fontSize: '12pt' }}>
+                                            Order: </span>}
+                                        {c.order.length > 0 && c.order.map(item => <li key={item.id}>{item.amount} x {item.item.name}</li>)}
                                         {menuEditing.value && menuEditing.id === c.id &&
                                             <div>
                                                 {cateringItemTypes[c.catering.id] && <p className='item-review-heading'>Menu</p>}
@@ -522,8 +543,8 @@ export default function EventDetailsPage(props) {
                                                         <div className="menu-item-left">{item.name}<br />
                                                             {item.description}<br />
                                                         </div>
-                                                        <div className="menu-item-right">{item.servingPrice} Quantity:
-                                                            <input type='number' style={{ width: '100px' }} onChange={e => handleOrderEdit(c.id, item.id, e.target.value)} />
+                                                        <div className="menu-item-right">{item.servingPrice}
+                                                            <TextField size='small' label='Quantity' InputLabelProps={{ shrink: true }} type='number' style={{ width: '100px' }} onChange={e => handleOrderEdit(c.id, item.id, e.target.value)} />
                                                             <br />
                                                             {Object.keys(item).filter(k => item[k] === true).map(i => '"' + i + '" ')}<br />
                                                         </div>
@@ -533,8 +554,8 @@ export default function EventDetailsPage(props) {
                                                     Leave your order here<br />
                                                     <textarea /><br />
                                                 </>}
-                                                <input type='button' className='button' value='Confirm order' onClick={() => { setMenuEditing({ 'value': false, 'id': c.id }); handleOrderSubmit(c.id) }} />
-                                                <input type='button' className='button' value='Cancel' onClick={() => setMenuEditing({ 'value': false, 'id': c.id })} />
+                                                <Button variant='contained' size='medium' margin='dense' onClick={() => { setMenuEditing({ 'value': false, 'id': c.id }); handleOrderSubmit(c.id) }}>Confirm order</Button><br />
+                                                <Button variant='contained' size='small' margin='dense' onClick={() => setMenuEditing({ 'value': false, 'id': c.id })}>Cancel</Button>
                                             </div>
                                         }
                                     </div>
@@ -545,9 +566,9 @@ export default function EventDetailsPage(props) {
                     {isCatPicked &&
                         <div>
                             {JSON.parse(window.localStorage.getItem('cateringInfo')).map && JSON.parse(window.localStorage.getItem('cateringInfo')).map(c =>
-                                <div key={c.id} className='item-list-element' style={{ justifySelf: 'center', width: '1420px', marginBottom: '30px', display: 'grid', gridTemplateColumns: 'auto auto' }} >
-                                    <div className='list-item' style={{ width: '1420px' }} onClick={() => history.push(`/ItemDetails/Catering/${c.id}`)}>
-                                        <div className='overlay-listing' style={{ width: '1420px' }}>
+                                <div key={c.id} className='item-list-element' style={{ justifySelf: 'center', width: '1400px', marginBottom: '30px', display: 'grid', gridTemplateColumns: 'auto auto' }} >
+                                    <div className='list-item' style={{ width: '1400px' }} onClick={() => history.push(`/ItemDetails/Catering/${c.id}`)}>
+                                        <div className='overlay-listing' style={{ width: '1400px' }}>
                                             <div className='overlay-listing-left'>
                                                 {c.name}<br />
                                                 {c.description}
@@ -557,24 +578,25 @@ export default function EventDetailsPage(props) {
 
                                             </div>
                                         </div>
-                                        <div className='' style={{ width: '1420px' }}>
+                                        <div className='list-item-pics' style={{ width: '1400px' }}>
                                             {c.images && c.images.map(i => <div key={i.encodedImage}>
                                                 <img alt={i.name} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
                                             </div>)}
                                         </div>
                                     </div>
-                                    <input type='button' value='x' className='x-button' onClick={() => handleDeleteCatering(c)} />
+                                    <IconButton onClick={() => handleDeleteCatering(c)}><DeleteIcon /></IconButton>
                                     <div>
-                                        Message for catering provider <br />
-                                        <textarea onChange={e => setCaterMessage([...caterMessage, { 'message': e.target.value, 'id': c.id }])} /><br />
-                                        Serving time
-                                        <input type='time' onChange={e => setCaterTime([...caterTime, { 'time': e.target.value, 'id': c.id }])} />
+                                        <br />
+                                        <TextField size='small' margin='dense' style={{ width: '400px' }} multiline label='Message for catering provider' onChange={e => setCaterMessage([...caterMessage, { 'message': e.target.value, 'id': c.id }])} /><br />
+                                        <TextField size='small' margin='dense' InputLabelProps={{ shrink: true }} type='time' label='Serving time' onChange={e => setCaterTime([...caterTime, { 'time': e.target.value, 'id': c.id }])} />
                                     </div>
                                 </div>)}
                         </div>
                     }
                     <input type='button' value='+' className='add-button' onClick={() => history.push(`/ListPage/Caterings/${id}`)} /><br />
-                    {JSON.parse(window.localStorage.getItem('cateringInfo')) && JSON.parse(window.localStorage.getItem('cateringInfo')).length > 0 && <input type='button' value='Request caterings booking' className='button' onClick={handleReserveCaterings} />}
+                    {JSON.parse(window.localStorage.getItem('cateringInfo')) && JSON.parse(window.localStorage.getItem('cateringInfo')).length > 0 &&
+                        <Button variant='contained' className='button' onClick={handleReserveCaterings}>Request caterings booking</Button>
+                    }
                     <p style={{ color: 'red' }}>{cateringErrorMessage}</p>
 
                 </div>
@@ -600,21 +622,34 @@ export default function EventDetailsPage(props) {
                                                 Service cost: {c.optionalService.serviceCost} pln<br />
                                             </div>
                                         </div>
-                                        <div className='list-item-pics'>
+                                        <div className='list-item-pics' style={{ width: '1420px' }}>
                                             {c.optionalService.images && c.optionalService.images.map(i => <div key={i.encodedImage}>
                                                 <img alt={i.name} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
                                             </div>)}
                                         </div>
                                     </div>
                                     <div>
-                                        Message for catering provider: <br />
-                                        "{c.comment}"<br />
-                                        Time: {c.timeFrom} - {c.timeTo}<br />
-                                        Status: {c.confirmationStatus}<br />
-                                        <button className='button' onClick={() => handleCancel('service', c.id)}>
+                                        <br />
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'auto auto', justifyContent: 'start', columnGap: '10px', alignItems: 'end' }}>
+                                            <span style={{ fontSize: '12pt', justifySelf: 'start' }}>
+                                                Message: </span>
+                                            "{c.comment}"<br />
+                                            <span style={{ fontSize: '12pt' }}>
+                                                Serving time: </span>
+                                            {c.timeFrom + " - " + c.timeTo}<br />
+                                            <span style={{ fontSize: '12pt' }}>
+                                                Status: </span>
+                                            {c.confirmationStatus}<br />
+                                        </div>
+                                        <br />
+                                        <Button variant='contained' size='small' className='button' onClick={() => handleCancel('service', c.id)}>
                                             Cancel request
-                                        </button><br />
-                                        {c.confirmationStatus === "NOT_CONFIRMED" && 'ⓘ You will be able to finalise event planning after the reservation is confirmed by service provider'}
+                                        </Button><br />
+                                        {c.confirmationStatus === "NOT_CONFIRMED" &&
+                                            <p style={{ fontSize: '12pt' }}>
+                                                ⓘ You will be able to finalise event planning after the reservation is confirmed by service provider
+                                            </p>
+                                        }
                                     </div>
                                 </div>}</div>)
                             }
@@ -623,9 +658,9 @@ export default function EventDetailsPage(props) {
                     {isServicePicked &&
                         <div>
                             {JSON.parse(window.localStorage.getItem('serviceInfo')).map && JSON.parse(window.localStorage.getItem('serviceInfo')).map(c =>
-                                <div key={c.id} className='item-list-element' style={{ justifySelf: 'center', width: '1420px', marginBottom: '30px', display: 'grid', gridTemplateColumns: 'auto auto' }} >
-                                    <div className='list-item' style={{ width: '1420px' }} onClick={() => history.push(`/ItemDetails/Service/${c.id}`)}>
-                                        <div className='overlay-listing' style={{ width: '1420px' }}>
+                                <div key={c.id} className='item-list-element' style={{ justifySelf: 'center', width: '1400px', marginBottom: '30px', display: 'grid', gridTemplateColumns: 'auto auto' }} >
+                                    <div className='list-item' style={{ width: '1400px' }} onClick={() => history.push(`/ItemDetails/Service/${c.id}`)}>
+                                        <div className='overlay-listing' style={{ width: '1400px' }}>
                                             <div className='overlay-listing-left'>
                                                 {c.type + " " + c.firstName + " " + c.lastName}<br />
                                                 {c.description}
@@ -634,26 +669,28 @@ export default function EventDetailsPage(props) {
                                                 Service cost: {c.serviceCost} pln<br />
                                             </div>
                                         </div>
-                                        <div className='list-item-pics'>
+                                        <div className='list-item-pics' style={{ width: '1400px' }}>
                                             {c.images && c.images.map(i => <div key={i.encodedImage}>
                                                 <img alt={i.name} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
                                             </div>)}
                                         </div>
                                     </div>
-                                    <input type='button' value='x' className='x-button' onClick={() => handleDeleteService(c)} />
+                                    <IconButton onClick={() => handleDeleteService(c)}><DeleteIcon /></IconButton>
                                     <div>
-                                        Message for service provider <br />
-                                        <textarea onChange={e => setServiceMessage([...serviceMessage, { 'message': e.target.value, 'id': c.id }])} /><br />
-                                        Time: <input type='time' onChange={e => setServiceTimeFrom([...serviceTimeFrom, { 'time': e.target.value, 'id': c.id }])} />
-                                        {' - '}
-                                        <input type='time' onChange={e => setServiceTimeTo([...serviceTimeTo, { 'time': e.target.value, 'id': c.id }])} />
+                                        <br />
+                                        <TextField size='small' margin='dense' style={{ width: '400px' }} multiline label='Message for service provider' onChange={e => setServiceMessage([...serviceMessage, { 'message': e.target.value, 'id': c.id }])} /><br />
+                                        <TextField size='small' margin='dense' InputLabelProps={{ shrink: true }} label='Time from' type='time' onChange={e => setServiceTimeFrom([...serviceTimeFrom, { 'time': e.target.value, 'id': c.id }])} />
+                                        {' _ '}
+                                        <TextField size='small' margin='dense' InputLabelProps={{ shrink: true }} label='Time to' type='time' onChange={e => setServiceTimeTo([...serviceTimeTo, { 'time': e.target.value, 'id': c.id }])} />
                                     </div>
                                 </div>)
                             }
                         </div>
                     }
                     <input type='button' value='+' className='add-button' onClick={() => history.push(`/ListPage/Services/${id}`)} /><br />
-                    {JSON.parse(window.localStorage.getItem('serviceInfo')) && JSON.parse(window.localStorage.getItem('serviceInfo')).length > 0 && <input type='button' value='Request services booking' className='button' onClick={handleReserveServices} />}
+                    {JSON.parse(window.localStorage.getItem('serviceInfo')) && JSON.parse(window.localStorage.getItem('serviceInfo')).length > 0 &&
+                        <Button variant='contained' size='small' margin='dense' className='button' onClick={handleReserveServices}>Request booking</Button>
+                    }
                     <p style={{ color: 'red' }}>{serviceErrorMessage}</p>
                 </div>
             }
@@ -664,22 +701,29 @@ export default function EventDetailsPage(props) {
                     {guestList.map(guest =>
                         <div className='guest-list-element' key={guestList.indexOf(guest)}>
                             {guest.name} {guest.surname} {guest.email}
-                            <input type='button' value='x' className='x-button' onClick={() => handleGuestDelete(guestList.indexOf(guest))} />
+                            <IconButton onClick={() => handleGuestDelete(guestList.indexOf(guest))}><DeleteIcon /></IconButton>
                         </div>
                     )}
                     {newGuestPanel &&
                         <div className='new-guest-panel'>
-                            <select className='select-guest' onChange={handleSelectGuestFromBook}>
-                                <option value=''>Pick from guest book</option>
-                                {props.authorized && guestBook.map(guest => <option key={guest.id} value={JSON.stringify(guest)}>{guest.firstName + " " + guest.lastName + " (" + guest.email + ')'}</option>)}
-                            </select><br />
-                            <input className='new-guest-input' id='newGuestName' placeholder='name' onChange={e => setGuestName(e.target.value)} />
-                            <input className='new-guest-input' id='newGuestSurname' placeholder='surname' onChange={e => setGuestSurname(e.target.value)} />
-                            <input className='new-guest-input' id='newGuestEmail' type='email' placeholder='email' onChange={e => setGuestEmail(e.target.value)} />
-                            <input className='new-guest-button' type='button' value='Add guest' onClick={addNewGuest} />
+                            <FormControl margin="dense">
+                                <InputLabel id="select-guest-label">Pick from guest book</InputLabel>
+                                <Select labelId="select-guest-label" size='small' label='Pick from guest book' margin='dense' style={{ width: '300px' }} onChange={handleSelectGuestFromBook}>
+                                    {props.authorized && guestBook.map(guest =>
+                                        <MenuItem key={guest.id} value={JSON.stringify(guest)}>{guest.firstName + " " + guest.lastName + " (" + guest.email + ')'}</MenuItem>)
+                                    }
+                                </Select>
+                            </FormControl>
+                            <br />
+                            <div>
+                                <TextField size='small' margin='dense' style={{ marginRight: '10px' }} className='new-guest-input' id='newGuestName' label='name' onChange={e => setGuestName(e.target.value)} />
+                                <TextField size='small' margin='dense' style={{ marginRight: '10px' }} className='new-guest-input' id='newGuestSurname' label='surname' onChange={e => setGuestSurname(e.target.value)} />
+                                <TextField size='small' margin='dense' style={{ marginRight: '10px' }} className='new-guest-input' id='newGuestEmail' type='email' label='email' onChange={e => setGuestEmail(e.target.value)} />
+                                <Button size='small' margin='dense' style={{ marginTop: '8px' }}  variant='contained' className='new-guest-button'  onClick={addNewGuest}>Add guest</Button>
+                            </div>
                         </div>
                     }
-                    <input type='button' value='+' className='add-button' onClick={() => setNewGuestPanel(true)} />
+                    {!newGuestPanel && <input type='button' value='+' className='add-button' onClick={() => setNewGuestPanel(true)} />}
                 </div>
             }
 

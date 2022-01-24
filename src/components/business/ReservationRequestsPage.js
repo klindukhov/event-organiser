@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import apiFetch from '../../api';
 import '../../styles/business/ReservationRequestsPage.css'
+import { Button } from '@mui/material';
 
 export default function ReservationRequestsPage(props) {
     const history = useHistory();
@@ -87,22 +88,21 @@ export default function ReservationRequestsPage(props) {
 
     return (<div className='main'>
         <div className='block' style={{ textAlign: 'center' }}>
-            <input type='button' className='e-c-button-l' value='Caterings' onClick={handleEvents} style={{ color: eventPastColor, backgroundColor: eventPastBackColor }} />
-            <input type='button' className='e-c-button-c' value='Services' onClick={handleEvents} style={{ color: eventAllColor, backgroundColor: eventAllBackColor }} />
-            <input type='button' className='e-c-button-r' value='Venues' onClick={handleEvents} style={{ color: eventFutureColor, backgroundColor: eventFutureBackColor }} />
+            <Button className='e-c-button-l' value='Caterings' onClick={handleEvents} style={{ color: eventPastColor, backgroundColor: eventPastBackColor }}>Caterings</Button>
+            <Button className='e-c-button-c' value='Services' onClick={handleEvents} style={{ color: eventAllColor, backgroundColor: eventAllBackColor }}>Services</Button>
+            <Button className='e-c-button-r' value='Venues' onClick={handleEvents} style={{ color: eventFutureColor, backgroundColor: eventFutureBackColor }}>Venues</Button>
             <br />
             <br />
-            <input type='button' className='e-c-button-l' value='requests' onClick={handleEvents} style={{ color: requestsColor, backgroundColor: requestsBackColor }} />
-            <input type='button' className='e-c-button-r' value='bookings' onClick={handleEvents} style={{ color: bookingsColor, backgroundColor: bookingsBackColor }} />
+            <Button className='e-c-button-l' value='requests' onClick={handleEvents} style={{ color: requestsColor, backgroundColor: requestsBackColor }}>requests</Button>
+            <Button className='e-c-button-r' value='bookings' onClick={handleEvents} style={{ color: bookingsColor, backgroundColor: bookingsBackColor }}>bookings</Button>
         </div>
 
         {items && items.length > 0 && items.map(i =>
             <div className='block' key={i.id}>
                 {isRequests ? 'REQUEST:' : 'BOOKING:'} {i.id}<br />
-                {bType.substring(0, bType.length - 1)}: {i[iType] && i[iType].name} {bType === 'Services' && i.optionalService && i.optionalService.firstName + i.optionalService.firstName} <input type='button'
-                    value={`${bType.substring(0, bType.length - 1)} details`}
-                    className='button'
-                    onClick={() => history.push(`/ItemDetails/${bType.substring(0, bType.length - 1)}/${bType === 'Services' ? i.optionalService.id : i[iType].id}`)} />
+                {bType.substring(0, bType.length - 1)}: {i[iType] && i[iType].name} {bType === 'Services' && i.optionalService && i.optionalService.firstName + i.optionalService.firstName} <Button
+                    variant='contained'
+                    onClick={() => history.push(`/ItemDetails/${bType.substring(0, bType.length - 1)}/${bType === 'Services' ? i.optionalService.id : i[iType].id}`)}>{`${bType.substring(0, bType.length - 1)} details`}</Button>
                 <br />
                 {bType === 'Venues' && <>
                     Date: {i.date} ({i.timeFrom}-{i.timeTo})<br />
@@ -118,8 +118,8 @@ export default function ReservationRequestsPage(props) {
                     Comment:
                     "{i.comment}"<br />
                 </>}
-                {isRequests && <input type='button' value='Confirm' className='button' onClick={() => handleConfirm(i)} />}{" "}
-                {isRequests && <input type='button' value='Reject' className='button' onClick={() => handleReject(i)} />}
+                {isRequests && <Button variant='contained' onClick={() => handleConfirm(i)}>Confirm</Button>}{" "}
+                {isRequests && <Button variant='contained' onClick={() => handleReject(i)}>Reject</Button>}
 
             </div>)
         }

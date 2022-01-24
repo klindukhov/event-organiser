@@ -91,23 +91,39 @@ export default function ItemDetailsPage(props) {
 
     const handleAddToEvent = () => {
         if (typeOfItem === "Venue") {
-            window.localStorage.setItem('locationDetails', JSON.stringify(itemDetails));
+            let temp = {
+                "id": itemDetails.id,
+                "images": itemDetails.images,
+                "name": itemDetails.name,
+                "address": itemDetails.address,
+                "description": itemDetails.description,
+                "dailyRentCost": itemDetails.dailyRentCost
+            };
+            window.localStorage.setItem('locationDetails', JSON.stringify(temp));
             history.push(`/EventDetailsPage/${forEventId}`);
         } else if (typeOfItem === "Catering") {
             if (forEventId === undefined) {
                 alert('You have to pick venue first');
                 history.push('/ListPage/Venues');
             } else {
+                let temp = {
+                    "id": itemDetails.id,
+                    "images": itemDetails.images,
+                    "name": itemDetails.name,
+                    "address": itemDetails.address,
+                    "description": itemDetails.description,
+                    "serviceCost": itemDetails.serviceCost
+                };
                 if (window.localStorage.getItem('cateringInfo') !== null && window.localStorage.getItem('cateringInfo') !== undefined) {
                     let t = JSON.parse(window.localStorage.getItem('cateringInfo'));
-                    if (t.indexOf(itemDetails) === -1) {
-                        t.push(itemDetails);
+                    if (t.indexOf(temp) === -1) {
+                        t.push(temp);
                         window.localStorage.setItem("cateringInfo", JSON.stringify(t));
                     }
                     history.push(`/EventDetailsPage/${forEventId}`)
                 } else {
                     let t = [];
-                    t.push(itemDetails);
+                    t.push(temp);
                     window.localStorage.setItem("cateringInfo", JSON.stringify(t));
                     history.push(`/EventDetailsPage/${forEventId}`)
                 }
@@ -181,7 +197,7 @@ export default function ItemDetailsPage(props) {
 
     const sendEmail = () => {
         if (emailSubject !== '' && emailText !== '') {
-            let body = JSON.stringify({"subject": emailSubject, "content":emailText});
+            let body = JSON.stringify({ "subject": emailSubject, "content": emailText });
             apiFetch(`customers/message/${itemType.substring(0, itemType.length - 1)}/send?customerId=${props.userId}&${itemType.substring(0, itemType.length - 1)}Id=${id}`, "POST", body).catch(e => console.log('error' + e));
         }
     }
@@ -264,7 +280,7 @@ export default function ItemDetailsPage(props) {
                                 <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
                             }
                             {props.authorized === true && props.userData.user.type === 'B' &&
-                                <input type='button' className='add-to-event-button' value={`Edit ${typeOfItem}`} onClick={() => {history.push(`/AddBusinessPage/${typeOfItem}/${id}`)}} />
+                                <input type='button' className='add-to-event-button' value={`Edit ${typeOfItem}`} onClick={() => { history.push(`/AddBusinessPage/${typeOfItem}/${id}`) }} />
                             }
                         </>}
                         {typeOfItem === 'Event' && <>
@@ -312,7 +328,7 @@ export default function ItemDetailsPage(props) {
                     </div>}
             </>}
             {(typeOfItem === "Venue" || typeOfItem === "Catering") &&
-                <div className='block'>
+                <div className='block' style={{ height: '700px', overflow: 'auto' }}>
                     <p className='item-review-heading'>Available {aliasItemType}</p>
                     {itemDetails[aliasItemType] && itemDetails[aliasItemType].map(c => <div key={c.id} className='list-element' style={{ width: '1420px', marginBottom: '30px' }} onClick={() => handleAliasItemChoice(c.id)}>
                         <div className='list-item' style={{ width: '1420px' }}>
@@ -347,7 +363,7 @@ export default function ItemDetailsPage(props) {
                                 </div>
                             </div>
                             <div className='list-item-pics' style={{ width: '1420px' }}>
-                                {aliasItemType === "locations" && c.images.map(i => <div key={i.image}>
+                                {c.images && c.images.map(i => <div key={i.image}>
                                     <img alt={i.name} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
                                 </div>)}
                             </div>
@@ -359,8 +375,8 @@ export default function ItemDetailsPage(props) {
             {props.authorized === true && props.userData.user.type === 'C' &&
                 <div className='block'>
                     <p>You can contact the business through the form below</p>
-                    <input placeholder="Subject" onChange={e => setEmailSubject(e.target.value)} /><br/><br/>
-                    <textarea placeholder="Body" onChange={e => setEmailText(e.target.value)} style={{width:'100%'}} /><br/><br/>
+                    <input placeholder="Subject" onChange={e => setEmailSubject(e.target.value)} /><br /><br />
+                    <textarea placeholder="Body" onChange={e => setEmailText(e.target.value)} style={{ width: '100%' }} /><br /><br />
                     <button className='button' onClick={sendEmail}>Send</button>
                 </div>
             }

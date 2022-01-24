@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import '../../styles/general/SignUpPage.css';
 import { useHistory } from 'react-router-dom'
 import apiFetch from '../../api';
+import { ToggleButton, ToggleButtonGroup, TextField, Button, IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 
 
@@ -9,11 +11,6 @@ import apiFetch from '../../api';
 
 function SignUpPageContent(props) {
     let history = useHistory();
-
-    const [persBackColor, setPersBackColor] = useState('#47525e');
-    const [busBackColor, setBusBackColor] = useState('#e5e5e5');
-    const [persColor, setPersColor] = useState('white');
-    const [busColor, setBusColor] = useState('#47525e');
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -41,59 +38,30 @@ function SignUpPageContent(props) {
     const handleSignUp = () => {
         if (password !== confirmPassword || password === '') {
             setPasswordConf('Passwords have to match and contain at least one digit, one uppercase letter and a special character');
-        } else{
+        } else {
 
             createUser();
         }
     }
 
-    const handlePers = () => {
-        setPersBackColor('#47525e');
-        setPersColor('white');
-        setBusBackColor('#e5e5e5');
-        setBusColor('#47525e');
-        setAccType('C');
-    }
-
-    const handleBus = () => {
-        setPersBackColor('#e5e5e5');
-        setBusColor('white')
-        setPersColor('#47525e');
-        setBusBackColor('#47525e');
-        setAccType('B');
-    }
-
     useEffect(() => {
         if (accType === 'C') {
-            setAccDetails(
-                <div> </div>
-            )
+            setAccDetails('')
         } else {
             setAccDetails(
                 <div>
-                    <p className="signup-input-label">Business name</p>
-                    <input className="input-register" type="text" onChange={(event) => setBName(event.target.value)}>
-                    </input>
-
-                    <p className="signup-input-label">Country</p>
-                    <input className="input-register" type="text" onChange={(event) => setCountry(event.target.value)}>
-                    </input>
-
-                    <p className="signup-input-label">City</p>
-                    <input className="input-register" type="text" onChange={(event) => setCity(event.target.value)}>
-                    </input>
-
-                    <p className="signup-input-label">Street</p>
-                    <input className="input-register" type="text" onChange={(event) => setStreet(event.target.value)}>
-                    </input>
-
-                    <p className="signup-input-label">House</p>
-                    <input className="input-register" type="text" onChange={(event) => setHouse(event.target.value)}>
-                    </input>
-
-                    <p className="signup-input-label">Zip-code</p>
-                    <input className="input-register" type="text" onChange={(event) => setZip(event.target.value)}>
-                    </input>
+                    <TextField size='small' margin='dense' label='Business name' style={{ marginTop: '30px' }} type="text" onChange={(event) => setBName(event.target.value)}>
+                    </TextField><br />
+                    <TextField size='small' margin='dense' label='Country' style={{ marginRight: '10px' }} type="text" onChange={(event) => setCountry(event.target.value)}>
+                    </TextField>
+                    <TextField size='small' margin='dense' label='City' type="text" onChange={(event) => setCity(event.target.value)}>
+                    </TextField><br />
+                    <TextField size='small' margin='dense' label='Street' style={{ marginRight: '10px' }} type="text" onChange={(event) => setStreet(event.target.value)}>
+                    </TextField>
+                    <TextField size='small' margin='dense' label='Number' style={{ marginRight: '10px', width: '13%' }} type="text" onChange={(event) => setHouse(event.target.value)}>
+                    </TextField>
+                    <TextField size='small' margin='dense' label='Zip-code' style={{ width: '15%' }} type="text" onChange={(event) => setZip(event.target.value)}>
+                    </TextField>
                 </div>
             )
         }
@@ -125,7 +93,7 @@ function SignUpPageContent(props) {
                     })
                     .catch(error => console.log('error-login', error));
 
-            }).catch(error => {console.log('error-register', error); setErrorMessage('Please fill all the fields of the form');});
+            }).catch(error => { console.log('error-register', error); setErrorMessage('Please fill all the fields of the form'); });
     }
 
     const [isPassShow, setIsPassShow] = useState(false);
@@ -136,57 +104,74 @@ function SignUpPageContent(props) {
         <div className="signUp-page-content">
 
             <div className="sign-up-rect">
-                <div className="sign-up-h1">
+                <div className="sign-in-h1">
                     Sign up
                 </div>
-                <button className="input-acctype-personal" onClick={handlePers} style={{ backgroundColor: `${persBackColor}`, color: `${persColor}` }}>
-                    Personal
-                </button>
-                <button className="input-acctype-business" onClick={handleBus} style={{ backgroundColor: `${busBackColor}`, color: `${busColor}` }}>
-                    Business
-                </button>
+                <ToggleButtonGroup
+                    value={accType}
+                    exclusive
+                    onChange={() => setAccType(accType === 'C' ? 'B' : 'C')}
+                    aria-label="persBus"
+                >
+                    <ToggleButton value="C" aria-label="personal">
+                        Personal
+                    </ToggleButton>
+                    <ToggleButton value="B" aria-label="business">
+                        Business
+                    </ToggleButton>
+                </ToggleButtonGroup>
                 <br />
-                <p className='signup-input-label'>Email</p>
-                <input className="input-register" type="text" onChange={(event) => setEmail(event.target.value)}>
-                </input>
                 <br />
-                <p className='signup-input-label'>Password</p>
-                <input className="input-register" type={isPassShow ? "text" : "password"} onChange={(event) => setPassword(event.target.value)}>
-                </input>
+                <TextField size='small' margin='dense' label='Email' type="text" onChange={(event) => setEmail(event.target.value)}>
+                </TextField>
                 <br />
-                <button onClick={() => setIsPassShow(!isPassShow)} style={{position: 'relative', backgroundColor: 'transparent', borderColor: 'transparent' , left: '180px', top: '-40px'}}>
-                👁
-                </button>
-                <p className='signup-input-label'>Confirm password</p>
-                <input className="input-register" type={isCPassShow ? "text" : "password"} onChange={(event) => setConfirmPassword(event.target.value)}>
-                </input>
-                <br/>
-                <button onClick={() => setIsCPassShow(!isCPassShow)} style={{position: 'relative', backgroundColor: 'transparent', borderColor: 'transparent' , left: '180px', top: '-40px'}}>
-                👁
-                </button>
+                <TextField size='small' margin='dense' label='Phone number' type="text" onChange={(event) => setUPhoneNum(event.target.value)}>
+                </TextField>
+                <br />
+                <TextField size='small' margin='dense' label='Password' InputProps={{
+                    endAdornment:
+                        <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={() => setIsPassShow(!isPassShow)}
+                                edge="end"
+                            >
+                                {isPassShow ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                        </InputAdornment>
+                }} type={isPassShow ? "text" : "password"} onChange={(event) => setPassword(event.target.value)}>
+                </TextField>
+                <br />
+                <TextField size='small' margin='dense' label='Confirm password' InputProps={{
+                    endAdornment:
+                        <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={() => setIsCPassShow(!isCPassShow)}
+                                edge="end"
+                            >
+                                {isCPassShow ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                        </InputAdornment>
+                }} type={isCPassShow ? "text" : "password"} onChange={(event) => setConfirmPassword(event.target.value)}>
+                </TextField>
                 <p className='passwords-dont-match'>{passwordConf}</p>
                 <br />
-                <p className="signup-input-label">Name</p>
-                <input className="input-register" type="text" onChange={(event) => setUName(event.target.value)}>
-                </input>
-
-                <p className="signup-input-label">Surname</p>
-                <input className="input-register" type="text" onChange={(event) => setUSurname(event.target.value)}>
-                </input>
-
-                <p className="signup-input-label">Birthdate</p>
-                <input className="input-register" type="date" onChange={(event) => setUBirthdate(event.target.value)}>
-                </input>
-
-                <p className="signup-input-label">Phone number</p>
-                <input className="input-register" type="text" onChange={(event) => setUPhoneNum(event.target.value)}>
-                </input>
+                <TextField size='small' margin='dense' label='Name' style={{ marginRight: '10px' }} type="text" onChange={(event) => setUName(event.target.value)}>
+                </TextField>
+                <TextField size='small' margin='dense' label='Surname' type="text" onChange={(event) => setUSurname(event.target.value)}>
+                </TextField>
+                <br />
+                <TextField size='small' margin='dense' label='Birthdate' InputLabelProps={{ shrink: true }} type="date" onChange={(event) => setUBirthdate(event.target.value)}>
+                </TextField>
+                <br />
                 {accDetails}
-                <button className="input-register-button" onClick={() => handleSignUp()}>
+                <br />
+                <Button variant='contained' style={{ marginTop: '20px' }} className="input-register-button" onClick={() => handleSignUp()}>
                     Sign up
-                </button>
-                <br/>
-                <p style={{color: "red", fontSize: "20pt"}}>{errorMessage}</p>
+                </Button>
+                <br />
+                <p style={{ color: "red", fontSize: "12pt" }}>{errorMessage}</p>
 
             </div>
         </div>

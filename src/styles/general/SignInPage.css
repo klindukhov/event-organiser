@@ -1,6 +1,6 @@
 .signIn-page-content {
   background-color     : var(--bg);
-  height               : calc(100vh - 100px);
+  height               : calc(100vh - 170px);
   display              : grid;
   grid-template-columns: auto;
   justify-content      : center;
@@ -8,18 +8,18 @@
 }
 
 .sign-in-rect {
-  height          : 700px;
-  width           : 800px;
+  height          : 400px;
+  width           : 500px;
   background-color: var(--blockbg);
   color           : var(--txt);
   text-align      : center;
 }
 
 .sign-in-h1 {
-  font-size    : 50px;
+  font-size    : 35px;
   color        : var(--txt);
-  margin-top   : 50px;
-  margin-bottom: 30px;
+  margin-top   : 20px;
+  margin-bottom: 20px;
 }
 
 .login-input-label {

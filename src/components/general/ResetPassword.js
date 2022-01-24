@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import apiFetch from "../../api";
+import {TextField, Button} from '@mui/material'
 
 export default function ResetPasswordPage() {
     const { token } = useParams();
@@ -36,28 +37,24 @@ export default function ResetPasswordPage() {
 
     return (
         <div className="signIn-page-content">
-            <div className="sign-in-rect" >
+            <div className="sign-in-rect" style={{height: '350px'}}>
                 <div className="sign-in-h1">
                     Reset password
                 </div>
-                <p className='login-input-label'>Password</p>
-                <input className="input-login" type="text" onKeyPress={e => { if (e.key === 'Enter') { document.querySelector('input[name=passwordField]').focus(); } }} onChange={e => setPassword(e.target.value)}>
-                </input>
+                <TextField size='small' dense label='Password' className="input-login" type={showInput ? 'text' : 'password'} onKeyPress={e => { if (e.key === 'Enter') { document.querySelector('input[name=passwordField]').focus(); } }} onChange={e => setPassword(e.target.value)}/>                
                 <br />
-                <p className='login-input-label'>Password</p>
-                <input className="input-login" name='passwordField' onKeyPress={handleKeypress} type={showInput ? 'text' : 'password'} onChange={e => setRepeatPassword(e.target.value)}>
-                </input>
+                <TextField size='small' dense label='Repeat password' className="input-login" name='passwordField' onKeyPress={handleKeypress} type={showInput ? 'text' : 'password'} onChange={e => setRepeatPassword(e.target.value)}/>
                 <br />
-                <button className='show-password-button' onClick={() => {
+                <Button variant='contained' className='show-password-button' onClick={() => {
                     setShowInput(showInput ? false : true)
                     setPassButtonText(showInput ? 'Show password' : 'Hide password');
-                }}>{passButtonText}</button>
+                }}>{passButtonText}</Button>
                 <br />
                 <p style={{ color: 'red' }}>{message}</p>
-                <button className="input-login-button"
+                <Button variant='contained' className="input-login-button"
                     onClick={handleSubmit}>
                     Reset
-                </button>
+                </Button>
             </div>
         </div>)
 }

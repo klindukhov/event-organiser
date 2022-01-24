@@ -9,7 +9,7 @@
 }
 
 .venue-input-number {
-    width      : 60px;
+    width      : 90px;
     margin-left: 20px;
 }
 
@@ -31,7 +31,7 @@
 
 .list-sorting-rect {
     width                : 1520px;
-    height               : 50px;
+    height               : 60px;
     background-color     : var(--blockbg);
     color                : var(--txt);
     display              : grid;
@@ -96,6 +96,7 @@
 }
 
 .list-element {
+    cursor: pointer;
     list-style-type: none;
 }
 

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import apiFetch from "../../api";
 import '../../styles/customer/GuestBookPage.css'
+import {TextField, Button, IconButton} from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function GuestBook(props) {
     useEffect(() => { props.setHeaderMessage('Guest Book') })
@@ -39,16 +41,18 @@ export default function GuestBook(props) {
         <div className="main">
             {guests.map(guest => <div className="block" key={guest.id}>
                 {guest.firstName + " " + guest.lastName + " (" + guest.email + ')'}
-                <input type='button' value='Delete guest' className="delete-guest-button" onClick={() => deleteGuest(guest.id)} />
+                <IconButton onClick={() => deleteGuest(guest.id)}>
+                    <DeleteIcon/>
+                </IconButton>
             </div>)}
             {guests.length === 0 &&
                 <p>Your guest book is empty</p>
             }
             <div className="block">
-                <input className="guest-listing-input" placeholder="Name" onChange={e => setName(e.target.value)} />
-                <input className="guest-listing-input" placeholder="Surname" onChange={e => setSurname(e.target.value)} />
-                <input className="guest-listing-input" placeholder="Email" onChange={e => setEmail(e.target.value)} />
-                <input className="guest-listing-button" value='Add guest' type='button' onClick={handleAddGuest} />
+                <TextField size='small' style={{width:'250px', marginRight:'20px'}} label="Name" onChange={e => setName(e.target.value)} />
+                <TextField size='small' style={{width:'250px', marginRight:'20px'}} label="Surname" onChange={e => setSurname(e.target.value)} />
+                <TextField size='small' style={{width:'250px', marginRight:'20px'}} label="Email" onChange={e => setEmail(e.target.value)} />
+                <Button variant='contained' style={{width:'250px', marginRight:'20px'}} value='Add guest'onClick={handleAddGuest}>Add guest</Button>
             </div>
 
         </div>)

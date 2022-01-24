@@ -40,7 +40,9 @@ export default function ContactFormPage(props) {
                 </select>
 
                 <textarea className='problem-description-input' placeholder='Detailed description of a problem' onChange={(e) => setDescription(e.target.value)} />
-                <input className='submit-problem-button' type='button' value='Submit' onClick={handleSubmit} />
+                <br/>
+                <Button variant='contained' size='small' style={{width:'250px', justifySelf: 'center'}} margin='dense' onClick={handleSubmit}>Submit</Button>
+                <br/>
             </div>
         </div>
     );

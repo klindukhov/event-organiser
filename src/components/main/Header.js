@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import acc from '../../images/accIcon.png';
 import Sidebar from './Sidebar';
 import '../../styles/general/Header.css';
 import { useState } from 'react/cjs/react.development';
 import apiFetch from '../../api';
+import Logo from '../../images/Logo.png'
 
 const Header = (props) => {
+  const history = useHistory();
   const [userPageLink, setUserPageLink] = useState('/SignIn');
   const [userName, setUserName] = useState('Sign in');
   const [myAccount, setMyAccount] = useState('/SignIn');
@@ -96,12 +98,10 @@ const Header = (props) => {
   return (
     <div className="header-main">
       <header className='header'>
-        <Sidebar props={props.myProps} myAccount={myAccount} userName={userName} accType={accType} />
-        <Link to={logoLink} className="logo">
-          <p className="logo">
-            *LOGO*
-          </p>
-        </Link>
+        <Sidebar props={props.myProps} myAccount={myAccount} changeTheme={handleThemeChange} userName={userName} accType={accType} />
+        <div className="logo">
+          <img alt='logo' src={Logo} className='header-logo' onClick={() => history.push(logoLink)}/>
+        </div>
         <div className="cap-margin">
           {props.myProps.headerMessage}
         </div>
@@ -111,9 +111,6 @@ const Header = (props) => {
             <p className='user-logo-text'>{userName}</p>
           </Link>
         </div>
-        <input type='button' className='theme-button' value={theme} onClick={handleThemeChange} />
-
-
       </header>
     </div>
   );

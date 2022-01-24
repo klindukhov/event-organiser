@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import apiFetch from "../../api";
 import '../../styles/business/AddBusinessPage.css'
+import TextField from '@mui/material/TextField'
+import { Button, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from "@mui/material";
 
 export default function AddBusinessPage(props) {
     const { id } = useParams();
@@ -24,10 +26,11 @@ export default function AddBusinessPage(props) {
             apiFetch('services/allowed/music/styles').then(res => setAvailableMusicStyles(res)).catch(e => console.log('error', e))
         }
     }, [])
+    const [businessDetails, setBusinessDetails] = useState(''); 
     useEffect(() => {
         if (id !== undefined) {
             apiFetch(`${businessType !== 'Catering' ? typeOfBusiness : 'caterings'}/allowed/${id}/detail`).then(res => {
-                console.log(businessType);
+                setBusinessDetails(res);
                 setEmail(res.email)
                 setDescription(res.description)
                 if (res.address !== null) {
@@ -285,115 +288,144 @@ export default function AddBusinessPage(props) {
     }
 
     const handleSubmitChanges = () => {
+        let body= {...businessDetails};
+        body.email  =email;
+        body.description = description;
+
+        switch (businessType) {
+            case 'Venue':
+                body.name = name;
+                body.phoneNumber = phoneNumber;
+                body.dailyRentCost = dailyRentCost;
+                body.seatingCapacity = seatingCap;
+                body.standingCapacity = standingCap;
+                break;
+            case 'Catering':
+                body.name = name;
+                body.phoneNumber = phoneNumber;
+                body.serviceCost = dailyRentCost;
+                break;
+            case 'Service':
+                body.firstName = name;
+                body.lastName = surname;
+                body.alias = alias;
+                body.serviceCost = dailyRentCost;
+                break;
+            default:
+                break;
+        }
+        apiFetch(`${typeOfBusiness === 'caterings/new' ? 'caterings' : typeOfBusiness}/edit?id=${id}`, "PUT", JSON.stringify(body))
+            .then(() => window.location.reload())
+            .catch(e => console.log('error', e))
 
     }
 
 
     return (<div className="main">
         <div className="block">
-            Name
-            <input className="input" defaultValue={name} onChange={e => setName(e.target.value)} /><br />
+
+            <TextField InputLabelProps={{ shrink: id !== undefined }} margin="dense" size="small" label='Email' style={{ width: '250px' }} value={email} onChange={e => setEmail(e.target.value)} /><br />
+            <TextField InputLabelProps={{ shrink: id !== undefined }} margin="dense" size="small" label='Name' style={{ width: '250px' }} value={name} onChange={e => setName(e.target.value)} /><br />
             {businessType === "Service" &&
                 <>
-                    Surname
-                    <input className="input" defaultValue={surname} onChange={e => setSurname(e.target.value)} /><br />
-                    Alias
-                    <input className="input" defaultValue={alias} onChange={e => setAlias(e.target.value)} /><br />
-                    Type
-                    <select className="input" onChange={e => setType(e.target.value)}>
-                        <option value={type}>{id === undefined ? 'choose' : type}</option>
-                        {availableTypes.map(t =>
-                            <option key={t} value={t}>{t}</option>
-                        )}
-                    </select><br />
+                    <TextField InputLabelProps={{ shrink: id !== undefined }} margin="dense" size="small" label='Surname' style={{ width: '250px' }} value={surname} onChange={e => setSurname(e.target.value)} /><br />
+                    <TextField InputLabelProps={{ shrink: id !== undefined }} margin="dense" size="small" label='Alias' style={{ width: '250px' }} value={alias} onChange={e => setAlias(e.target.value)} /><br />
+                    <FormControl margin="dense" size="small">
+                        <InputLabel id='service-type-label'>Type</InputLabel>
+                        <Select style={{ width: '250px' }} label='Type' disabled={id !== undefined} value={type} onChange={e => setType(e.target.value)}>
+                            {availableTypes.map(t =>
+                                <MenuItem key={t} value={t}>{t}</MenuItem>
+                            )}
+                        </Select>
+                    </FormControl>
+                    <br />
                     {type === 'KIDS PERFORMER' &&
                         <div>
-                            Type of kids performer
-                            <select className="input" onChange={e => setKidType(e.target.value)}>
-                                <option value={kidType}>{kidType}</option>
-                                {availableKidTypes.map(t =>
-                                    <option key={t} value={t}>{t}</option>
-                                )}
-                            </select><br />
-                            Age
-                            <input className="input" defaultValue={ageFrom} onChange={e => setAgeFrom(e.target.value)} />
-                            to
-                            <input className="input" defaultValue={ageTo} onChange={e => setAgeTo(e.target.value)} /><br />
+                            <FormControl margin="dense" disabled={id !== undefined} size="small">
+                                <InputLabel>Type of kids performer</InputLabel>
+                                <Select style={{ width: '250px' }} value={kidType} onChange={e => setKidType(e.target.value)}>
+                                    {availableKidTypes.map(t =>
+                                        <MenuItem key={t} value={t}>{t}</MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
+                            <br />
+                            <TextField InputLabelProps={{ shrink: id !== undefined }} disabled={id !== undefined} margin="dense" size="small" label='Age from' style={{ width: '250px' }} value={ageFrom} onChange={e => setAgeFrom(e.target.value)} />
+                            <TextField InputLabelProps={{ shrink: id !== undefined }} disabled={id !== undefined} margin="dense" size="small" label='Age to' style={{ width: '250px' }} value={ageTo} onChange={e => setAgeTo(e.target.value)} /><br />
                         </div>
                     }
                     {type === "INTERPRETER" &&
                         <div>
-                            {availableLanguages.map(o => <div key={o}><input type='checkbox' checked={languages.includes(o)} value={o} onChange={handleLanguages} /> {o}</div>)}
+                            {availableLanguages.map(o => <div key={o}>
+                                <FormControlLabel margin="dense" disabled={id !== undefined} size="small" control={<Checkbox value={o} defaultChecked={languages.includes(o)} onChange={handleLanguages} />} label={o} />
+                            </div>)}
                         </div>
                     }
                     {type === 'MUSIC BAND' &&
                         <div>
-                            Number of people
-                            <input className="input" defaultValue={bandPeople} onChange={e => setBandPeople(e.target.value)} /><br />
-                            {availableMusicStyles.map(o => <div key={o}><input type='checkbox' checked={musicStyles.includes(o)} value={o} onChange={handleMusicStyles} /> {o}</div>)}
+                            <TextField InputLabelProps={{ shrink: id !== undefined }} disabled={id !== undefined} margin="dense" size="small" label='Number of people' style={{ width: '250px' }} value={bandPeople} onChange={e => setBandPeople(e.target.value)} /><br />
+                            {availableMusicStyles.map(o => <div key={o}>
+                                <FormControlLabel margin="dense" size="small" disabled={id !== undefined} control={<Checkbox value={o} defaultChecked={musicStyles.includes(o)} onChange={handleMusicStyles} />} label={o} />
+                            </div>)}
                         </div>
                     }
                     {type === 'MUSICIAN' &&
                         <div>
-                            Instrument
-                            <input className="input" defaultValue={instrument} onChange={e => setInstrument(e.target.value)} /><br />
-                            {availableMusicStyles.map(o => <div key={o}><input type='checkbox' checked={musicStyles.includes(o)} value={o} onChange={handleMusicStyles} /> {o}</div>)}
+                            <TextField InputLabelProps={{ shrink: id !== undefined }} disabled={id !== undefined} margin="dense" size="small" label='Instrument' style={{ width: '250px' }} value={instrument} onChange={e => setInstrument(e.target.value)} /><br />
+                            {availableMusicStyles.map(o => <div key={o}>
+                                <FormControlLabel margin="dense" size="small" control={<Checkbox value={o} defaultChecked={musicStyles.includes(o)} onChange={handleMusicStyles} />} label={o} />
+                            </div>)}
                         </div>
                     }
                     {(type === 'SINGER' || type === "DJ") &&
                         <div>
-                            {availableMusicStyles.map(o => <div key={o}><input type='checkbox' checked={musicStyles.includes(o)} value={o} onChange={handleMusicStyles} /> {o}</div>)}
+                            {availableMusicStyles.map(o => <div key={o}>
+                                <FormControlLabel margin="dense" size="small" disabled={id !== undefined} control={<Checkbox value={o} defaultChecked={musicStyles.includes(o)} onChange={handleMusicStyles} />} label={o} />
+                            </div>)}
                         </div>
                     }
                 </>
             }
-            Email
-            <input className="input" defaultValue={email} onChange={e => setEmail(e.target.value)} /><br />
             {businessType !== 'Service' &&
-                <>Phone number
-                    <input className="input" defaultValue={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} /><br />
+                <>
+                    <TextField InputLabelProps={{ shrink: id !== undefined }} margin="dense" size="small" label='Phone number' style={{ width: '250px' }} value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} /><br />
                 </>
             }
             {businessType === "Venue" &&
                 <>
-                    Seating capacity
-                    <input className="input" defaultValue={seatingCap} onChange={e => setSeatingCap(e.target.value)} /><br />
-                    Standing capasity
-                    <input className="input" defaultValue={standingCap} onChange={e => setStandingCap(e.target.value)} /><br />
-                    Size(square meters)
-                    <input className="input" defaultValue={size} onChange={e => setSize(e.target.value)} /><br />
+                    <br />
+                    <TextField InputLabelProps={{ shrink: id !== undefined }} margin="dense" size="small" type='number' label='Seating capacity' style={{ width: '250px' }} value={seatingCap} onChange={e => setSeatingCap(e.target.value)} /><br />
+                    <TextField InputLabelProps={{ shrink: id !== undefined }} margin="dense" size="small" type='number' label='Standing capasity' style={{ width: '250px' }} value={standingCap} onChange={e => setStandingCap(e.target.value)} /><br />
+                    <TextField InputLabelProps={{ shrink: id !== undefined }} margin="dense" size="small" disabled={id !== undefined} type='number' label='Size(square meters)' style={{ width: '250px' }} value={size} onChange={e => setSize(e.target.value)} /><br />
                 </>
             }
-            Description<br />
-            <textarea className="input" defaultValue={description} onChange={e => setDescription(e.target.value)} /><br />
-            {businessType === "Venue" && 'Daily rent cost'}
-            {(businessType === "Catering" || businessType === "Service") && 'Service cost'}
-            <input className="input" defaultValue={dailyRentCost} onChange={e => setDailyRentCost(e.target.value)} /><br />
-            Country
-            <input className="input" defaultValue={country} onChange={e => setCountry(e.target.value)} /><br />
-            City
-            <input className="input" defaultValue={city} onChange={e => setCity(e.target.value)} /><br />
-            Street name
-            <input className="input" defaultValue={streetName} onChange={e => setStreetName(e.target.value)} /><br />
-            Street number
-            <input className="input" defaultValue={streetNum} onChange={e => setStreetNum(e.target.value)} /><br />
-            Postal code
-            <input className="input" defaultValue={postCode} onChange={e => setPostCode(e.target.value)} /><br />
+            <br />
+            <TextField InputLabelProps={{ shrink: id !== undefined }} margin="dense" size="small" type='number' label={businessType === "Venue" ? 'Daily rent cost' : 'Service cost'} style={{ width: '250px' }} value={dailyRentCost} onChange={e => setDailyRentCost(e.target.value)} /><br />
+            <TextField InputLabelProps={{ shrink: id !== undefined }} margin="dense" size="small" label='Description' multiline style={{ width: '510px' }} value={description} onChange={e => setDescription(e.target.value)} /><br />
+            <br />
+            <TextField InputLabelProps={{ shrink: id !== undefined }} margin="dense" disabled={id !== undefined} size="small" label='Country' style={{ width: '250px', marginRight: '10px' }} value={country} onChange={e => setCountry(e.target.value)} />
+            <TextField InputLabelProps={{ shrink: id !== undefined }} margin="dense" disabled={id !== undefined} size="small" label='City' style={{ width: '250px' }} value={city} onChange={e => setCity(e.target.value)} /><br />
+            <TextField InputLabelProps={{ shrink: id !== undefined }} margin="dense" disabled={id !== undefined} size="small" label='Street name' style={{ width: '250px', marginRight: '10px' }} value={streetName} onChange={e => setStreetName(e.target.value)} />
+            <TextField InputLabelProps={{ shrink: id !== undefined }} margin="dense" disabled={id !== undefined} size="small" label='Number' style={{ width: '100px', marginRight: '10px' }} value={streetNum} onChange={e => setStreetNum(e.target.value)} />
+            <TextField InputLabelProps={{ shrink: id !== undefined }} margin="dense" disabled={id !== undefined} size="small" label='Postal code' style={{ width: '140px' }} value={postCode} onChange={e => setPostCode(e.target.value)} /><br />
             {businessType === 'Catering' &&
                 <>
-                    Offers outside catering
-                    <input type='checkbox' checked={outsideCatering} onChange={e => setOutsideCatering(e.target.checked)} />
+                    <FormControlLabel margin="dense" size="small" disabled={id !== undefined} control={<Checkbox defaultChecked={outsideCatering} onChange={e => setOutsideCatering(e.target.checked)} />} label={'Offers outside catering'} />
                 </>}
             {businessType === 'Venue' &&
                 <>
                     <p style={{ textAlign: 'center' }}>Descriptions </p>
-                    {descriptionOptions.map(o => <div key={o}><input type='checkbox' value={o} checked={descriptions.includes(o)} onChange={handleDescriptions} /> {o}</div>)}
+                    {descriptionOptions.map(o => <div key={o}>
+                        <FormControlLabel margin="dense" size="small" disabled={id !== undefined} control={<Checkbox value={o} defaultChecked={descriptions.includes(o)} onChange={handleDescriptions} />} label={o} />
+                    </div>)}
                 </>
             }
             {businessType === 'Catering' &&
                 <>
                     <p style={{ textAlign: 'center' }}>Cuisines </p>
-                    {availableCuisines.map(o => <div key={o.name}><input type='checkbox' checked={cuisines.includes(o.name)} value={o.name} onChange={handleCuisines} /> {o.name}</div>)}
+                    {availableCuisines.map(o => <div key={o.name}>
+                        <FormControlLabel margin="dense" size="small" disabled={id !== undefined} control={<Checkbox value={o.name} defaultChecked={descriptions.includes(o.name)} onChange={handleCuisines} />} label={o.name} />
+                    </div>)}
                 </>
             }
             <p style={{ textAlign: 'center' }}>Business Hours</p>
@@ -401,8 +433,8 @@ export default function AddBusinessPage(props) {
                 {['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'].map(d =>
                     <div key={d}>
                         {d}<br />
-                        <input type='time' id={d} value={businessHours.find(b => b.day === d).timeFrom} onChange={handleOpenTime} />
-                        <input type='time' id={d} value={businessHours.find(b => b.day === d).timeTo} onChange={handleCloseTime} />
+                        <TextField InputLabelProps={{ shrink: id !== undefined }} disabled={id !== undefined} margin="dense" size="small" label='From' type='time' id={d} value={businessHours.find(b => b.day === d).timeFrom} onChange={handleOpenTime} />
+                        <TextField InputLabelProps={{ shrink: id !== undefined }} disabled={id !== undefined} margin="dense" size="small" label='To' type='time' id={d} value={businessHours.find(b => b.day === d).timeTo} onChange={handleCloseTime} />
                     </div>)}
             </div>}
             <p style={{ textAlign: 'center' }}>Images </p>
@@ -414,7 +446,7 @@ export default function AddBusinessPage(props) {
                 )}
                 <div className="add-images-wrapper">
                     <label htmlFor='add-images' className="add-images-label">+</label>
-                    <input type='file' className="add-images-input" id='add-images' multiple={true} accept='image/*' onChange={handleAddPics} />
+                    <TextField InputLabelProps={{ shrink: id !== undefined }} margin="dense" size="small" label='' type='file' className="add-images-input" id='add-images' multiple={true} accept='image/*' onChange={handleAddPics} />
                 </div>
             </div>
             {pics.length > 0 && 'Click on image to delete it'}
@@ -430,9 +462,9 @@ export default function AddBusinessPage(props) {
         }
         {id !== undefined &&
             <div className="block" style={{ display: 'grid', gridTemplateColumns: 'auto auto auto', justifyItems: 'center' }}>
-                <input type='button' className="button" value='Cancel' onClick={() => history.push(`/ListPage/${businessType}s`)} />
-                <input type='button' className="button" value='Submit changes' onClick={handleSubmitChanges} />
-                <input type='button' className="button" value={'Delete' + businessType} onClick={handleDeleteBusiness} />
+                <Button variant='contained' margin="dense" size="small" value='Cancel' onClick={() => history.push(`/ListPage/${businessType}s`)}>Cancel</Button>
+                <Button variant='contained' margin="dense" size="small" value='Submit changes' onClick={handleSubmitChanges}>Submit Canges</Button>
+                <Button variant='contained' margin="dense" size="small" value={'Delete' + businessType} onClick={handleDeleteBusiness} >Delete</Button>
             </div>
         }
 
