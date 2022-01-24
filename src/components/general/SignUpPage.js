@@ -50,7 +50,7 @@ function SignUpPageContent(props) {
         } else {
             setAccDetails(
                 <div>
-                    <TextField size='small' margin='dense' label='Business name' style={{ marginTop: '30px' }} type="text" onChange={(event) => setBName(event.target.value)}>
+                    <TextField size='small' margin='dense' label='Business name' style={{ marginTop: '30px', width: '250px' }} type="text" onChange={(event) => setBName(event.target.value)}>
                     </TextField><br />
                     <TextField size='small' margin='dense' label='Country' style={{ marginRight: '10px' }} type="text" onChange={(event) => setCountry(event.target.value)}>
                     </TextField>
@@ -122,13 +122,13 @@ function SignUpPageContent(props) {
                 </ToggleButtonGroup>
                 <br />
                 <br />
-                <TextField size='small' margin='dense' label='Email' type="text" onChange={(event) => setEmail(event.target.value)}>
+                <TextField size='small' margin='dense' label='Email' style={{width: '250px'}} type="text" onChange={(event) => setEmail(event.target.value)}>
                 </TextField>
                 <br />
-                <TextField size='small' margin='dense' label='Phone number' type="text" onChange={(event) => setUPhoneNum(event.target.value)}>
+                <TextField size='small' margin='dense' label='Phone number' style={{width: '250px'}} type="text" onChange={(event) => setUPhoneNum(event.target.value)}>
                 </TextField>
                 <br />
-                <TextField size='small' margin='dense' label='Password' InputProps={{
+                <TextField size='small' style={{width: '250px'}} margin='dense' label='Password' InputProps={{
                     endAdornment:
                         <InputAdornment position="end">
                             <IconButton
@@ -142,7 +142,7 @@ function SignUpPageContent(props) {
                 }} type={isPassShow ? "text" : "password"} onChange={(event) => setPassword(event.target.value)}>
                 </TextField>
                 <br />
-                <TextField size='small' margin='dense' label='Confirm password' InputProps={{
+                <TextField size='small' style={{width: '250px'}} margin='dense' label='Confirm password' InputProps={{
                     endAdornment:
                         <InputAdornment position="end">
                             <IconButton
@@ -157,9 +157,10 @@ function SignUpPageContent(props) {
                 </TextField>
                 <p className='passwords-dont-match'>{passwordConf}</p>
                 <br />
-                <TextField size='small' margin='dense' label='Name' style={{ marginRight: '10px' }} type="text" onChange={(event) => setUName(event.target.value)}>
+                <TextField size='small' margin='dense' style={{width: '250px'}} label='Name' type="text" onChange={(event) => setUName(event.target.value)}>
                 </TextField>
-                <TextField size='small' margin='dense' label='Surname' type="text" onChange={(event) => setUSurname(event.target.value)}>
+                <br />
+                <TextField size='small' margin='dense' style={{width: '250px'}} label='Surname' type="text" onChange={(event) => setUSurname(event.target.value)}>
                 </TextField>
                 <br />
                 <TextField size='small' margin='dense' label='Birthdate' InputLabelProps={{ shrink: true }} type="date" onChange={(event) => setUBirthdate(event.target.value)}>
