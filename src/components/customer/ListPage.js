@@ -308,7 +308,7 @@ export default function ListPage(props) {
                     <div className="block">
                         <FormControl margin="dense">
                             <InputLabel id="select-city-label">City</InputLabel>
-                            <Select labelId="select-city-label" value={location} style={{width:'200px'}} size="small" label="City" onChange={e => setLocation(e.target.value)}>
+                            <Select labelId="select-city-label" value={location} style={{ width: '200px' }} size="small" label="City" onChange={e => setLocation(e.target.value)}>
                                 {cities.map(c => <MenuItem value={c} key={c}>{c}</MenuItem>)}
                             </Select>
                         </FormControl>
@@ -316,7 +316,7 @@ export default function ListPage(props) {
                         <br />
                         <div className="guests-choice">
                             {typeOfList === "Venues" && <>
-                                <TextField type="number" label="Guests" size='small' margin="dense" InputLabelProps={{ shrink: true }} style={{width:'200px'}} defaultValue={guestNum} onChange={e => setGuestNum(e.target.value)} />{'  '}
+                                <TextField type="number" label="Guests" size='small' margin="dense" InputLabelProps={{ shrink: true }} style={{ width: '200px' }} defaultValue={guestNum} onChange={e => setGuestNum(e.target.value)} />{'  '}
                                 <FormControlLabel margin="dense" control={<Checkbox onChange={e => setSeatedOnly(e.target.checked)} />} label={'Seated only'} /><br /></>
                             }
                             <TextField size="small" margin="dense" InputLabelProps={{ shrink: true }} InputProps={{
@@ -333,26 +333,26 @@ export default function ListPage(props) {
                         </div>
 
                         <div className="event-date">
-                            <TextField value={date} InputLabelProps={{ shrink: true }} label='Date'  type="date" style={{width:'200px'}} size='small' onChange={e => setDate(e.target.value)} />
+                            <TextField value={date} InputLabelProps={{ shrink: true }} label='Date' type="date" style={{ width: '200px' }} size='small' onChange={e => setDate(e.target.value)} />
                         </div>
                         {typeOfList === "Services" &&
                             <>
-                            <FormControl margin='dense'>
-                                <InputLabel id="select-type-label">Type</InputLabel>
-                                <Select style={{width:'200px'}} size="small" label='type' onChange={e => setType(e.target.value)}>
-                                    <MenuItem value=''>choose</MenuItem>
-                                    {availableTypes.map(t =>
-                                        <MenuItem key={t} value={t}>{t}</MenuItem>
-                                    )}
-                                </Select>
-                            </FormControl>
-                                
-                                
+                                <FormControl margin='dense'>
+                                    <InputLabel id="select-type-label">Type</InputLabel>
+                                    <Select style={{ width: '200px' }} size="small" label='type' onChange={e => setType(e.target.value)}>
+                                        <MenuItem value=''>choose</MenuItem>
+                                        {availableTypes.map(t =>
+                                            <MenuItem key={t} value={t}>{t}</MenuItem>
+                                        )}
+                                    </Select>
+                                </FormControl>
+
+
                                 <br />
                                 {type === 'KIDS PERFORMER' &&
                                     <div>
-                                        <TextField label='Age from' margin="dense" size='small'onChange={e => setAgeFrom(e.target.value)} />{' _ '}
-                                        <TextField label='Age to' margin="dense"  size='small'  onChange={e => setAgeTo(e.target.value)} /><br />
+                                        <TextField label='Age from' margin="dense" size='small' onChange={e => setAgeFrom(e.target.value)} />{' _ '}
+                                        <TextField label='Age to' margin="dense" size='small' onChange={e => setAgeTo(e.target.value)} /><br />
                                     </div>
                                 }
                                 {type === "INTERPRETER" &&
@@ -362,11 +362,11 @@ export default function ListPage(props) {
                                 }
                                 {type === 'MUSIC BAND' &&
                                     <div>
-                                        <TextField label='Number of people' margin="dense"  size='small' type='number' className="input" onChange={e => setBandPeople(e.target.value)} /><br />
+                                        <TextField label='Number of people' margin="dense" size='small' type='number' className="input" onChange={e => setBandPeople(e.target.value)} /><br />
                                     </div>
                                 }
                                 {(type === 'SINGER' || type === "DJ" || type === 'MUSICIAN' || type === 'MUSIC BAND') &&
-                                    <div style={{display:'grid', gridTemplateColumns:'auto auto'}}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'auto auto' }}>
                                         {availableMusicStyles.map(o => <div key={o}><FormControlLabel control={<Checkbox value={o} onChange={handleMusicStyles} />} label={o} /></div>)}
                                     </div>
                                 }
@@ -387,14 +387,14 @@ export default function ListPage(props) {
                             <>
                                 Cuisines (inclusive):
                                 <br />
-                                <div className="must-haves" style={{gridTemplateColumns: 'auto auto auto'}}>
+                                <div className="must-haves" style={{ gridTemplateColumns: 'auto auto auto' }}>
                                     {availableCuisines.map(d => <div key={d.name}>
                                         <FormControlLabel control={<Checkbox value={d.name} onChange={handleCuisines} />} label={d.name} />
                                     </div>)}
                                 </div>
                             </>
                         }
-                        <br/>
+                        <br />
                         <Button type='button' margin='dense' variant="contained" className='button' value='Apply filters' onClick={getItemsWithFilters}>Apply filters</Button>
                     </div>
                 }
@@ -490,7 +490,14 @@ export default function ListPage(props) {
                 </div>
             }
             {props.authorized === true && props.userData.user.type === 'C' && typeOfList === 'Events' &&
-                <div className='block' style={{ textAlign: 'center', cursor:'pointer' }} onClick={() => history.push('/EventDetailsPage/new')}>
+                <div className='block' style={{ textAlign: 'center', cursor: 'pointer' }} onClick={() => {
+                    window.localStorage.removeItem('locationDetails');
+                    window.localStorage.removeItem('eStart');
+                    window.localStorage.removeItem('eEnd');
+                    window.sessionStorage.setItem('filters', JSON.stringify({ "guestNum": '', "date": '', "eventType": '' }));
+                    window.localStorage.removeItem('eventName');
+                    history.push('/EventDetailsPage/new');
+                }}>
                     Add {typeOfList.substring(0, typeOfList.length - 1)}
                 </div>
             }

@@ -22,15 +22,6 @@ export default function EventDetailsPage(props) {
         } else {
             setIsNew(false);
         }
-        return () => {
-            if (!isNew) {
-                window.localStorage.setItem('locationDetails', null);
-                window.localStorage.setItem('eStart', null);
-                window.localStorage.setItem('eEnd', null);
-                window.sessionStorage.setItem('filters', JSON.stringify({ "guestNum": null, "date": null, "eventType": null }));
-                window.localStorage.setItem('eventName', null);
-            }
-        };
     }, []);
 
     const history = useHistory();
@@ -385,7 +376,7 @@ export default function EventDetailsPage(props) {
     const [locationCancellationMessage, setLocationCancellationMessage] = useState('');
     const handleCancel = (type, id) => {
         apiFetch(`event/${type}/cancel?id=${id}`, "DELETE").then(res => res.json()).then(res => { console.log(res); window.localStorage.setItem('locationDetails', null); window.location.reload() })
-            .catch(e => { console.log('error', e); setLocationCancellationMessage('You have to cancel caterings and services first') })
+            .catch(e => { console.log('error', e); if(type === 'location'){setLocationCancellationMessage('You have to cancel caterings and services first')} })
     }
 
     const bookVenue = () => {

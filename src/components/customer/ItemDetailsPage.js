@@ -5,6 +5,8 @@ import '../../styles/customer/ItemDetailsPage.css'
 import 'react-slideshow-image/dist/styles.css'
 import { Slide } from 'react-slideshow-image';
 import StarRatings from 'react-star-ratings';
+import { Button } from '@mui/material'
+
 
 import pplIcon from '../../images/pplIcon.png';
 
@@ -273,14 +275,11 @@ export default function ItemDetailsPage(props) {
                             </div>
                         </div>
                         {typeOfItem !== 'Event' && <>
-                            {props.authorized === false &&
-                                <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
-                            }
-                            {props.authorized === true && props.userData.user.type === 'C' &&
-                                <input type='button' className='add-to-event-button' value='Add to event' onClick={handleAddToEvent} />
+                            {(props.authorized === false || (props.authorized === true && props.userData.user.type === 'C')) &&
+                                <Button variant='contained' className='add-to-event-button' onClick={handleAddToEvent}>Add to event</Button>
                             }
                             {props.authorized === true && props.userData.user.type === 'B' &&
-                                <input type='button' className='add-to-event-button' value={`Edit ${typeOfItem}`} onClick={() => { history.push(`/AddBusinessPage/${typeOfItem}/${id}`) }} />
+                                <Button variant='contained' className='add-to-event-button'  onClick={() => { history.push(`/AddBusinessPage/${typeOfItem}/${id}`) }}>{`Edit ${typeOfItem}`}</Button>
                             }
                         </>}
                         {typeOfItem === 'Event' && <>
@@ -323,13 +322,13 @@ export default function ItemDetailsPage(props) {
                                 <input type="checkbox" onChange={e => setDishVegetarian(e.target.value === 'on' ? true : false)} /> Gluten free
                                 <input type="checkbox" onChange={e => setDishGlutenFree(e.target.value === 'on' ? true : false)} /><br />
                                 <input type="button" value='Submit' className="button" onClick={handleSubmitMenu} style={{ marginRight: "15px" }} />
-                                <input type="button" value='Cancel' className="button" onClick={() => setIsMenuEdited(false)} />
+                                <Button variant='contained'  size='small' margin='dense' onClick={() => setIsMenuEdited(false)}>Cancel</Button>
                             </>}
                     </div>}
             </>}
             {(typeOfItem === "Venue" || typeOfItem === "Catering") &&
                 <div className='block' style={{ height: '700px', overflow: 'auto' }}>
-                    <p className='item-review-heading'>Available {aliasItemType}</p>
+                    <p className='item-info-heading'>Available {aliasItemType}</p>
                     {itemDetails[aliasItemType] && itemDetails[aliasItemType].map(c => <div key={c.id} className='list-element' style={{ width: '1420px', marginBottom: '30px' }} onClick={() => handleAliasItemChoice(c.id)}>
                         <div className='list-item' style={{ width: '1420px' }}>
                             <div className='overlay-listing' style={{ width: '1420px' }}>
@@ -394,7 +393,7 @@ export default function ItemDetailsPage(props) {
 
                 </div>}</>}
                 <div className='block'>
-                    <p className='item-review-heading'>Reviews</p>
+                    <p className='item-info-heading'>Reviews</p>
                     {reviews.length > 0 &&
                         reviews.map(r =>
                             <div key={r.id} className='item-review-div'>

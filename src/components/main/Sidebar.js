@@ -32,61 +32,78 @@ export default function Sidebar(props) {
         </a>
       }
       {props.accType === 'C' &&
-        <a className="menu-item" href="/EventDetailsPage/new">
+        <a className="menu-item" href="/EventDetailsPage/new" onClick={() => {
+          window.localStorage.removeItem('locationDetails');
+          window.localStorage.removeItem('eStart');
+          window.localStorage.removeItem('eEnd');
+          window.sessionStorage.setItem('filters', JSON.stringify({ "guestNum": '', "date": '', "eventType": '' }));
+          window.localStorage.removeItem('eventName');
+        }
+        }>
           New event
         </a>
       }
-      {props.accType === 'C' &&
+      {
+        props.accType === 'C' &&
         <a className="menu-item" href="/ListPage/Events">
           My events
         </a>
       }
-      {props.accType === 'C' &&
+      {
+        props.accType === 'C' &&
         <a className="menu-item" href="/GuestBookPage">
           Guest book
         </a>
       }
-      {props.accType === 'B' &&
+      {
+        props.accType === 'B' &&
         <a className="menu-item" href="/ReservationRequestsPage">
           Reservation requests
         </a>
       }
-      {props.accType === 'B' &&
+      {
+        props.accType === 'B' &&
         <a className="menu-item" href="/ListPage/Caterings">
           My caterings
         </a>
       }
-      {props.accType === 'B' &&
+      {
+        props.accType === 'B' &&
         <a className="menu-item" href="/ListPage/Venues">
           My locations
         </a>
       }
-      {props.accType === 'B' &&
+      {
+        props.accType === 'B' &&
         <a className="menu-item" href="/ListPage/Services">
           My services
         </a>
       }
-      {(props.accType === 'B' || props.accType === 'C') &&
+      {
+        (props.accType === 'B' || props.accType === 'C') &&
         <a className="menu-item" href="/ContactFormPage">
           Report a problem
         </a>
       }
-      {props.accType === 'A' &&
+      {
+        props.accType === 'A' &&
         <a className="menu-item" href="/ProblemsPage">
           Problems
         </a>
       }
-      {props.accType === 'A' &&
+      {
+        props.accType === 'A' &&
         <a className="menu-item" href="/UsersPage">
           Users
         </a>
       }
-      {props.accType === 'A' &&
+      {
+        props.accType === 'A' &&
         <a className="menu-item" href="/VerificationRequestsPage">
           Verification requests
         </a>
       }
 
-    </Menu>
+    </Menu >
   );
 };
