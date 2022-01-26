@@ -14,6 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function EventDetailsPage(props) {
     const { id } = useParams();
+    const { adminUserId } = useParams();
     const [isNew, setIsNew] = useState(true);
     useEffect(() => {
         if (id === 'new') {
@@ -38,10 +39,19 @@ export default function EventDetailsPage(props) {
     const [bookedCats, setBookedCats] = useState([]);
     const [canceledLocs, setCanceledLocs] = useState([]);
     const [bookedServices, setBookedServices] = useState([]);
+    const [isEventReady, setIsEventReady] = useState('');
+    const [isEventCancelled, setIsEventCancelled] = useState('');
     useEffect(() => {
+        let userId = props.userId;
+        if(props.userData.type && props.userData.type === 'A'){userId=adminUserId}
         if (!isNew) {
-            apiFetch(`events/detail?eventId=${id}&customerId=${props.userId}`).then(res => {
-                props.setHeaderMessage(res.name);
+            apiFetch(`events/detail?eventId=${id}&customerId=${userId}`).then(res => {
+                props.setHeaderMessage(res.eventStatus === "READY" ? res.name + '(READY)' : res.eventStatus === "CANCELLED" ? res.name + '(CANCELLED)' : res.name);
+                setIsEventReady(res.eventStatus === "READY");
+                setIsEventCancelled(res.eventStatus === "CANCELLED");
+                if (res.eventStatus === "READY") {
+                    setGuestList(res.guests)
+                }
                 setEventName(res.name);
                 setGuestNum(res.guestCount);
                 setEDate(res.date);
@@ -90,7 +100,13 @@ export default function EventDetailsPage(props) {
 
     const [newGuestPanel, setNewGuestPanel] = useState(false);
     const [guestList, setGuestList] = useState([]);
-    useEffect(() => { if (JSON.parse(window.localStorage.getItem('guestList'))) { if (JSON.parse(window.localStorage.getItem('guestList')).length > 0) { setGuestList(JSON.parse(window.localStorage.getItem('guestList'))) } } }, [])
+    useEffect(() => {
+        if (JSON.parse(window.localStorage.getItem('guestList'))) {
+            if (JSON.parse(window.localStorage.getItem('guestList')).length > 0) {
+                setGuestList(JSON.parse(window.localStorage.getItem('guestList')))
+            }
+        }
+    }, [])
 
     const [guestBook, setGuestBook] = useState([]);
     useEffect(() => {
@@ -124,7 +140,7 @@ export default function EventDetailsPage(props) {
     }
 
     useEffect(() => {
-        if (guestList.length > 0) {
+        if (guestList.length >= 0) {
             window.localStorage.setItem('guestList', JSON.stringify(guestList));
         }
     }, [guestList])
@@ -147,17 +163,11 @@ export default function EventDetailsPage(props) {
     const handleGuestDelete = id => {
         let temp = [...guestList];
         temp.splice(id, 1);
-        setGuestList(temp);
         if (temp.length === 0) {
-            props.setGuests([]);
+            setGuestList([]);
+        } else {
+            setGuestList(temp);
         }
-    }
-
-    const inviteGuests = () => {
-        let body = [];
-        guestList.forEach(g => body.push(g.id));
-        apiFetch(`customers/guests/invite?customerId=${props.userId}&eventId=${id}&guestIds=${JSON.stringify(body).substring(1, JSON.stringify(body).length - 1)}`, 'PUT')
-            .catch(e => console.log('error', e))
     }
 
 
@@ -348,8 +358,15 @@ export default function EventDetailsPage(props) {
     }
 
     const handleEventReady = () => {
-        inviteGuests();
-        apiFetch(`customers/invite/send?id=${props.userId}&eventId=${id}`, "POST").then(res => { if (res.ok) { console.log('created') } }).catch(e => console.log('error', e));
+        let body = [];
+        guestList.forEach(g => body.push(g.id));
+        apiFetch(`customers/guests/invite?customerId=${props.userId}&eventId=${id}&guestIds=${JSON.stringify(body).substring(1, JSON.stringify(body).length - 1)}`, 'PUT')
+            .then((res) => {
+                if (res.ok) {
+                    apiFetch(`customers/invite/send?id=${props.userId}&eventId=${id}`, "POST").then(res => { if (res.ok) { window.location.reload() } }).catch(e => console.log('error', e));
+                }
+            })
+            .catch(e => console.log('error', e))
 
     }
 
@@ -357,7 +374,7 @@ export default function EventDetailsPage(props) {
         let catStatus = true;
         let serStatus = true;
         bookedCats.forEach(e => {
-            if (e.confirmationStatus === "NOT_CONFIRMED") {
+            if (e.confirmationStatus === "NOT_CONFIRMED" || e.isOrderConfirmed === false) {
                 catStatus = false;
             }
         })
@@ -376,7 +393,7 @@ export default function EventDetailsPage(props) {
     const [locationCancellationMessage, setLocationCancellationMessage] = useState('');
     const handleCancel = (type, id) => {
         apiFetch(`event/${type}/cancel?id=${id}`, "DELETE").then(res => res.json()).then(res => { console.log(res); window.localStorage.setItem('locationDetails', null); window.location.reload() })
-            .catch(e => { console.log('error', e); if(type === 'location'){setLocationCancellationMessage('You have to cancel caterings and services first')} })
+            .catch(e => { console.log('error', e); if (type === 'location') { setLocationCancellationMessage('You have to cancel caterings and services first') } })
     }
 
     const bookVenue = () => {
@@ -414,10 +431,10 @@ export default function EventDetailsPage(props) {
                     </Select>
                 </FormControl>
                 <br />
-                {!isNew && <Button variant='contained' onClick={cancelEvent}>Cancel event</Button>}
+                {!isNew && !isEventCancelled && <Button variant='contained' onClick={cancelEvent}>Cancel event</Button>}
                 {formError && <p style={{ color: 'red', textAlign: 'center' }}><br />Please fill in all the fields</p>}
             </div>
-            <div className='block'>
+            {!isEventCancelled && <div className='block'>
                 <p className='venue-choice-heading'>
                     Venue
                     {isLocPicked && isNew && <IconButton onClick={() => {
@@ -453,7 +470,7 @@ export default function EventDetailsPage(props) {
                 }
                 {isLocPicked && !isNew && JSON.parse(window.localStorage.getItem('locationDetails')) !== null &&
                     <p style={{ fontSize: '14pt' }}>{locStatus !== '' && <><br />Status: {locStatus}<br /><br /></>}
-                        {(locStatus === 'CONFIRMED' || locStatus === 'NOT_CONFIRMED') && <Button variant='contained' size='small' className='button' onClick={() => handleCancel('location', locResId)}>
+                        {(locStatus === 'CONFIRMED' || locStatus === 'NOT_CONFIRMED') && !isEventReady && <Button variant='contained' size='small' className='button' onClick={() => handleCancel('location', locResId)}>
                             Cancel request
                         </Button>}
                         {locationCancellationMessage !== '' && <p style={{ color: 'red', fontSize: '12pt' }}>{locationCancellationMessage}</p>}
@@ -463,13 +480,13 @@ export default function EventDetailsPage(props) {
                         {locStatus === '' &&
                             <Button style={{ fontSize: '30pt' }} onClick={() => history.push(`/ListPage/Venues/${id}`)} >+</Button>
                         }
-                        {locStatus === 'NOT_CONFIRMED' && 'ⓘ You will be able to pick caterigs, services, and invite guests to your event after the reservation is confirmed by venue provider'}
+                        {locStatus === 'NOT_CONFIRMED' && <><br/>ⓘ You will be able to pick caterigs, services, and invite guests to your event after the reservation is confirmed by venue provider</>}
                     </p>
                 }
                 {(!isLocPicked || JSON.parse(window.localStorage.getItem('locationDetails')) === null) &&
                     <Button style={{ fontSize: '30pt' }} onClick={() => history.push(`/ListPage/Venues/${id}`)} >+</Button>
                 }
-            </div>
+            </div>}
             {isLocPicked && !isNew && locStatus === 'CONFIRMED' &&
                 <div className='block'>
                     <p className='venue-choice-heading'>Caterings</p>
@@ -510,11 +527,14 @@ export default function EventDetailsPage(props) {
                                             <span style={{ fontSize: '12pt' }}>
                                                 Status: </span>
                                             {c.confirmationStatus}<br />
+                                            <span style={{ fontSize: '12pt' }}>
+                                                Order status: </span>
+                                            {c.isOrderConfirmed ? 'Confirmed' : 'Not confirmed'}<br />
                                         </div>
                                         <br />
-                                        <Button variant='contained' size='small' className='button' onClick={() => handleCancel('catering', c.id)}>
+                                        {!isEventReady && <Button variant='contained' size='small' className='button' onClick={() => handleCancel('catering', c.id)}>
                                             Cancel request
-                                        </Button><br />
+                                        </Button>}<br />
                                         {c.confirmationStatus === "NOT_CONFIRMED" && <p style={{ fontSize: '12pt' }}>
                                             ⓘ You will be able to make an order after the reservation is confirmed by catering provider
                                         </p>
@@ -584,7 +604,7 @@ export default function EventDetailsPage(props) {
                                 </div>)}
                         </div>
                     }
-                    <input type='button' value='+' className='add-button' onClick={() => history.push(`/ListPage/Caterings/${id}`)} /><br />
+                    {!isEventReady && <input type='button' value='+' className='add-button' onClick={() => history.push(`/ListPage/Caterings/${id}`)} />}<br />
                     {JSON.parse(window.localStorage.getItem('cateringInfo')) && JSON.parse(window.localStorage.getItem('cateringInfo')).length > 0 &&
                         <Button variant='contained' className='button' onClick={handleReserveCaterings}>Request caterings booking</Button>
                     }
@@ -633,9 +653,9 @@ export default function EventDetailsPage(props) {
                                             {c.confirmationStatus}<br />
                                         </div>
                                         <br />
-                                        <Button variant='contained' size='small' className='button' onClick={() => handleCancel('service', c.id)}>
+                                        {!isEventReady && <><Button variant='contained' size='small' className='button' onClick={() => handleCancel('service', c.id)}>
                                             Cancel request
-                                        </Button><br />
+                                        </Button><br /></>}
                                         {c.confirmationStatus === "NOT_CONFIRMED" &&
                                             <p style={{ fontSize: '12pt' }}>
                                                 ⓘ You will be able to finalise event planning after the reservation is confirmed by service provider
@@ -678,7 +698,7 @@ export default function EventDetailsPage(props) {
                             }
                         </div>
                     }
-                    <input type='button' value='+' className='add-button' onClick={() => history.push(`/ListPage/Services/${id}`)} /><br />
+                    {!isEventReady && <input type='button' value='+' className='add-button' onClick={() => history.push(`/ListPage/Services/${id}`)} />}<br />
                     {JSON.parse(window.localStorage.getItem('serviceInfo')) && JSON.parse(window.localStorage.getItem('serviceInfo')).length > 0 &&
                         <Button variant='contained' size='small' margin='dense' className='button' onClick={handleReserveServices}>Request booking</Button>
                     }
@@ -686,13 +706,13 @@ export default function EventDetailsPage(props) {
                 </div>
             }
 
-            {isLocPicked && !isNew && locStatus === 'CONFIRMED' &&
+            {isLocPicked && !isNew && locStatus === 'CONFIRMED' && (isFinal() || isEventReady) &&
                 <div className='block'>
                     <p className='guest-choice-heading'>Guests</p>
                     {guestList.map(guest =>
                         <div className='guest-list-element' key={guestList.indexOf(guest)}>
-                            {guest.name} {guest.surname} {guest.email}
-                            <IconButton onClick={() => handleGuestDelete(guestList.indexOf(guest))}><DeleteIcon /></IconButton>
+                            {guest[isEventReady ? 'firstName' : 'name']} {guest[isEventReady ? 'lastName' : 'surname']} ({guest.email})
+                            {!isEventReady && <IconButton onClick={() => handleGuestDelete(guestList.indexOf(guest))}><DeleteIcon /></IconButton>}
                         </div>
                     )}
                     {newGuestPanel &&
@@ -710,11 +730,11 @@ export default function EventDetailsPage(props) {
                                 <TextField size='small' margin='dense' style={{ marginRight: '10px' }} className='new-guest-input' id='newGuestName' label='name' onChange={e => setGuestName(e.target.value)} />
                                 <TextField size='small' margin='dense' style={{ marginRight: '10px' }} className='new-guest-input' id='newGuestSurname' label='surname' onChange={e => setGuestSurname(e.target.value)} />
                                 <TextField size='small' margin='dense' style={{ marginRight: '10px' }} className='new-guest-input' id='newGuestEmail' type='email' label='email' onChange={e => setGuestEmail(e.target.value)} />
-                                <Button size='small' margin='dense' style={{ marginTop: '8px' }}  variant='contained' className='new-guest-button'  onClick={addNewGuest}>Add guest</Button>
+                                <Button size='small' margin='dense' style={{ marginTop: '8px' }} variant='contained' className='new-guest-button' onClick={addNewGuest}>Add guest</Button>
                             </div>
                         </div>
                     }
-                    {!newGuestPanel && <input type='button' value='+' className='add-button' onClick={() => setNewGuestPanel(true)} />}
+                    {!newGuestPanel && !isEventReady && <input type='button' value='+' className='add-button' onClick={() => setNewGuestPanel(true)} />}
                 </div>
             }
 
@@ -723,10 +743,13 @@ export default function EventDetailsPage(props) {
                     Create event and request location booking <br />
                 </div>
             }
-            {isFinal() &&
+            {isFinal() && !isEventReady &&
                 <div className='block' onClick={handleEventReady} style={{ textAlign: 'center', cursor: 'pointer' }}>
                     Confirm all bookings and send invitations to guests <br />
                 </div>
+            }
+            {!isFinal() && !isEventReady && isLocPicked && !isNew &&
+                "ⓘ You will be able to add guests and finalise the event after everything is confirmed"
             }
         </div>
     )

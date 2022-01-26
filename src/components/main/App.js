@@ -33,7 +33,7 @@ const ROUTES = {
   '/CustomerProfilePage': CustomerProfile,
   '/BusinessProfilePage': BusinessProfile,
   '/ContactFormPage': ContactFormPage,
-  '/EventDetailsPage/:id': EventDetailsPage,
+  '/EventDetailsPage/:id/:adminUserId?': EventDetailsPage,
   '/UsersPage': UsersPage,
   '/ProblemsPage': ProblemsPage,
   '/VerificationRequestsPage': VerificationRequestsPage,

@@ -4,9 +4,10 @@ import '../../styles/admin/UserDetailsPage.css'
 
 import pplIcon from '../../images/pplIcon.png';
 import apiFetch from "../../api";
+import { Button } from "@mui/material";
 
 
-export default function UserDetailsPage() {
+export default function UserDetailsPage(props) {
     const { id } = useParams();
 
     const history = useHistory();
@@ -22,6 +23,7 @@ export default function UserDetailsPage() {
     //  const [reservations, setReservations] = useState([]);
 
     useEffect(() => {
+        props.setHeaderMessage('');
         apiFetch(`users?id=${id}`)
             .then(result => setDetails(result))
             .catch(error => console.log('error', error));
@@ -123,20 +125,20 @@ export default function UserDetailsPage() {
             {details.type === 'B' && <>
                 Business name: {details.business.businessName}<br />
                 Phone number: {details.business.phoneNumber}<br />
-                Verification: {details.business.verificationStatus} {details.business.verificationStatus !== 'VERIFIED' && <input type='button' className="button" value='Mark verified' onClick={handleVerify} />}<br />
+                Verification: {details.business.verificationStatus} {details.business.verificationStatus !== 'VERIFIED' && <Button variant='contained' size='small' onClick={handleVerify}>Mark verified</Button>}<br />
                 Address: {details.business.address.streetName} {details.business.address.streetNumber}, {details.business.address.city}, {details.business.address.zipCode},  {details.business.address.country}<br />
             </>}
-            Active: {'' + details.active} {details.active && <input type='button' className="button" value='Deactivate' onClick={handleBan} />}
+            Active: {'' + details.active} {details.active && <Button variant='contained' size='small' value='Deactivate' onClick={handleBan}>Deactivate</Button>}
         </div>
         {details.type === 'C' &&
             <div className="block">
                 <p className="problem-heading">Events</p>
                 <div className='event-filter-div'>
-                    <input type='button' className='e-c-button-l' value='past' onClick={handleEvents} style={{ color: eventPastColor, backgroundColor: eventPastBackColor }} />
-                    <input type='button' className='e-c-button-c' value='all' onClick={handleEvents} style={{ color: eventAllColor, backgroundColor: eventAllBackColor }} />
-                    <input type='button' className='e-c-button-r' value='future' onClick={handleEvents} style={{ color: eventFutureColor, backgroundColor: eventFutureBackColor }} />
+                    <Button className='e-c-button-l' value='past' onClick={handleEvents} style={{ color: eventPastColor, backgroundColor: eventPastBackColor }}>past</Button>
+                    <Button className='e-c-button-c' value='all' onClick={handleEvents} style={{ color: eventAllColor, backgroundColor: eventAllBackColor }}>all</Button>
+                    <Button className='e-c-button-r' value='future' onClick={handleEvents} style={{ color: eventFutureColor, backgroundColor: eventFutureBackColor }}>future</Button>
                 </div>
-                {events.map(c => <div key={c.id} className='item-list-element' style={{ justifySelf: 'center', width: '1420px', marginBottom: '30px' }} onClick={() => history.push(`/EventDetailsPage/${c.id}`)}>
+                {events.map(c => <div key={c.id} className='item-list-element' style={{ justifySelf: 'center', width: '1420px', marginBottom: '30px' }} onClick={() => history.push(`/EventDetailsPage/${c.id}/${id}`)}>
                     <div className='list-item' style={{ width: '1420px' }}>
                         <div className='overlay-listing' style={{ width: '1420px' }}>
                             <div className='overlay-listing-left'>
@@ -149,7 +151,7 @@ export default function UserDetailsPage() {
                             </div>
                         </div>
                         <div className='list-item-pics' style={{ width: '1420px' }}>
-                            {c.location.location.images && c.location.location.images.map(i => <div key={i.encodedImage}>
+                            {c.location[0].location.images && c.location[0].location.images.map(i => <div key={i.encodedImage}>
                                 <img alt={i.name} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
                             </div>)}
                         </div>

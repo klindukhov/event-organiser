@@ -48,12 +48,17 @@ export default function ItemDetailsPage(props) {
     const [cateringItemTypes, setCateringItemTypes] = useState([]);
     const [businessHours, setBusinessHours] = useState([]);
 
+    const [aliasItemTypeDetails, setAliasItemTypeDetails] = useState([]);
+
     useEffect(() => {
         if (itemType !== '') {
             apiFetch(`${itemType}/allowed/${id}/detail`)
                 .then(result => {
                     setItemDetails(result);
                     setSlideImages(result.images);
+                    apiFetch(`${aliasItemType}/allowed/${itemType.substring(0, itemType.length - 1)}?${itemType === 'locations' ? 'id' : 'cateringId'}=${id}`).then(res => {
+                        setAliasItemTypeDetails(res);
+                    }).catch(e=>console.log('error', e))
                 })
                 .catch(error => { console.log('error', error); setItemDetails({}); setSlideImages([]); });
 
@@ -275,15 +280,15 @@ export default function ItemDetailsPage(props) {
                             </div>
                         </div>
                         {typeOfItem !== 'Event' && <>
-                            {(props.authorized === false || (props.authorized === true && props.userData.user.type === 'C')) &&
+                            {(props.authorized === false || (props.authorized === true && props.userData.user && props.userData.user.type === 'C')) &&
                                 <Button variant='contained' className='add-to-event-button' onClick={handleAddToEvent}>Add to event</Button>
                             }
-                            {props.authorized === true && props.userData.user.type === 'B' &&
-                                <Button variant='contained' className='add-to-event-button'  onClick={() => { history.push(`/AddBusinessPage/${typeOfItem}/${id}`) }}>{`Edit ${typeOfItem}`}</Button>
+                            {props.authorized === true && props.userData.user && props.userData.user.type === 'B' &&
+                                <Button variant='contained' className='add-to-event-button' onClick={() => { history.push(`/AddBusinessPage/${typeOfItem}/${id}`) }}>{`Edit ${typeOfItem}`}</Button>
                             }
                         </>}
                         {typeOfItem === 'Event' && <>
-                            {props.authorized === true && props.userData.user.type === 'C' &&
+                            {props.authorized === true && props.userData.user && props.userData.user.type === 'C' &&
                                 <input type='button' className='add-to-event-button' value='Edit event' onClick={() => history.push(`/EventDetailsPage/${id}`)} />
                             }
                         </>}
@@ -291,9 +296,9 @@ export default function ItemDetailsPage(props) {
                 </div>
             </div>
             {typeOfItem === "Catering" && <>
-                {itemDetails.cateringItems !== undefined && ((itemDetails.cateringItems !== null && itemDetails.cateringItems.length > 0) || (props.authorized === true && props.userData.user.type === "B")) &&
+                {itemDetails.cateringItems !== undefined && ((itemDetails.cateringItems !== null && itemDetails.cateringItems.length > 0) || (props.authorized === true && props.userData.user && props.userData.user.type === "B")) &&
                     <div className='block'>
-                        <p className='item-review-heading'>Menu{props.authorized === true && props.userData.user.type === "B" && !isMenuEdited && <input type='button' class='x-button' value='✎' onClick={handleMenuEdit} />}</p>
+                        <p className='item-review-heading'>Menu{props.authorized === true && props.userData.user && props.userData.user.type === "B" && !isMenuEdited && <input type='button' class='x-button' value='✎' onClick={handleMenuEdit} />}</p>
                         {cateringItemTypes.map(t => <div key={t}>
                             <p className='item-info-heading'>{t}s</p>
                             {itemDetails.cateringItems.filter(l => l.type === t).map(c => <div className="catering-menu-item" key={c.id}>
@@ -322,14 +327,14 @@ export default function ItemDetailsPage(props) {
                                 <input type="checkbox" onChange={e => setDishVegetarian(e.target.value === 'on' ? true : false)} /> Gluten free
                                 <input type="checkbox" onChange={e => setDishGlutenFree(e.target.value === 'on' ? true : false)} /><br />
                                 <input type="button" value='Submit' className="button" onClick={handleSubmitMenu} style={{ marginRight: "15px" }} />
-                                <Button variant='contained'  size='small' margin='dense' onClick={() => setIsMenuEdited(false)}>Cancel</Button>
+                                <Button variant='contained' size='small' margin='dense' onClick={() => setIsMenuEdited(false)}>Cancel</Button>
                             </>}
                     </div>}
             </>}
             {(typeOfItem === "Venue" || typeOfItem === "Catering") &&
                 <div className='block' style={{ height: '700px', overflow: 'auto' }}>
                     <p className='item-info-heading'>Available {aliasItemType}</p>
-                    {itemDetails[aliasItemType] && itemDetails[aliasItemType].map(c => <div key={c.id} className='list-element' style={{ width: '1420px', marginBottom: '30px' }} onClick={() => handleAliasItemChoice(c.id)}>
+                    {aliasItemTypeDetails && aliasItemTypeDetails.map(c => <div key={c.id} className='list-element' style={{ width: '1420px', marginBottom: '30px' }} onClick={() => handleAliasItemChoice(c.id)}>
                         <div className='list-item' style={{ width: '1420px' }}>
                             <div className='overlay-listing' style={{ width: '1420px' }}>
                                 <div className='overlay-listing-left'>
@@ -371,7 +376,7 @@ export default function ItemDetailsPage(props) {
                 </div>
             }
 
-            {props.authorized === true && props.userData.user.type === 'C' &&
+            {props.authorized === true && props.userData.user && props.userData.user.type === 'C' &&
                 <div className='block'>
                     <p>You can contact the business through the form below</p>
                     <input placeholder="Subject" onChange={e => setEmailSubject(e.target.value)} /><br /><br />
@@ -406,7 +411,7 @@ export default function ItemDetailsPage(props) {
                                 </div>
                             </div>
                         )}
-                    {props.authorized === true && props.userData.user.type === "C" && <>
+                    {props.authorized === true && props.userData.user && props.userData.user.type === "C" && <>
                         <div className='reviewer-info'>
                             <img alt='acc-pic' src={accIcon} className='contact-acc-pic1' />
                             <div className='reviewer-name'> {props.userData && props.userData.firstName + " " + props.userData.lastName} <br /> <input className='write-title-div' placeholder='Write a title here' onChange={e => setTitle(e.target.value)} />

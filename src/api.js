@@ -21,7 +21,7 @@ export default async function apiFetch(path, method = 'GET', body, contentType) 
 
     if (!response.ok || response.status === 500) {
         throw new Error(`${response.status + response.statusText}`);
-    } else if (method === "POST" || method === "DELETE") {
+    } else if (method === "POST" || method === "DELETE" || method === 'PUT') {
         return response;
     }else {
         return response.json();        

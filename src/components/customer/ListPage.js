@@ -45,12 +45,18 @@ export default function ListPage(props) {
     const [order, setOrder] = useState('');
     const getItemsWithFilters = (sorting) => {
         let body = {};
+        let forLocationId = '';
         if (forEventId) {
             setDate(JSON.parse(window.sessionStorage.filters).date);
             body.date = JSON.parse(window.sessionStorage.filters).date;
 
             setLocation(JSON.parse(window.sessionStorage.filters).location);
             body.city = JSON.parse(window.sessionStorage.filters).location;
+
+            if(listType === 'caterings'){
+                forLocationId = '?locationId='+JSON.parse(window.localStorage.getItem('locationDetails')).id;
+            }
+
         } else {
             if (location) { body.city = location };
             if (date) { body.date = date }
@@ -79,7 +85,7 @@ export default function ListPage(props) {
             case 'Events':
                 break;
         }
-        apiFetch(`${listType}/allowed/search`, "POST", JSON.stringify(body))
+        apiFetch(`${listType}/allowed/search${forLocationId}`, "POST", JSON.stringify(body))
             .then(res => res.json())
             .then(result => {
                 if (sorting) {
@@ -169,7 +175,7 @@ export default function ListPage(props) {
     }, [])
 
 
-    const [eventsTab, setEventsTab] = useState('ALL');
+    const [eventsTab, setEventsTab] = useState('CURRENT');
     useEffect(() => {
         if (typeOfList === 'Events') {
             getAllEvents();
@@ -177,11 +183,11 @@ export default function ListPage(props) {
     }, [eventsTab])
 
     const [eventPastColor, setEventPastColor] = useState('#47525e');
-    const [eventFutureColor, setEventFutureColor] = useState('#47525e');
-    const [eventAllColor, setEventAllColor] = useState('white');
+    const [eventFutureColor, setEventFutureColor] = useState('white');
+    const [eventAllColor, setEventAllColor] = useState('#47525e');
     const [eventPastBackColor, setEventPastBackColor] = useState('#F2F4F5');
-    const [eventFutureBackColor, setEventFutureBackColor] = useState('#F2F4F5');
-    const [eventAllBackColor, setEventAllBackrColor] = useState('#47525e');
+    const [eventFutureBackColor, setEventFutureBackColor] = useState('#47525e');
+    const [eventAllBackColor, setEventAllBackrColor] = useState('#F2F4F5');
     const handleEvents = (e) => {
         if (e.target.value === "all") {
             setEventPastColor('#47525e');
@@ -417,8 +423,8 @@ export default function ListPage(props) {
             {listType === "events" &&
                 <div className='block' style={{ textAlign: 'center' }}>
                     <Button type='button' className='e-c-button-l' value='past' onClick={handleEvents} style={{ color: eventPastColor, backgroundColor: eventPastBackColor }}>past</Button>
-                    <Button type='button' className='e-c-button-c' value='all' onClick={handleEvents} style={{ color: eventAllColor, backgroundColor: eventAllBackColor }}>all</Button>
                     <Button type='button' className='e-c-button-r' value='future' onClick={handleEvents} style={{ color: eventFutureColor, backgroundColor: eventFutureBackColor }}>future</Button>
+                    <Button type='button' className='e-c-button-c' value='all' onClick={handleEvents} style={{ color: eventAllColor, backgroundColor: eventAllBackColor }}>all</Button>
                 </div>
             }
             {items.length > 0 && (items[0].address || listType === 'services' || listType === 'events') && <>

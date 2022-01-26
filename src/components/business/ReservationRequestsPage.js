@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import apiFetch from '../../api';
 import '../../styles/business/ReservationRequestsPage.css'
-import { Button } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Button, ListItem, Typography } from '@mui/material';
+import { ExpandMore } from '@mui/icons-material';
 
 export default function ReservationRequestsPage(props) {
     const history = useHistory();
@@ -78,13 +79,16 @@ export default function ReservationRequestsPage(props) {
     useEffect(() => { console.log(items) }, [items])
 
     const handleConfirm = (i) => {
-        apiFetch(`event/${iType}/confirm?${iType === 'catering' ? 'cateringI' : 'i'}d=${bType === "Services"? i.optionalService.id :i[iType].id}&eventId=${bType === 'Venues' ? i.event.id : bType === 'Caterings' ? i.eventLocation.event.id : i.locationForEvent.event.id}`, "PUT").then(() => window.location.reload()).catch(e => console.log('error', e))
+        apiFetch(`event/${iType}/confirm?${iType === 'catering' ? 'cateringI' : 'i'}d=${bType === "Services" ? i.optionalService.id : i[iType].id}&eventId=${bType === 'Venues' ? i.event.id : bType === 'Caterings' ? i.eventLocation.event.id : i.locationForEvent.event.id}`, "PUT").then(() => window.location.reload()).catch(e => console.log('error', e))
     }
 
-    const handleReject = (i) =>{
-        apiFetch(`event/${iType}/cancel?id=${i.id}`, "DELETE").then(res => res.json()).then(res=>window.location.reload()).catch(e=>console.log('error', e))
+    const handleReject = (i) => {
+        apiFetch(`event/${iType}/cancel?id=${i.id}`, "DELETE").then(res => res.json()).then(res => window.location.reload()).catch(e => console.log('error', e))
     }
 
+    const handleConfirmOrder = (id) => {
+        apiFetch(`event/catering/order/confirm?reservationId=${id}`, "PUT").then(res => window.location.reload()).catch(e => console.log("error", e));
+    }
 
     return (<div className='main'>
         <div className='block' style={{ textAlign: 'center' }}>
@@ -117,6 +121,21 @@ export default function ReservationRequestsPage(props) {
                     Time: {i.time}<br />
                     Comment:
                     "{i.comment}"<br />
+                    {!isRequests && <Accordion style={{ width: '300px' }} margin='dense'>
+                        <AccordionSummary
+                            expandIcon={<ExpandMore />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                        >
+                            <Typography>Order </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Typography>
+                                {i.order && i.order.map(o => <ListItem>{o.amount + ' x ' + o.item.name}</ListItem>)}
+                            </Typography>
+                        </AccordionDetails>
+                    </Accordion>}
+                    {!i.isOrderConfirmed && !isRequests && <Button variant='contained' size='small' margin='dense' onClick={() => handleConfirmOrder(i.id)} >Confirm order</Button>}
                 </>}
                 {isRequests && <Button variant='contained' onClick={() => handleConfirm(i)}>Confirm</Button>}{" "}
                 {isRequests && <Button variant='contained' onClick={() => handleReject(i)}>Reject</Button>}
