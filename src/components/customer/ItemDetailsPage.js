@@ -5,8 +5,10 @@ import '../../styles/customer/ItemDetailsPage.css'
 import 'react-slideshow-image/dist/styles.css'
 import { Slide } from 'react-slideshow-image';
 import StarRatings from 'react-star-ratings';
-import { Avatar, Button } from '@mui/material'
-
+import { Avatar, Button, Tooltip } from '@mui/material'
+import VeganLogo from '../../images/veganLogo.png'
+import VegetarianLogo from '../../images/vegetarianLogo.png'
+import GlutenFreeLogo from '../../images/glutenFreeLogo.png'
 
 import pplIcon from '../../images/pplIcon.png';
 
@@ -57,7 +59,7 @@ export default function ItemDetailsPage(props) {
                     setSlideImages(result.images);
                     apiFetch(`${aliasItemType}/allowed/${itemType.substring(0, itemType.length - 1)}?${itemType === 'locations' ? 'id' : 'cateringId'}=${id}`).then(res => {
                         setAliasItemTypeDetails(res);
-                    }).catch(e=>console.log('error', e))
+                    }).catch(e => console.log('error', e))
                 })
                 .catch(error => { console.log('error', error); setItemDetails({}); setSlideImages([]); });
 
@@ -304,7 +306,16 @@ export default function ItemDetailsPage(props) {
                                 <div className="menu-item-left">{c.name}{isMenuEdited && <input type='button' class='x-button' value='x' onClick={() => handleDeleteMenuItem(c.id)} />}<br />
                                     {c.description}<br /></div>
                                 <div className="menu-item-right">{c.servingPrice}<br />
-                                    {Object.keys(c).filter(k => c[k] === true).map(i => '"' + i + '" ')}<br /></div>
+                                    {c.isVegan && <Tooltip title='vegan'>
+                                        <img alt='vegan' src={VeganLogo} style={{ height: '30px', width: '30px' }} />
+                                    </Tooltip>}
+                                    {c.isVegetarian && <Tooltip title='vegetarian'>
+                                        <img alt='vegan' src={VegetarianLogo} style={{ height: '30px', width: '30px' }} />
+                                    </Tooltip>}
+                                    {c.isGlutenFree && <Tooltip title='gluten free'>
+                                        <img alt='vegan' src={GlutenFreeLogo} style={{ height: '30px', width: '30px' }} />
+                                    </Tooltip>}
+                                    <br /></div>
                             </div>)}
                         </div>)}
                         {isMenuEdited &&
@@ -402,7 +413,7 @@ export default function ItemDetailsPage(props) {
                         reviews.map(r =>
                             <div key={r.id} className='item-review-div'>
                                 <div className='reviewer-info'>
-                                    <Avatar alt='acc-pic' src={'data:image/png;base64,' + r.customer.avatar.encodedImage} style={{height: '80px', width: '80px'}} />
+                                    <Avatar alt='acc-pic' src={'data:image/png;base64,' + r.customer.avatar.encodedImage} style={{ height: '80px', width: '80px' }} />
                                     <p className='reviewer-name'> {r.customer.firstName} {r.customer.lastName} <br /> "{r.title}" {'\u{2605}'.repeat(r.starRating)} </p>
                                 </div>
                                 <div className='item-review-text'>
@@ -412,7 +423,7 @@ export default function ItemDetailsPage(props) {
                         )}
                     {props.authorized === true && props.userData.user && props.userData.user.type === "C" && <>
                         <div className='reviewer-info'>
-                            <Avatar alt='acc-pic' src={'data:image/png;base64,' + props.userData.avatar.encodedImage} style={{height: '100px', width: '100px'}} />
+                            <Avatar alt='acc-pic' src={'data:image/png;base64,' + props.userData.avatar.encodedImage} style={{ height: '100px', width: '100px' }} />
                             <div className='reviewer-name'> {props.userData && props.userData.firstName + " " + props.userData.lastName} <br /> <input className='write-title-div' placeholder='Write a title here' onChange={e => setTitle(e.target.value)} />
                                 <StarRatings
                                     rating={rating}

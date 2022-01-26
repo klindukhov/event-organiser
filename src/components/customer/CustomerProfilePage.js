@@ -61,7 +61,7 @@ export default function CustomerProfilePage(props) {
         if (avatar.file) {
             let data = new FormData();
             data.append("file", avatar.file, avatar.file.name);
-            apiFetch(`customer/avatar/upload?customerId=${props.userId}`, 'POST', data, 's');
+            apiFetch(`customers/avatar/upload?customerId=${props.userId}`, 'POST', data, 's').then(() => window.location.reload()).catch(e=>console.log('error', e))
         }
     }
 
