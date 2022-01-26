@@ -86,7 +86,7 @@ function SignUpPageContent(props) {
                     .then(data => {
                         props.setAuth(data);
                         if (data.user.type === 'C') {
-                            history.goBack();
+                            history.push('/');
                         } else if (data.user.type === 'B') {
                             history.push('/ReservationRequestsPage');
                         }

@@ -5,12 +5,11 @@ import '../../styles/customer/ItemDetailsPage.css'
 import 'react-slideshow-image/dist/styles.css'
 import { Slide } from 'react-slideshow-image';
 import StarRatings from 'react-star-ratings';
-import { Button } from '@mui/material'
+import { Avatar, Button } from '@mui/material'
 
 
 import pplIcon from '../../images/pplIcon.png';
 
-import accIcon from '../../images/accIcon250.png'
 import apiFetch from "../../api";
 
 export default function ItemDetailsPage(props) {
@@ -403,7 +402,7 @@ export default function ItemDetailsPage(props) {
                         reviews.map(r =>
                             <div key={r.id} className='item-review-div'>
                                 <div className='reviewer-info'>
-                                    <img alt='acc-pic' src={accIcon} className='contact-acc-pic1' />
+                                    <Avatar alt='acc-pic' src={'data:image/png;base64,' + r.customer.avatar.encodedImage} style={{height: '80px', width: '80px'}} />
                                     <p className='reviewer-name'> {r.customer.firstName} {r.customer.lastName} <br /> "{r.title}" {'\u{2605}'.repeat(r.starRating)} </p>
                                 </div>
                                 <div className='item-review-text'>
@@ -413,7 +412,7 @@ export default function ItemDetailsPage(props) {
                         )}
                     {props.authorized === true && props.userData.user && props.userData.user.type === "C" && <>
                         <div className='reviewer-info'>
-                            <img alt='acc-pic' src={accIcon} className='contact-acc-pic1' />
+                            <Avatar alt='acc-pic' src={'data:image/png;base64,' + props.userData.avatar.encodedImage} style={{height: '100px', width: '100px'}} />
                             <div className='reviewer-name'> {props.userData && props.userData.firstName + " " + props.userData.lastName} <br /> <input className='write-title-div' placeholder='Write a title here' onChange={e => setTitle(e.target.value)} />
                                 <StarRatings
                                     rating={rating}

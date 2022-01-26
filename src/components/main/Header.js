@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom'
-import acc from '../../images/accIcon.png';
 import Sidebar from './Sidebar';
 import '../../styles/general/Header.css';
 import { useState } from 'react/cjs/react.development';
 import apiFetch from '../../api';
 import Logo from '../../images/Logo.png'
+import { Avatar, Tooltip } from '@mui/material'
 
 const Header = (props) => {
   const history = useHistory();
@@ -14,6 +14,7 @@ const Header = (props) => {
   const [myAccount, setMyAccount] = useState('/SignIn');
   const [accType, setAccType] = useState('');
   const [logoLink, setLogoLink] = useState('/');
+  const [avatar, setAvatar] = useState('');
 
   const [theme, setTheme] = useState('');
   useEffect(() => {
@@ -65,6 +66,9 @@ const Header = (props) => {
         apiFetch(`customers?id=${props.myProps.userData.id}`)
           .then(res => {
             setUserName(res.firstName + ' ' + res.lastName);
+            if (res.avatar !== null) {
+              setAvatar('data:image/png;base64,' + res.avatar.encodedImage);
+            }
           }).catch(error => { console.log('error', error); props.myProps.setUnauth(); });
       } else if (props.myProps.userData.user && props.myProps.userData.user.type === 'B') {
         setAccType('B');
@@ -98,18 +102,21 @@ const Header = (props) => {
   return (
     <div className="header-main">
       <header className='header'>
-        <Sidebar props={props.myProps} myAccount={myAccount} changeTheme={handleThemeChange} userName={userName} accType={accType} />
+        <Sidebar props={props.myProps} myAccount={myAccount} avatar={avatar} changeTheme={handleThemeChange} userName={userName} accType={accType} />
         <div className="logo">
-          <img alt='logo' src={Logo} className='header-logo' onClick={() => history.push(logoLink)}/>
+          <img alt='logo' src={Logo} className='header-logo' onClick={() => history.push(logoLink)} />
         </div>
         <div className="cap-margin">
           {props.myProps.headerMessage}
         </div>
         <div className='user-logo-div'>
           <Link to={userPageLink} className='user-logo-div'>
-            <img src={acc} className="accountIcon" alt="accountIcon" />
+            <Tooltip placement='right-start' title={userName === 'Sign in' ? 'sign in' : 'settings'}>
+              <Avatar alt={userName} sx={{ width: '60px', height: '60px', marginTop: '10px' }} src={avatar} />
+            </Tooltip>
             <p className='user-logo-text'>{userName}</p>
           </Link>
+
         </div>
       </header>
     </div>

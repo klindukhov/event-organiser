@@ -1,9 +1,8 @@
 import React from 'react';
 import { slide as Menu } from 'react-burger-menu';
 import '../../styles/general/Sidebar.css';
-
-import accIcon from '../../images/accIcon250.png'
 import { useEffect, useState } from 'react/cjs/react.development';
+import { Avatar } from '@mui/material';
 
 export default function Sidebar(props) {
   const [logout, setLogout] = useState('');
@@ -20,7 +19,7 @@ export default function Sidebar(props) {
   return (
     <Menu>
       <div className='sidebar-user-card' style={{ display: 'grid', gridTemplateColumns: 'auto auto' }}>
-        <img alt='acc-icon' src={accIcon} className='acc-icon' style={{ height: '70px', width: '70px' }} />
+        <Avatar alt={props.userName} src={props.avatar} className='acc-icon' style={{ height: '70px', width: '70px' }} />
         <div className='sidebar-user-info' style={{ justifySelf: 'start' }}>
           <a className="menu-item" href={props.myAccount} style={{ textDecoration: 'none' }}>{props.userName}</a><br />
           {logout}

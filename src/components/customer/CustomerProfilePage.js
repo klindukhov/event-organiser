@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/customer/CustomerProfilePage.css';
-import accIcon from '../../images/accIcon250.png'
 import { Link } from 'react-router-dom'
 import apiFetch from '../../api';
+import { Avatar, TextField, Tooltip } from '@mui/material'
 
 export default function CustomerProfilePage(props) {
     const [changes, setChanges] = useState(true);
@@ -12,6 +12,7 @@ export default function CustomerProfilePage(props) {
     const [surname, setSurname] = useState('');
     const [birthdate, setBirthdate] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [avatar, setAvatar] = useState('');
 
     const [password, setPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -45,6 +46,7 @@ export default function CustomerProfilePage(props) {
                     setSurname(res.lastName);
                     setBirthdate(res.birthdate);
                     setPhoneNumber(res.phoneNumber);
+                    setAvatar({ 'pic': 'data:image/png;base64,' + res.avatar.encodedImage });
                 } else {
                     props.myProps.setUnauth();
                 }
@@ -55,13 +57,24 @@ export default function CustomerProfilePage(props) {
     const handleSubmit = () => {
         const raw = JSON.stringify({ "address": { "county": " ", "city": " ", "streetName": " ", "streetNumber": " ", "zipCode": " " }, "firstName": name, "lastName": surname, "birthdate": birthdate, "phoneNumber": phoneNumber });
 
-        apiFetch(`customers?id=${props.userId}`, "PUT", raw)
-            .catch(error => console.log('error', error));
+        apiFetch(`customers?id=${props.userId}`, "PUT", raw).catch(error => console.log('error', error));
+        if (avatar.file) {
+            let data = new FormData();
+            data.append("file", avatar.file, avatar.file.name);
+            apiFetch(`customer/avatar/upload?customerId=${props.userId}`, 'POST', data, 's');
+        }
     }
 
     const handleInput = () => {
         setChanges(false);
         setButtonColor(getComputedStyle(document.querySelector(':root')).getPropertyValue('--txt'))
+    }
+
+    const handleAddPics = e => {
+        if (e.target.files && e.target.files[0]) {
+            setAvatar({ 'pic': URL.createObjectURL(e.target.files[0]), 'file': e.target.files[0] });
+            handleInput();
+        }
     }
 
     return (
@@ -70,7 +83,14 @@ export default function CustomerProfilePage(props) {
 
                 <div className='customer-pic-and-info'>
                     <div className='customer-pic-and-labels'>
-                        <img src={accIcon} alt='profile' className='customer-profile-image' />
+                        <div className="add-images-wrapper" style={{ width: '250px', height: '250px', margin: '50px', justifySelf: 'center' }}>
+                            <label htmlFor='add-images' className="add-images-label">
+                                <Tooltip title='Add image'>
+                                <Avatar src={avatar.pic} alt='profile' style={{ width: '250px', height: '250px', margin: '50px', justifySelf: 'center' }} />
+                                </Tooltip>
+                            </label>
+                            <TextField InputLabelProps={{ shrink: true }} margin="dense" size="small" label='' type='file' className="add-images-input" id='add-images' multiple={true} accept='image/*' onChange={handleAddPics} />
+                        </div>
                         <div className='customer-info-labels'>
                             <p className='customer-profile-field-label'>Name:</p>
                             <p className='customer-profile-field-label'>Surname:</p>
