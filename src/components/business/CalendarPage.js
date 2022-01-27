@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import Kalend, { CalendarView } from 'kalend' // import component
 import 'kalend/dist/styles/index.css'; // import styles
@@ -8,12 +9,10 @@ import apiFetch from "../../api";
 export default function BusinessCalendar(props) {
     const { businessType } = useParams();
     const { id } = useParams();
-
-    const [businessHours, setBusinessHours] = useState('');
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
-        apiFetch(`${businessType}/allowed/${id}/detail`).then(res => setBusinessHours(res.businessHours)).catch(e => console.log('error', e));
+        apiFetch(`availability/${businessType.substring(0, businessType.length -1)}?id=${id}&date=?`).then(res => {console.log(res); setEvents('')}).catch(e => console.log('error', e));
     }, [])
     const [selectedView, setSelectedView] = useState();
     const onEventClick = () => {

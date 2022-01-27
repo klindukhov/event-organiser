@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/business/BusinessProfilePage.css';
-import { Link } from 'react-router-dom'
 import apiFetch from '../../api';
-import { Avatar } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 
 export default function BusinessProfilePage(props) {
     const [changes, setChanges] = useState(true);
@@ -81,67 +80,45 @@ export default function BusinessProfilePage(props) {
             .catch(error => console.log('error', error));
     }
 
+    const handleDeleteAccount = () => {
+        apiFetch(`business?id=${props.userId}`, "DELETE").then(() => {
+            window.location.reload();
+        }).catch(e => console.log('error', e));
+    }
+
     return (
-        <div className='business-profile-main'>
-            <div className='business-profile-rect'>
-                <div className='business-pic-and-info'>
-                    <div className='business-pic-and-labels'>
-                        <Avatar alt='profile' className='business-profile-image' style={{
-                            height: '250px',
-                            width: '250px',
-                            margin: '50px',
-                            justifySelf: 'center'
-                        }} />
-                        <div className='business-profile-info-labels'>
-                            <p className='business-profile-field-label'>Name:</p>
-                            <p className='business-profile-field-label'>Surname:</p>
-                            <p className='business-profile-field-label'>Phone number:</p>
-                        </div>
-                    </div>
-                    <div className='business-profile-info-fields'>
-                        <input className='business-profile-field-input' type='text' defaultValue={name} onChange={e => { handleInput(); setName(e.target.value) }} />
-                        <input className='business-profile-field-input' type='text' defaultValue={surname} onChange={e => { handleInput(); setSurname(e.target.value) }} />
-                        <input className='business-profile-field-input' type='text' defaultValue={phoneNumber} onChange={e => { handleInput(); setPhoneNumber(e.target.value) }} />
-                    </div>
-                </div>
-                <p className='business-info-heading'>Business information</p>
+        <div className='main'>
+            <div className='block' style={{ display: 'grid' }}>
+                <div className='fields-main'>
+                    <div className='fields-left'>
+                        <p className='business-info-heading'>Business information</p>
+                        <TextField className='customer-profile-field-input' size='small' margin='normal' label='Business name' value={businessName} onChange={e => { handleInput(); setBusinessName(e.target.value) }} /><br />
+                        <TextField className='customer-profile-field-input' size='small' margin='normal' label='Country' value={country} onChange={e => { handleInput(); setCountry(e.target.value) }} /><br />
+                        <TextField className='customer-profile-field-input' size='small' margin='normal' label='City' value={city} onChange={e => { handleInput(); setCity(e.target.value) }} /><br />
+                        <TextField className='customer-profile-field-input' size='small' margin='normal' label='Street' value={streetName} onChange={e => { handleInput(); setStreetName(e.target.value) }} /><br />
+                        <TextField className='customer-profile-field-input' size='small' margin='normal' label='Number' value={streetNumber} onChange={e => { handleInput(); setStreetNumber(e.target.value) }} /><br />
+                        <TextField className='customer-profile-field-input' size='small' margin='normal' label='Postal code' value={postCode} onChange={e => { handleInput(); setPostCode(e.target.value) }} /><br />
+                        <p className='business-field-label'>Status: {status}</p>
 
-                <div className='business-info'>
-                    <div className='business-info-labels'>
-                        <p className='business-field-label'>Business name:</p>
-                        <p className='business-field-label'>Country:</p>
-                        <p className='business-field-label'>City:</p>
-                        <p className='business-field-label'>Street:</p>
-                        <p className='business-field-label'>Number:</p>
-                        <p className='business-field-label'>Postal code:</p>
-                        <p className='business-field-label'>Status:</p>
                     </div>
-                    <div className='business-info-fields'>
-                        <input className='business-field-input' type='text' defaultValue={businessName} onChange={e => { handleInput(); setBusinessName(e.target.value) }} />
-                        <input className='business-field-input' type='text' defaultValue={country} onChange={e => { handleInput(); setCountry(e.target.value) }} />
-                        <input className='business-field-input' type='text' defaultValue={city} onChange={e => { handleInput(); setCity(e.target.value) }} />
-                        <input className='business-field-input' type='text' defaultValue={streetName} onChange={e => { handleInput(); setStreetName(e.target.value) }} />
-                        <input className='business-field-input' type='text' defaultValue={streetNumber} onChange={e => { handleInput(); setStreetNumber(e.target.value) }} />
-                        <input className='business-field-input' type='text' defaultValue={postCode} onChange={e => { handleInput(); setPostCode(e.target.value) }} />
-                        <p className='business-field-label'>{status}</p>
-
+                    <div className='fields-right'>
+                        <p className='business-info-heading'>User information</p>   
+                        <TextField className='customer-profile-field-input' margin='normal' size="small" label='Name' InputLabelProps={{ shrink: true }} type='text' value={name} onChange={e => { setName(e.target.value); handleInput() }} /><br />
+                        <TextField className='customer-profile-field-input' margin="normal" size="small" label='Surname' InputLabelProps={{ shrink: true }} type='text' value={surname} onChange={e => { setSurname(e.target.value); handleInput() }} /><br />
+                        <TextField className='customer-profile-field-input' margin="normal" size="small" label='Phone number' InputLabelProps={{ shrink: true }} type='text' value={phoneNumber} onChange={e => { setPhoneNumber(e.target.value); handleInput() }} /><br />
+                        <br/> 
+                        <TextField className='customer-profile-field-input' size="small" margin='dense' type='password' onChange={e => setPassword(e.target.value)} label='Password' /><br />
+                        <TextField className='customer-profile-field-input' size="small" margin='dense' type='password' onChange={e => setNewPassword(e.target.value)} label='New password' /><br />
+                        <TextField className='customer-profile-field-input' size="small" margin='dense' type='password' onChange={e => setConfirmPassword(e.target.value)} label='Confirm password' /><br /><br />
+                        <Button className='customer-profile-field-input' variant='contained' size="small" onClick={handlePasswordSubmit} value='Change password'>Change password</Button>
+                        <p style={{ color: passwordMessageColor, justifySelf: 'center' }}>{passwordMessage}</p>
                     </div>
                 </div>
-
-                <input type='button' className='submit-business-info' value='Submit changes' disabled={changes} style={{ backgroundColor: buttonColor }} onClick={handleSubmitChanges}></input>
-
-                <p className='change-password-p' >Change password</p>
-                <div className='customer-password-change'>
-                    <input className='cust-password-change-field' type='password' defaultValue={password} onChange={e => setPassword(e.target.value)} placeholder='Password'></input>
-                    <input className='cust-password-change-field' type='password' defaultValue={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder='New password'></input>
-                    <input className='cust-password-change-field' type='password' defaultValue={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder='Confirm password'></input>
-                    <input className='cust-password-submit-button' type='button' onClick={handlePasswordSubmit} value='Change password'></input>
-                </div>
-                <p style={{ color: passwordMessageColor, justifySelf: 'center' }}>{passwordMessage}</p>
-
-                <p className='business-prof-bottom-text' >If you are unsatisfied with our services and/or worried about about your privacy you can </p>
-                <Link className='delete-acc-link' to=''>Delete your account</Link>
-
+                <br />
+                <Button variant='contained' margin="normal" size="small" className='customer-profile-field-input' disabled={changes} style={{ backgroundColor: buttonColor, justifySelf: 'center' }} onClick={() => { setChanges(true); setButtonColor(getComputedStyle(document.querySelector(':root')).getPropertyValue('--bg')); handleSubmitChanges() }}>Submit changes</Button>
+                <br />
+                <p className='business-prof-bottom-text' >If you are unsatisfied with our services and/or worried about about your privacy you can
+                    <Button className='delete-acc-link' onClick={handleDeleteAccount}>Delete your account</Button></p>
             </div>
         </div>
     )

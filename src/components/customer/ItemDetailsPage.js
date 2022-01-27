@@ -427,7 +427,7 @@ export default function ItemDetailsPage(props) {
                         reviews.map(r =>
                             <div key={r.id} className='item-review-div'>
                                 <div className='reviewer-info'>
-                                    <Avatar alt='acc-pic' src={'data:image/png;base64,' + r.customer.avatar.encodedImage} style={{ height: '80px', width: '80px' }} />
+                                    <Avatar alt={r.customer.firstName} src={'data:image/png;base64,' + (r.customer.avatar ? r.customer.avatar.encodedImage : '')} style={{ height: '80px', width: '80px' }} />
                                     <p className='reviewer-name'> {r.customer.firstName} {r.customer.lastName} <br /> "{r.title}" {'\u{2605}'.repeat(r.starRating)} </p>
                                 </div>
                                 <div className='item-review-text'>

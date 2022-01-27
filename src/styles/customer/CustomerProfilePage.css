@@ -1,6 +1,6 @@
 .customer-profile-main {
     background-color     : var(--bg);
-    height               : calc(100vh - 100px);
+    height               : calc(100vh - 170px);
     display              : grid;
     grid-template-columns: auto;
     justify-content      : center;
@@ -30,22 +30,18 @@
 
 .customer-pic-and-labels {
     display              : grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto;
     font-size            : 24pt;
 }
 
-.customer-info-labels {
-    display              : grid;
-    grid-template-columns: auto;
-    justify-content      : end;
-    align-content        : center;
-}
 
 .customer-info-fields {
     display              : grid;
     grid-template-columns: auto;
     justify-content      : start;
     align-content        : center;
+    margin-top   : 70px;
+
 
 
 }

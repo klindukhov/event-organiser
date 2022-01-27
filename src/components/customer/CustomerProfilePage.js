@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/customer/CustomerProfilePage.css';
-import { Link } from 'react-router-dom'
 import apiFetch from '../../api';
-import { Avatar, IconButton, TextField, Tooltip } from '@mui/material'
+import { Avatar, Button, IconButton, TextField, Tooltip } from '@mui/material'
 import { Delete } from '@mui/icons-material';
 
 export default function CustomerProfilePage(props) {
@@ -86,6 +85,12 @@ export default function CustomerProfilePage(props) {
         apiFetch(`customers/avatar/delete?customerId=${props.userId}`, "DELETE").then(() => window.location.reload()).catch(e => console.log('error', e));
     }
 
+    const handleDeleteAccount = () => {
+        apiFetch(`customer?id=${props.userId}`).then(() => {
+            window.location.reload();
+        }).catch(e => console.log('error', e));
+    }
+
     return (
         <div className='customer-profile-main'>
             <div className='customer-profile-rect'>
@@ -103,31 +108,25 @@ export default function CustomerProfilePage(props) {
                             </label>
                             <TextField InputLabelProps={{ shrink: true }} margin="dense" size="small" label='' type='file' className="add-images-input" id='add-images' multiple={true} accept='image/*' onChange={handleAddPics} />
                         </div>
-                        <div className='customer-info-labels'>
-                            <p className='customer-profile-field-label'>Name:</p>
-                            <p className='customer-profile-field-label'>Surname:</p>
-                            <p className='customer-profile-field-label'>Birthdate:</p>
-                            <p className='customer-profile-field-label'>Phone number:</p>
-                        </div>
                     </div>
                     <div className='customer-info-fields'>
-                        <input className='customer-profile-field-input' type='text' defaultValue={name} onChange={e => { setName(e.target.value); handleInput() }} />
-                        <input className='customer-profile-field-input' type='text' defaultValue={surname} onChange={e => { setSurname(e.target.value); handleInput() }} />
-                        <input className='customer-profile-field-input' type='date' defaultValue={birthdate} onChange={e => { setBirthdate(e.target.value); handleInput() }} />
-                        <input className='customer-profile-field-input' type='text' defaultValue={phoneNumber} onChange={e => { setPhoneNumber(e.target.value); handleInput() }} />
+                        <TextField className='customer-profile-field-input' margin='normal' size="small" label='Name' InputLabelProps={{ shrink: true }} type='text' value={name} onChange={e => { setName(e.target.value); handleInput() }} />
+                        <TextField className='customer-profile-field-input' margin="normal" size="small" label='Surname' InputLabelProps={{ shrink: true }} type='text' value={surname} onChange={e => { setSurname(e.target.value); handleInput() }} />
+                        <TextField className='customer-profile-field-input' margin="normal" size="small" label='Birthdate' InputLabelProps={{ shrink: true }}  type='date' value={birthdate} onChange={e => { setBirthdate(e.target.value); handleInput() }} />
+                        <TextField className='customer-profile-field-input' margin="normal" size="small" label='Phone number' InputLabelProps={{ shrink: true }} type='text' value={phoneNumber} onChange={e => { setPhoneNumber(e.target.value); handleInput() }} /><br/>
+                        <Button variant='contained' margin="normal" size="small" className='customer-profile-field-input' disabled={changes} style={{ backgroundColor: buttonColor }} onClick={() => { setChanges(true); setButtonColor(getComputedStyle(document.querySelector(':root')).getPropertyValue('--bg')); handleSubmit() }}>Submit changes</Button>
                     </div>
                 </div>
-                <input type='button' className='submit-customer-profile' value='Submit changes' disabled={changes} style={{ backgroundColor: buttonColor }} onClick={() => { setChanges(true); setButtonColor(getComputedStyle(document.querySelector(':root')).getPropertyValue('--bg')); handleSubmit() }}></input>
                 <p className='change-password-p' >Change password</p>
                 <div className='customer-password-change'>
-                    <input className='cust-password-change-field' type='password' onChange={e => setPassword(e.target.value)} placeholder='Password'></input>
-                    <input className='cust-password-change-field' type='password' onChange={e => setNewPassword(e.target.value)} placeholder='New password'></input>
-                    <input className='cust-password-change-field' type='password' onChange={e => setConfirmPassword(e.target.value)} placeholder='Confirm password'></input>
-                    <input className='cust-password-submit-button' type='button' onClick={handlePasswordSubmit} value='Change password'></input>
+                    <TextField className='cust-password-change-field' size="small" type='password' onChange={e => setPassword(e.target.value)} label='Password' />
+                    <TextField className='cust-password-change-field' size="small" type='password' onChange={e => setNewPassword(e.target.value)} label='New password' />
+                    <TextField className='cust-password-change-field' size="small" type='password' onChange={e => setConfirmPassword(e.target.value)} label='Confirm password' />
+                    <Button variant='contained'  onClick={handlePasswordSubmit} value='Change password'>Change password</Button>
                 </div>
                 <p style={{ color: passwordMessageColor, justifySelf: 'center' }}>{passwordMessage}</p>
-                <p className='cust-prof-bottom-text' >If you are unsatisfied with our services and/or worried about your privacy you can </p>
-                <Link className='delete-acc-link' to=''>Delete your account</Link>
+                <p className='cust-prof-bottom-text' >If you are unsatisfied with our services and/or worried about your privacy you can 
+                <Button className='delete-acc-link' onClick={handleDeleteAccount}>Delete your account</Button></p><br />
             </div>
         </div>
     )
