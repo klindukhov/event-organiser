@@ -407,7 +407,7 @@ export default function ListPage(props) {
             </>}
             {listType !== "events" && (props.authorized === false || (props.authorized === true && props.userData.user.type !== 'B')) && <div className='list-sorting-rect'>
                 <p className='list-displaying-info'>{pageSize !== null ? `Displaying ${1 + pageNo * pageSize}-${(pageNo + 1) * pageSize > totalRes ? totalRes : (pageNo + 1) * pageSize} results out of` : 'Found results: '} {totalRes}</p>
-                <Pagination style={{ justifySelf: 'center' }} count={Math.ceil(totalRes / pageSize)} page={pageNo + 1} onChange={(event, value) => { setPageNo(value - 1); console.log(value) }} shape='rounded' />
+                {pageSize !== null ? <Pagination style={{ justifySelf: 'center' }} count={Math.ceil(totalRes / pageSize)} page={pageNo + 1} onChange={(event, value) => { setPageNo(value - 1); console.log(value) }} shape='rounded' /> : <div> </div>}
                 <div className='select-list-sorting'>
                     <FormControl>
                         <InputLabel id="select-sorting-label">Sort by</InputLabel>

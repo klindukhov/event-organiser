@@ -26,7 +26,7 @@ export default function AddBusinessPage(props) {
             apiFetch('services/allowed/music/styles').then(res => setAvailableMusicStyles(res)).catch(e => console.log('error', e))
         }
     }, [])
-    const [businessDetails, setBusinessDetails] = useState(''); 
+    const [businessDetails, setBusinessDetails] = useState('');
     useEffect(() => {
         if (id !== undefined) {
             apiFetch(`${businessType !== 'Catering' ? typeOfBusiness : 'caterings'}/allowed/${id}/detail`).then(res => {
@@ -43,7 +43,7 @@ export default function AddBusinessPage(props) {
                 setBusinessHours(res.businessHours)
                 let temp = pics.slice();
                 res.images.forEach(i => {
-                    temp.push({ 'pic': 'data:image/png;base64,' + i.encodedImage, 'file': 'none' });
+                    temp.push({ 'pic': 'data:image/png;base64,' + i.encodedImage, 'file': 'none', 'id': i.id });
                 })
                 setPics(temp)
                 switch (businessType) {
@@ -199,6 +199,7 @@ export default function AddBusinessPage(props) {
         { "day": "SUNDAY", "timeFrom": "00:00", "timeTo": "00:00" }
     ]);
     const [pics, setPics] = useState([]);
+    const [picsToDelete, setPicsToDelete] = useState([]);
 
 
     const handleDescriptions = (e) => {
@@ -276,6 +277,10 @@ export default function AddBusinessPage(props) {
         let temp = pics.slice();
         temp.splice(temp.indexOf(e), 1);
         setPics(temp);
+
+        if(e.file === 'none'){
+            setPicsToDelete([...picsToDelete, e.id]);
+        }
     }
 
     const handleDeleteBusiness = () => {
@@ -288,8 +293,8 @@ export default function AddBusinessPage(props) {
     }
 
     const handleSubmitChanges = () => {
-        let body= {...businessDetails};
-        body.email  =email;
+        let body = { ...businessDetails };
+        body.email = email;
         body.description = description;
 
         switch (businessType) {
@@ -315,7 +320,36 @@ export default function AddBusinessPage(props) {
                 break;
         }
         apiFetch(`${typeOfBusiness === 'caterings/new' ? 'caterings' : typeOfBusiness}/edit?id=${id}`, "PUT", JSON.stringify(body))
-            .then(() => window.location.reload())
+            .then(() => {
+                if (picsToDelete.length > 0) {
+                    picsToDelete.forEach(p => {
+                        apiFetch(`images/${typeOfBusiness === 'caterings/new' ? 'catering' : typeOfBusiness.substring(0, typeOfBusiness.length - 1)}?id=${p}`, "DELETE")
+                            .catch(e => console.log('error', e));
+                    })
+                }
+                let newPics = pics.filter(p => p.file !== 'none');
+                if (newPics.length > 0) {
+                    if (businessType !== "Venue") {
+                        newPics.forEach(p => {
+                            let data = new FormData();
+                            data.append("file", p.file, p.file.name);
+                            apiFetch(`images/${businessType.toLowerCase()}/upload?${businessType.toLowerCase()}Id=${id}`, "POST", data, 's').then(() => {
+                                window.location.reload()
+                            }).catch(e => console.log('error', e))
+                        })
+                    } else {
+                        newPics.forEach(p => {
+                            let data = new FormData();
+                            data.append("file", p.file, p.file.name);
+                            apiFetch(`images/location/upload?locationId=${id}`, "POST", data, 's').then(() => {
+                                window.location.reload()
+                            }).catch(e => console.log('error', e));
+                        })
+                    }
+                } else {
+                    window.location.reload()
+                }
+            })
             .catch(e => console.log('error', e))
 
     }
@@ -428,7 +462,7 @@ export default function AddBusinessPage(props) {
                     </div>)}
                 </>
             }
-            <div style={{ textAlign: 'center' }}>Business Hours {id !== undefined && businessType!=="Catering" &&<><br/><Button variant='contained' onClick={() => history.push(`/BusinessCalendar/${typeOfBusiness}/${id}`)}>Edit availability slots</Button></>}</div>
+            <div style={{ textAlign: 'center' }}>Business Hours {id !== undefined && businessType !== "Catering" && <><br /><Button variant='contained' onClick={() => history.push(`/BusinessCalendar/${typeOfBusiness}/${id}`)}>Edit availability slots</Button></>}</div>
             {businessHours !== '' && <div className="business-hours">
                 {['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'].map(d =>
                     <div key={d}>
