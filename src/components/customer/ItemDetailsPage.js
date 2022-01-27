@@ -5,7 +5,7 @@ import '../../styles/customer/ItemDetailsPage.css'
 import 'react-slideshow-image/dist/styles.css'
 import { Slide } from 'react-slideshow-image';
 import StarRatings from 'react-star-ratings';
-import { Avatar, Button, Tooltip } from '@mui/material'
+import { Avatar, Button, Checkbox, Chip, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField, Tooltip } from '@mui/material'
 import VeganLogo from '../../images/veganLogo.png'
 import VegetarianLogo from '../../images/vegetarianLogo.png'
 import GlutenFreeLogo from '../../images/glutenFreeLogo.png'
@@ -240,42 +240,56 @@ export default function ItemDetailsPage(props) {
                         </div>
                         <br />
                         <div className='item-description-p'>
-                            Description: {itemDetails["description"]} <br />
+                            <span style={{ fontSize: '12pt' }}>
+                                Description: </span>
+                            {itemDetails["description"]} <br />
                             {typeOfItem === "Venue" && <>
-                                Seats: {itemDetails["seatingCapacity"]} people<br />
-                                Standing capacity: {itemDetails["seatingCapacity"]} people<br />
-                                Square meters: {itemDetails["sizeInSqMeters"]}<br />
-                                Features: {itemDetails["descriptions"] && itemDetails["descriptions"].map(d => <div key={d}>"{d}"</div>)}
+                                <span style={{ fontSize: '12pt' }}>
+                                    Seats: </span>
+                                {itemDetails["seatingCapacity"]} people<br />
+                                <span style={{ fontSize: '12pt' }}>
+                                    Standing capacity: </span>
+                                {itemDetails["seatingCapacity"]} people<br />
+                                <span style={{ fontSize: '12pt' }}>
+                                    Square meters: </span>
+                                {itemDetails["sizeInSqMeters"]}<br />
+                                <span style={{ fontSize: '12pt' }}>
+                                    Features: </span>
+                                {itemDetails["descriptions"] && itemDetails["descriptions"].map(d => <Chip key={d} label={d} style={{ marginRight: '5px' }} />)}
                             </>}
                             {typeOfItem === "Catering" && <>
-                                {itemDetails.cuisines !== null && itemDetails.cuisines !== undefined && <>Cuisines: {itemDetails.cuisines.map(l => '"' + l.name + '" ')}<br /></>}
-                                City: {itemDetails.address && itemDetails.address.city}
+                                {itemDetails.cuisines !== null && itemDetails.cuisines !== undefined && <>
+                                    <span style={{ fontSize: '12pt' }}>
+                                        Cuisines: </span> {itemDetails.cuisines.map(l => <Chip label={l.name} style={{ marginRight: '5px' }} />)}<br /></>}
+                                <span style={{ fontSize: '12pt' }}>
+                                    City: </span>
+                                {itemDetails.address && itemDetails.address.city}
                             </>}
                             {typeOfItem === "Service" && <>
-                                {itemDetails.translationLanguages !== null && <>{itemDetails.translationLanguages !== undefined && <>Languages: {itemDetails.translationLanguages.map(l => l.name + ' ')}<br /></>}</>}
-                                {itemDetails.musicStyle !== null && <>{itemDetails.musicStyle !== undefined && <>Styles: {itemDetails.musicStyle.map(l => '"' + l.name + '" ')}<br /></>}</>}
-                                {itemDetails.instrument !== null && <>Instrument: {itemDetails.instrument}<br /></>}
-                                {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo !== itemDetails.kidAgeFrom && <>Ages: {itemDetails.kidAgeFrom + '-' + itemDetails.kidAgeTo}</>}<br /></>}
-                                {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo === itemDetails.kidAgeFrom && <>Ages: {itemDetails.kidAgeFrom}</>}<br /></>}
-                                {itemDetails.kidAgeFrom === null && <>{itemDetails.kidAgeTo !== null && <>Ages: {0 + '-' + itemDetails.kidAgeTo}</>}<br /></>}
-                                {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo === null && <>Ages: {itemDetails.kidAgeFrom + '+'}</>}<br /></>}
+                                {itemDetails.translationLanguages !== null && <>{itemDetails.translationLanguages !== undefined && <><span style={{ fontSize: '12pt' }}>Languages: </span>{itemDetails.translationLanguages.map(l => <Chip label={l.name} style={{ marginRight: '5px' }} />)}<br /></>}</>}
+                                {itemDetails.musicStyle !== null && <>{itemDetails.musicStyle !== undefined && <><span style={{ fontSize: '12pt' }}>Styles: </span> {itemDetails.musicStyle.map(l => <Chip label={l.name} style={{ marginRight: '5px' }} />)}<br /></>}</>}
+                                {itemDetails.instrument !== null && <><span style={{ fontSize: '12pt' }}>Instrument: </span> {itemDetails.instrument}<br /></>}
+                                {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo !== itemDetails.kidAgeFrom && <><span style={{ fontSize: '12pt' }}>Ages: </span> {itemDetails.kidAgeFrom + '-' + itemDetails.kidAgeTo}</>}<br /></>}
+                                {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo === itemDetails.kidAgeFrom && <><span style={{ fontSize: '12pt' }}>Ages: </span> {itemDetails.kidAgeFrom}</>}<br /></>}
+                                {itemDetails.kidAgeFrom === null && <>{itemDetails.kidAgeTo !== null && <><span style={{ fontSize: '12pt' }}>Ages: </span> {0 + '-' + itemDetails.kidAgeTo}</>}<br /></>}
+                                {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo === null && <><span style={{ fontSize: '12pt' }}>Ages: </span> {itemDetails.kidAgeFrom + '+'}</>}<br /></>}
                             </>}
                         </div>
                     </div>
                     <div className='item-contact-rect'>
                         <div className='contact-acc-info'>
                             <div>
-                                Phone number: {itemDetails["phoneNumber"]}<br />
-                                Email: {itemDetails["email"]}<br />
+                                {itemDetails["phoneNumber"] && <><span style={{ fontSize: '12pt' }}>Phone number: </span> {itemDetails["phoneNumber"]}<br /></>}
+                                <span style={{ fontSize: '12pt' }}>Email: </span> {itemDetails["email"]}<br />
                                 {typeOfItem === "Venue" && <>
-                                    Address: {itemDetails.address && <>{itemDetails.address.streetName + ' ' + itemDetails.address.streetNumber + ', ' + itemDetails.address.city}</>}<br />
-                                    {itemDetails["dailyRentCost"] !== '0.00' && <>Cost: {itemDetails["dailyRentCost"]} pln/day<br /></>}
+                                    <span style={{ fontSize: '12pt' }}>Address: </span> {itemDetails.address && <>{itemDetails.address.streetName + ' ' + itemDetails.address.streetNumber + ', ' + itemDetails.address.city}</>}<br />
+                                    {itemDetails["dailyRentCost"] !== '0.00' && <><span style={{ fontSize: '12pt' }}>Cost: </span> {itemDetails["dailyRentCost"]} pln/day<br /></>}
                                 </>}
                                 {typeOfItem === "Catering" && <>
-                                    Service cost: {itemDetails["serviceCost"]} pln
+                                    <span style={{ fontSize: '12pt' }}>Service cost: </span> {itemDetails["serviceCost"]} pln
                                 </>}
                                 {typeOfItem === "Service" && <>
-                                    Service cost: {itemDetails["serviceCost"]} pln
+                                    <span style={{ fontSize: '12pt' }}>Service cost: </span> {itemDetails["serviceCost"]} pln
                                 </>}
 
                             </div>
@@ -321,22 +335,22 @@ export default function ItemDetailsPage(props) {
                         {isMenuEdited &&
                             <>
                                 <p className='item-info-heading'>New menu entry</p>
-                                Name
-                                <input className="input" onChange={e => setDishName(e.target.value)} />
-                                Price
-                                <input className="input" onChange={e => setDishPrice(e.target.value)} />
-                                Type
-                                <select className="input" onChange={e => setDishType(e.target.value)}>
-                                    <option value=''>choose</option>
-                                    {availableDishTypes.map(t => <option value={t}>{t}</option>)}
-                                </select><br />
-                                Description
-                                <textarea className="input" onChange={e => setDishDescription(e.target.value)} />
-                                Vegan
-                                <input type="checkbox" onChange={e => setDishVegan(e.target.value === 'on' ? true : false)} /> Vegeterian
-                                <input type="checkbox" onChange={e => setDishVegetarian(e.target.value === 'on' ? true : false)} /> Gluten free
-                                <input type="checkbox" onChange={e => setDishGlutenFree(e.target.value === 'on' ? true : false)} /><br />
-                                <input type="button" value='Submit' className="button" onClick={handleSubmitMenu} style={{ marginRight: "15px" }} />
+                                <TextField size='small' style={{ marginRight: "15px", width: '250px' }} margin='dense' label='Name' onChange={e => setDishName(e.target.value)} />
+                                <TextField size='small' style={{ marginRight: "15px", width: '250px' }} margin='dense' label="Price" onChange={e => setDishPrice(e.target.value)} />
+                                <FormControl margin='dense' >
+                                    <InputLabel id='select-menu-type'>Type</InputLabel>
+                                    <Select labelId="select-manu-type" label='Type' size='small' style={{ width: '250px' }} onChange={e => setDishType(e.target.value)}>
+                                        {availableDishTypes.map(t => <MenuItem value={t}>{t}</MenuItem>)}
+                                    </Select>
+                                </FormControl>
+                                <br />
+                                <TextField multiline style={{ marginRight: "15px", width: '780px' }} size='small' margin='dense' label='Description' className="input" onChange={e => setDishDescription(e.target.value)} />
+                                <br />
+                                <FormControlLabel control={<Checkbox onChange={e => setDishVegan(e.target.value === 'on' ? true : false)} />} label='Vegan' />
+                                <FormControlLabel control={<Checkbox onChange={e => setDishVegetarian(e.target.value === 'on' ? true : false)} />} label='Vegeterian' />
+                                <FormControlLabel control={<Checkbox onChange={e => setDishGlutenFree(e.target.value === 'on' ? true : false)} />} label='Gluten free' />
+                                <br />
+                                <Button variant='contained' size='small' margin='dense' onClick={handleSubmitMenu} style={{ marginRight: "15px" }}>Submit</Button>
                                 <Button variant='contained' size='small' margin='dense' onClick={() => setIsMenuEdited(false)}>Cancel</Button>
                             </>}
                     </div>}
@@ -389,9 +403,9 @@ export default function ItemDetailsPage(props) {
             {props.authorized === true && props.userData.user && props.userData.user.type === 'C' &&
                 <div className='block'>
                     <p>You can contact the business through the form below</p>
-                    <input placeholder="Subject" onChange={e => setEmailSubject(e.target.value)} /><br /><br />
-                    <textarea placeholder="Body" onChange={e => setEmailText(e.target.value)} style={{ width: '100%' }} /><br /><br />
-                    <button className='button' onClick={sendEmail}>Send</button>
+                    <TextField size='small' margin='dense' label="Subject" onChange={e => setEmailSubject(e.target.value)} /><br />
+                    <TextField size='small' margin='dense' multiline label="Body" onChange={e => setEmailText(e.target.value)} style={{ width: '100%' }} /><br />
+                    <Button variant='contained' size='small' margin='dense' onClick={sendEmail}>Send</Button>
                 </div>
             }
             {typeOfItem !== 'Event' && <>
@@ -439,7 +453,7 @@ export default function ItemDetailsPage(props) {
                         </div>
                         <textarea className='write-review-div' type='text' placeholder='Write your review here' onChange={e => setReview(e.target.value)} />
                         {reviewMessage}
-                        <input className='review-submit-button' type='button' value='Submit' onClick={handleSubmitReview} />
+                        <Button variant='contained' size="medium" value='Submit' onClick={handleSubmitReview}>Submit</Button>
                     </>}
                     {props.authorized === false &&
                         <div className='reviewer-name' style={{ textAlign: 'center' }}>

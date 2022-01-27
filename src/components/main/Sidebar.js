@@ -19,7 +19,9 @@ export default function Sidebar(props) {
   return (
     <Menu>
       <div className='sidebar-user-card' style={{ display: 'grid', gridTemplateColumns: 'auto auto' }}>
-        <Avatar alt={props.userName} src={props.avatar} className='acc-icon' style={{ height: '70px', width: '70px' }} />
+        <a className="menu-item" href={props.myAccount} style={{ textDecoration: 'none' }}>
+          <Avatar alt={props.userName} src={props.avatar} className='acc-icon' style={{ height: '70px', width: '70px' }} />
+        </a>
         <div className='sidebar-user-info' style={{ justifySelf: 'start' }}>
           <a className="menu-item" href={props.myAccount} style={{ textDecoration: 'none' }}>{props.userName}</a><br />
           {logout}

@@ -43,7 +43,7 @@ export default function EventDetailsPage(props) {
     const [isEventCancelled, setIsEventCancelled] = useState('');
     useEffect(() => {
         let userId = props.userId;
-        if(props.userData.type && props.userData.type === 'A'){userId=adminUserId}
+        if(props.userData && props.userData.type && props.userData.type === 'A'){userId=adminUserId}
         if (!isNew) {
             apiFetch(`events/detail?eventId=${id}&customerId=${userId}`).then(res => {
                 props.setHeaderMessage(res.eventStatus === "READY" ? res.name + '(READY)' : res.eventStatus === "CANCELLED" ? res.name + '(CANCELLED)' : res.name);

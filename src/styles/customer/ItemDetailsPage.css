@@ -54,9 +54,7 @@
 }
 
 .contact-acc-info {
-    display              : grid;
-    grid-template-columns: auto;
-    justify-content      : center;
+    padding-left: 70px ;
 }
 
 .contact-acc-pic {

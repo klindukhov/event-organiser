@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import '../../styles/customer/CustomerProfilePage.css';
 import { Link } from 'react-router-dom'
 import apiFetch from '../../api';
-import { Avatar, TextField, Tooltip } from '@mui/material'
+import { Avatar, IconButton, TextField, Tooltip } from '@mui/material'
+import { Delete } from '@mui/icons-material';
 
 export default function CustomerProfilePage(props) {
     const [changes, setChanges] = useState(true);
@@ -57,12 +58,16 @@ export default function CustomerProfilePage(props) {
     const handleSubmit = () => {
         const raw = JSON.stringify({ "address": { "county": " ", "city": " ", "streetName": " ", "streetNumber": " ", "zipCode": " " }, "firstName": name, "lastName": surname, "birthdate": birthdate, "phoneNumber": phoneNumber });
 
-        apiFetch(`customers?id=${props.userId}`, "PUT", raw).catch(error => console.log('error', error));
-        if (avatar.file) {
-            let data = new FormData();
-            data.append("file", avatar.file, avatar.file.name);
-            apiFetch(`customers/avatar/upload?customerId=${props.userId}`, 'POST', data, 's').then(() => window.location.reload()).catch(e=>console.log('error', e))
-        }
+        apiFetch(`customers?id=${props.userId}`, "PUT", raw).then(() => {
+            if (avatar.file) {
+                let data = new FormData();
+                data.append("file", avatar.file, avatar.file.name);
+                apiFetch(`customers/avatar/upload?customerId=${props.userId}`, 'POST', data, 's').then(() => window.location.reload()).catch(e => console.log('error', e))
+            } else {
+                window.location.reload()
+            }
+        }).catch(error => console.log('error', error));
+
     }
 
     const handleInput = () => {
@@ -77,6 +82,10 @@ export default function CustomerProfilePage(props) {
         }
     }
 
+    const handleDeleteAvatar = () => {
+        apiFetch(`customers/avatar/delete?customerId=${props.userId}`, "DELETE").then(() => window.location.reload()).catch(e => console.log('error', e));
+    }
+
     return (
         <div className='customer-profile-main'>
             <div className='customer-profile-rect'>
@@ -86,7 +95,10 @@ export default function CustomerProfilePage(props) {
                         <div className="add-images-wrapper" style={{ width: '250px', height: '250px', margin: '50px', justifySelf: 'center' }}>
                             <label htmlFor='add-images' className="add-images-label">
                                 <Tooltip title='Add image'>
-                                <Avatar src={avatar.pic} alt='profile' style={{ width: '250px', height: '250px', margin: '50px', justifySelf: 'center' }} />
+                                    <Avatar src={avatar.pic} alt='profile' style={{ width: '250px', height: '250px', margin: '50px', justifySelf: 'center' }} />
+                                </Tooltip>
+                                <Tooltip placement='right-start' title='Delete avatar'>
+                                    <IconButton style={{ position: 'relative', zIndex: '3', top: '-330px', left: '300px' }} onClick={handleDeleteAvatar} ><Delete /></IconButton>
                                 </Tooltip>
                             </label>
                             <TextField InputLabelProps={{ shrink: true }} margin="dense" size="small" label='' type='file' className="add-images-input" id='add-images' multiple={true} accept='image/*' onChange={handleAddPics} />
