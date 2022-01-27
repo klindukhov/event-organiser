@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import apiFetch from "../../api";
@@ -26,17 +27,18 @@ export default function ProblemDetailsPage() {
 
     return (<div className="problem-details-main">
         <div className="problem-rect">
-            <p className="problem-heading">Problem information</p>
-            Problem id: {details.id}<br />
-            Concern: "{details.concern}"<br />
-            Description:<br />
-            "{details.description}"
-            <p className="problem-heading">User information</p>
-            User id: {details.user && details.user.id}<br />
-            User type: {details.user && details.user.type}<br />
-            User email: {details.user && details.user.email}<br />
-
-            <input type='button' className='resolve-problem-button' value='Mark as resolved' onClick={handleResolve} />
+            <div className="problem-heading">Problem information</div>
+            <span style={{fontSize:'12pt'}}>Problem id: </span>{details.id}<br />
+            <span style={{fontSize:'12pt'}}>Created at: </span>{details.createdAt}<br />
+            <span style={{fontSize:'12pt'}}>Concern: </span>"{details.concern}"<br />
+            <span style={{fontSize:'12pt'}}>Description: </span>"{details.description}"<br />            
+            <p className="problem-heading">User information <Button size='small' variant='contained'
+            onClick={() => history.push(`/UserDetailsPage${details.user.id}`)}
+            >User details</Button></p>
+            <span style={{fontSize:'12pt'}}>User id: </span>{details.user && details.user.id}<br />
+            <span style={{fontSize:'12pt'}}>User type: </span>{details.user && details.user.type}<br />
+            <span style={{fontSize:'12pt'}}>User email: </span>{details.user && details.user.email}<br />
+            <Button size='medium' variant='contained'  onClick={handleResolve}>Mark as resolved</Button>
         </div>
     </div>)
 }

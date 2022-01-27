@@ -1,7 +1,9 @@
-import { TextField } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Tooltip } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import apiFetch from "../../api";
+import { DataGrid, GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector } from '@mui/x-data-grid'
+import { FileDownload, FileDownloadOutlined} from "@mui/icons-material";
 
 export default function ProblemsPage(props) {
     const history = useHistory();
@@ -19,20 +21,54 @@ export default function ProblemsPage(props) {
             .then(result => setProblems(result))
             .catch(error => console.log('error', error));
     }
-    return (<div className="users-page-main">
+
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+    function CustomToolbar() {
+        return (
+            <GridToolbarContainer>
+                <GridToolbarColumnsButton />
+                <GridToolbarFilterButton />
+                <GridToolbarDensitySelector />
+                <Button onClick={handleClickOpen} size='small'><FileDownloadOutlined />Export</Button>
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {"Choose time frame"}
+                    </DialogTitle>
+                    <DialogContent>
+                        <br/>
+                        <TextField type='date' label='Date from' InputLabelProps={{ shrink: true }} size='small' onChange={e => setTimeFrom(e.target.value)} />{' - '}
+                        <TextField label='Date to' size='small' InputLabelProps={{ shrink: true }} type='date' onChange={e => setTimeTo(e.target.value)} />
+                        <a href={`http://localhost:8080/api/problems/export?dateFrom=${timeFrom === '' ? '2022-01-01' : timeFrom}&dateTo=${timeTo === '' ? '2022-01-01' : timeTo}`} download ><Tooltip title="Download report"><FileDownload /></Tooltip></a>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} autoFocus>
+                            Close
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </GridToolbarContainer>
+        );
+    }
+
+    return (<div className="main" style={{ padding: '5px' }}>
         {problems.length === 0 && 'No unresolved problems'}
-        {problems.length !== 0 && <div className="user-list-element" >
-            <TextField type='date' label='Date from' InputLabelProps={{ shrink: true }} size='small' onChange={e => setTimeFrom(e.target.value)} /> - <TextField label='Date to' size='small' InputLabelProps={{ shrink: true }} type='date' onChange={e => setTimeTo(e.target.value)} />
-            : <a href={`http://localhost:8080/api/problems/export?dateFrom=${timeFrom === '' ? '2022-01-01' : timeFrom}&dateTo=${timeTo === '' ? '2022-01-01' : timeTo}`} download >Download report</a>
-        </div>}
-        {problems.map && problems.map(p => <div className="user-list-element" style={{ cursor: 'pointer' }} key={p.id} onClick={() => history.push(`/ProblemDetailsPage${p.id}`)}>
-            <span style={{fontSize:'12pt'}}>
-                Id:
-            </span> {p.id}{'  '}
-            <span style={{fontSize:'12pt'}}>
-                Concern:
-            </span> {p.concern}
-        </div>)}
+        <DataGrid onRowDoubleClick={e => history.push(`/ProblemDetailsPage${e.id}`)} components={{ Toolbar: CustomToolbar, }} style={{ height: 'calc(100vh - 180px)', width: '1520px', backgroundColor: 'white' }}
+            columns={[{ field: 'id' }, { field: 'userId' }, { field: 'concern', width: 200 }, { field: 'date', width: 200 }, { field: 'description', width: 500 }]}
+            rows={problems.map(p => { return { id: p.id, userId: p.user.id, concern: p.concern, date: p.createdAt, description: p.description } })}
+        />
 
     </div>)
 }

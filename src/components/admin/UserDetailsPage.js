@@ -112,23 +112,23 @@ export default function UserDetailsPage(props) {
     return (<div className="main">
         <div className="block">
             <p className="problem-heading">User information</p>
-            User id: {details.id}<br />
-            User type: {details.type}<br />
-            User email: {details.email}<br />
-            User Name: {details.type === 'C' && details.customer.firstName} {details.type === 'B' && details.business.firstName}<br />
-            User Surname: {details.type === 'C' && details.customer.lastName} {details.type === 'B' && details.business.lastName}<br />
+            <span style={{fontSize:'12pt'}}>User id: </span>{details.id}<br />
+            <span style={{fontSize:'12pt'}}>User type: </span>{details.type}<br />
+            <span style={{fontSize:'12pt'}}>User email: </span>{details.email}<br />
+            <span style={{fontSize:'12pt'}}>User Name: </span>{details.type === 'C' && details.customer.firstName} {details.type === 'B' && details.business.firstName}<br />
+            <span style={{fontSize:'12pt'}}>User Surname: </span>{details.type === 'C' && details.customer.lastName} {details.type === 'B' && details.business.lastName}<br />
             {details.type === 'C' && <>
-                Birthdate: {details.customer.birthdate}<br />
-                Phone number: {details.customer.phoneNumber}<br />
+            <span style={{fontSize:'12pt'}}>Birthdate: </span>{details.customer.birthdate}<br />
+            <span style={{fontSize:'12pt'}}>Phone number: </span>{details.customer.phoneNumber}<br />
             </>
             }
             {details.type === 'B' && <>
-                Business name: {details.business.businessName}<br />
-                Phone number: {details.business.phoneNumber}<br />
-                Verification: {details.business.verificationStatus} {details.business.verificationStatus !== 'VERIFIED' && <Button variant='contained' size='small' onClick={handleVerify}>Mark verified</Button>}<br />
-                Address: {details.business.address.streetName} {details.business.address.streetNumber}, {details.business.address.city}, {details.business.address.zipCode},  {details.business.address.country}<br />
+            <span style={{fontSize:'12pt'}}>Business name: </span>{details.business.businessName}<br />
+            <span style={{fontSize:'12pt'}}>Phone number: </span>{details.business.phoneNumber}<br />
+            <span style={{fontSize:'12pt'}}>Verification: </span>{details.business.verificationStatus} {details.business.verificationStatus !== 'VERIFIED' && <Button variant='contained' size='small' onClick={handleVerify}>Mark verified</Button>}<br />
+            <span style={{fontSize:'12pt'}}>Address: </span>{details.business.address.streetName} {details.business.address.streetNumber}, {details.business.address.city}, {details.business.address.zipCode},  {details.business.address.country}<br />
             </>}
-            Active: {'' + details.active} {details.active && <Button variant='contained' size='small' value='Deactivate' onClick={handleBan}>Deactivate</Button>}
+            <span style={{fontSize:'12pt'}}>Active: </span>{'' + details.active} {details.active && <Button variant='contained' size='small' value='Deactivate' onClick={handleBan}>Deactivate</Button>}
         </div>
         {details.type === 'C' &&
             <div className="block">

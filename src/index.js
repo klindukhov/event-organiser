@@ -6,7 +6,6 @@ import App from './components/main/App';
 import Header from './components/main/Header';
 import Footer from './components/main/Footer';
 import apiFetch from './api.js'
-import Popup from './components/main/Popup';
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from '@mui/material';
 
@@ -68,13 +67,6 @@ const Main = () => {
     window.location.href = '/';
   }
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [popupContent, setPopupContent] = useState();
-
-  const togglePopup = (content) => {
-    setIsOpen(!isOpen);
-    setPopupContent(content);
-  }
 
   const myProps = {
     authorized: authorized,
@@ -84,7 +76,6 @@ const Main = () => {
     setUnauth: setUnauth,
     setHeaderMessage: setHeaderMessage,
     headerMessage: headerMessage,
-    togglePopup: togglePopup
   }
 
   return (
@@ -92,12 +83,6 @@ const Main = () => {
       <BrowserRouter>
         <Header myProps={myProps} />
         <App myProps={myProps} />
-        {isOpen &&
-          <Popup
-            content={popupContent}
-            handleClose={togglePopup}
-          />
-        }
         <Footer myProps={myProps} />
       </BrowserRouter>
     </ThemeProvider>

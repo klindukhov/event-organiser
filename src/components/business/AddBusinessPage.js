@@ -428,7 +428,7 @@ export default function AddBusinessPage(props) {
                     </div>)}
                 </>
             }
-            <p style={{ textAlign: 'center' }}>Business Hours</p>
+            <div style={{ textAlign: 'center' }}>Business Hours {id !== undefined && businessType!=="Catering" &&<><br/><Button variant='contained' onClick={() => history.push(`/BusinessCalendar/${typeOfBusiness}/${id}`)}>Edit availability slots</Button></>}</div>
             {businessHours !== '' && <div className="business-hours">
                 {['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'].map(d =>
                     <div key={d}>

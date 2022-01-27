@@ -7,7 +7,7 @@ import AirlineSeatLegroomNormalIcon from '@mui/icons-material/AirlineSeatLegroom
 import pplIcon from '../../images/pplIcon.png';
 import apiFetch from "../../api";
 
-import { TextField, Button, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Checkbox, InputAdornment } from '@mui/material'
+import { TextField, Button, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Checkbox, InputAdornment, Pagination } from '@mui/material'
 
 
 
@@ -53,8 +53,8 @@ export default function ListPage(props) {
             setLocation(JSON.parse(window.sessionStorage.filters).location);
             body.city = JSON.parse(window.sessionStorage.filters).location;
 
-            if(listType === 'caterings'){
-                forLocationId = '?locationId='+JSON.parse(window.localStorage.getItem('locationDetails')).id;
+            if (listType === 'caterings') {
+                forLocationId = '?locationId=' + JSON.parse(window.localStorage.getItem('locationDetails')).id;
             }
 
         } else {
@@ -407,6 +407,7 @@ export default function ListPage(props) {
             </>}
             {listType !== "events" && (props.authorized === false || (props.authorized === true && props.userData.user.type !== 'B')) && <div className='list-sorting-rect'>
                 <p className='list-displaying-info'>{pageSize !== null ? `Displaying ${1 + pageNo * pageSize}-${(pageNo + 1) * pageSize > totalRes ? totalRes : (pageNo + 1) * pageSize} results out of` : 'Found results: '} {totalRes}</p>
+                <Pagination style={{ justifySelf: 'center' }} count={Math.ceil(totalRes / pageSize)} page={pageNo + 1} onChange={(event, value) => { setPageNo(value - 1); console.log(value) }} shape='rounded' />
                 <div className='select-list-sorting'>
                     <FormControl>
                         <InputLabel id="select-sorting-label">Sort by</InputLabel>
@@ -508,13 +509,8 @@ export default function ListPage(props) {
                 </div>
             }
             {((props.authorized === true && props.userData.user.type === 'C' && typeOfList !== 'Events' && pageSize !== null) || (props.authorized === false && typeOfList !== 'Events' && pageSize !== null)) &&
-                <div className='list-sorting-rect' style={{ display: "grid", gridTemplateColumns: 'auto auto' }} >
-                    <Button style={{ justifySelf: 'start' }} className="button" disabled={pageNo < 1} onClick={() => { setPageNo(pageNo - 1) }}>
-                        Previous page
-                    </Button>
-                    <Button style={{ justifySelf: 'end' }} className="button" disabled={items.length < pageSize} onClick={() => { setPageNo(pageNo + 1) }}>
-                        Next page
-                    </Button>
+                <div className='list-sorting-rect' style={{ display: "grid", gridTemplateColumns: 'auto ' }} >
+                    <Pagination style={{ justifySelf: 'center' }} count={Math.ceil(totalRes / pageSize)} page={pageNo + 1} onChange={(event, value) => { setPageNo(value - 1); console.log(value) }} shape='rounded' />
                 </div>
             }
         </div>)

@@ -20,6 +20,7 @@ import UserDetailsPage from '../admin/UserDetailsPage'
 import ReservationRequestsPage from '../business/ReservationRequestsPage';
 import AddBusinessPage from '../business/AddBusinessPage';
 import ForgotPassword from '../general/ForgotPassword';
+import BusinessCalendar from '../business/CalendarPage';
 
 import ItemDetailsPage from '../customer/ItemDetailsPage';
 import ListPage from '../customer/ListPage';
@@ -46,6 +47,7 @@ const ROUTES = {
   '/ListPage/:typeOfList/:forEventId?': ListPage,
   '/reset:token' : ResetPasswordPage,
   '/forgotPassword' : ForgotPassword,
+  '/BusinessCalendar/:businessType/:id': BusinessCalendar,
   '*': NotFound
 }
 

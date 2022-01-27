@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/business/BusinessProfilePage.css';
-import accIcon from '../../images/accIcon250.png'
 import { Link } from 'react-router-dom'
 import apiFetch from '../../api';
+import { Avatar } from '@mui/material';
 
 export default function BusinessProfilePage(props) {
     const [changes, setChanges] = useState(true);
@@ -76,6 +76,7 @@ export default function BusinessProfilePage(props) {
             .then(() => {
                 setChanges(true);
                 setButtonColor('#F2F4F5');
+                window.location.reload();
             })
             .catch(error => console.log('error', error));
     }
@@ -85,7 +86,12 @@ export default function BusinessProfilePage(props) {
             <div className='business-profile-rect'>
                 <div className='business-pic-and-info'>
                     <div className='business-pic-and-labels'>
-                        <img src={accIcon} alt='profile' className='business-profile-image' />
+                        <Avatar alt='profile' className='business-profile-image' style={{
+                            height: '250px',
+                            width: '250px',
+                            margin: '50px',
+                            justifySelf: 'center'
+                        }} />
                         <div className='business-profile-info-labels'>
                             <p className='business-profile-field-label'>Name:</p>
                             <p className='business-profile-field-label'>Surname:</p>
