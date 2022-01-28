@@ -5,7 +5,7 @@ import '../../styles/customer/ItemDetailsPage.css'
 import 'react-slideshow-image/dist/styles.css'
 import { Slide } from 'react-slideshow-image';
 import StarRatings from 'react-star-ratings';
-import { Avatar, Button, Checkbox, Chip, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField, Tooltip } from '@mui/material'
+import { Avatar, Backdrop, Button, Checkbox, Chip, CircularProgress, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField, Tooltip } from '@mui/material'
 import VeganLogo from '../../images/veganLogo.png'
 import VegetarianLogo from '../../images/vegetarianLogo.png'
 import GlutenFreeLogo from '../../images/glutenFreeLogo.png'
@@ -57,6 +57,7 @@ export default function ItemDetailsPage(props) {
                 .then(result => {
                     setItemDetails(result);
                     setSlideImages(result.images);
+                    setOpen(false);
                     apiFetch(`${aliasItemType}/allowed/${itemType.substring(0, itemType.length - 1)}?${itemType === 'locations' ? 'id' : 'cateringId'}=${id}`).then(res => {
                         setAliasItemTypeDetails(res);
                     }).catch(e => console.log('error', e))
@@ -210,9 +211,19 @@ export default function ItemDetailsPage(props) {
         }
     }
 
+    const [open, setOpen] = useState(false);
+
+    useEffect(() => { setOpen(true) }, [])
+
 
     return (
         <div className='main'>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={open}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <div className='gallery-info-div'>
                 <div className='item-gallery-rect'>
                     <div>
@@ -230,82 +241,86 @@ export default function ItemDetailsPage(props) {
                 </div>
                 <div className='item-info-div'>
                     <div className='item-info-rect'>
-                        <div className='item-info-heading'>
-                            {itemDetails["name"]}
-                            {typeOfItem === "Service" && <>
-                                {itemDetails["firstName"] + ' ' + itemDetails["lastName"]}<br />
-                                {itemDetails["type"]}{itemDetails.musicBandPeopleCount !== null && <>({itemDetails.musicBandPeopleCount} people)</>}
-                                {itemDetails.kidPerformerType !== null && <>, {itemDetails.kidPerformerType}</>}
-                            </>}
-                        </div>
-                        <br />
-                        <div className='item-description-p'>
-                            <span style={{ fontSize: '12pt' }}>
-                                Description: </span>
-                            {itemDetails["description"]} <br />
-                            {typeOfItem === "Venue" && <>
+                        {!open && <>
+                            <div className='item-info-heading'>
+                                {itemDetails["name"]}
+                                {typeOfItem === "Service" && <>
+                                    {itemDetails["firstName"] + ' ' + itemDetails["lastName"]}<br />
+                                    {itemDetails["type"]}{itemDetails.musicBandPeopleCount !== null && <>({itemDetails.musicBandPeopleCount} people)</>}
+                                    {itemDetails.kidPerformerType !== null && <>, {itemDetails.kidPerformerType}</>}
+                                </>}
+                            </div>
+                            <br />
+                            <div className='item-description-p'>
                                 <span style={{ fontSize: '12pt' }}>
-                                    Seats: </span>
-                                {itemDetails["seatingCapacity"]} people<br />
-                                <span style={{ fontSize: '12pt' }}>
-                                    Standing capacity: </span>
-                                {itemDetails["seatingCapacity"]} people<br />
-                                <span style={{ fontSize: '12pt' }}>
-                                    Square meters: </span>
-                                {itemDetails["sizeInSqMeters"]}<br />
-                                <span style={{ fontSize: '12pt' }}>
-                                    Features: </span>
-                                {itemDetails["descriptions"] && itemDetails["descriptions"].map(d => <Chip key={d} label={d} style={{ marginRight: '5px' }} />)}
-                            </>}
-                            {typeOfItem === "Catering" && <>
-                                {itemDetails.cuisines !== null && itemDetails.cuisines !== undefined && <>
-                                    <span style={{ fontSize: '12pt' }}>
-                                        Cuisines: </span> {itemDetails.cuisines.map(l => <Chip label={l.name} style={{ marginRight: '5px' }} />)}<br /></>}
-                                <span style={{ fontSize: '12pt' }}>
-                                    City: </span>
-                                {itemDetails.address && itemDetails.address.city}
-                            </>}
-                            {typeOfItem === "Service" && <>
-                                {itemDetails.translationLanguages !== null && <>{itemDetails.translationLanguages !== undefined && <><span style={{ fontSize: '12pt' }}>Languages: </span>{itemDetails.translationLanguages.map(l => <Chip label={l.name} style={{ marginRight: '5px' }} />)}<br /></>}</>}
-                                {itemDetails.musicStyle !== null && <>{itemDetails.musicStyle !== undefined && <><span style={{ fontSize: '12pt' }}>Styles: </span> {itemDetails.musicStyle.map(l => <Chip label={l.name} style={{ marginRight: '5px' }} />)}<br /></>}</>}
-                                {itemDetails.instrument !== null && <><span style={{ fontSize: '12pt' }}>Instrument: </span> {itemDetails.instrument}<br /></>}
-                                {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo !== itemDetails.kidAgeFrom && <><span style={{ fontSize: '12pt' }}>Ages: </span> {itemDetails.kidAgeFrom + '-' + itemDetails.kidAgeTo}</>}<br /></>}
-                                {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo === itemDetails.kidAgeFrom && <><span style={{ fontSize: '12pt' }}>Ages: </span> {itemDetails.kidAgeFrom}</>}<br /></>}
-                                {itemDetails.kidAgeFrom === null && <>{itemDetails.kidAgeTo !== null && <><span style={{ fontSize: '12pt' }}>Ages: </span> {0 + '-' + itemDetails.kidAgeTo}</>}<br /></>}
-                                {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo === null && <><span style={{ fontSize: '12pt' }}>Ages: </span> {itemDetails.kidAgeFrom + '+'}</>}<br /></>}
-                            </>}
-                        </div>
-                    </div>
-                    <div className='item-contact-rect'>
-                        <div className='contact-acc-info'>
-                            <div>
-                                {itemDetails["phoneNumber"] && <><span style={{ fontSize: '12pt' }}>Phone number: </span> {itemDetails["phoneNumber"]}<br /></>}
-                                <span style={{ fontSize: '12pt' }}>Email: </span> {itemDetails["email"]}<br />
+                                    Description: </span>
+                                {itemDetails["description"]} <br />
                                 {typeOfItem === "Venue" && <>
-                                    <span style={{ fontSize: '12pt' }}>Address: </span> {itemDetails.address && <>{itemDetails.address.streetName + ' ' + itemDetails.address.streetNumber + ', ' + itemDetails.address.city}</>}<br />
-                                    {itemDetails["dailyRentCost"] !== '0.00' && <><span style={{ fontSize: '12pt' }}>Cost: </span> {itemDetails["dailyRentCost"]} pln/day<br /></>}
+                                    <span style={{ fontSize: '12pt' }}>
+                                        Seats: </span>
+                                    {itemDetails["seatingCapacity"]} people<br />
+                                    <span style={{ fontSize: '12pt' }}>
+                                        Standing capacity: </span>
+                                    {itemDetails["seatingCapacity"]} people<br />
+                                    <span style={{ fontSize: '12pt' }}>
+                                        Square meters: </span>
+                                    {itemDetails["sizeInSqMeters"]}<br />
+                                    <span style={{ fontSize: '12pt' }}>
+                                        Features: </span>
+                                    {itemDetails["descriptions"] && itemDetails["descriptions"].map(d => <Chip key={d} label={d} style={{ marginRight: '5px' }} />)}
                                 </>}
                                 {typeOfItem === "Catering" && <>
-                                    <span style={{ fontSize: '12pt' }}>Service cost: </span> {itemDetails["serviceCost"]} pln
+                                    {itemDetails.cuisines !== null && itemDetails.cuisines !== undefined && <>
+                                        <span style={{ fontSize: '12pt' }}>
+                                            Cuisines: </span> {itemDetails.cuisines.map(l => <Chip label={l.name} style={{ marginRight: '5px' }} />)}<br /></>}
+                                    <span style={{ fontSize: '12pt' }}>
+                                        City: </span>
+                                    {itemDetails.address && itemDetails.address.city}
                                 </>}
                                 {typeOfItem === "Service" && <>
-                                    <span style={{ fontSize: '12pt' }}>Service cost: </span> {itemDetails["serviceCost"]} pln
+                                    {itemDetails.translationLanguages !== null && <>{itemDetails.translationLanguages !== undefined && <><span style={{ fontSize: '12pt' }}>Languages: </span>{itemDetails.translationLanguages.map(l => <Chip label={l.name} style={{ marginRight: '5px' }} />)}<br /></>}</>}
+                                    {itemDetails.musicStyle !== null && <>{itemDetails.musicStyle !== undefined && <><span style={{ fontSize: '12pt' }}>Styles: </span> {itemDetails.musicStyle.map(l => <Chip label={l.name} style={{ marginRight: '5px' }} />)}<br /></>}</>}
+                                    {itemDetails.instrument !== null && <><span style={{ fontSize: '12pt' }}>Instrument: </span> {itemDetails.instrument}<br /></>}
+                                    {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo !== itemDetails.kidAgeFrom && <><span style={{ fontSize: '12pt' }}>Ages: </span> {itemDetails.kidAgeFrom + '-' + itemDetails.kidAgeTo}</>}<br /></>}
+                                    {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo === itemDetails.kidAgeFrom && <><span style={{ fontSize: '12pt' }}>Ages: </span> {itemDetails.kidAgeFrom}</>}<br /></>}
+                                    {itemDetails.kidAgeFrom === null && <>{itemDetails.kidAgeTo !== null && <><span style={{ fontSize: '12pt' }}>Ages: </span> {0 + '-' + itemDetails.kidAgeTo}</>}<br /></>}
+                                    {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo === null && <><span style={{ fontSize: '12pt' }}>Ages: </span> {itemDetails.kidAgeFrom + '+'}</>}<br /></>}
                                 </>}
-
                             </div>
-                        </div>
-                        {typeOfItem !== 'Event' && <>
-                            {(props.authorized === false || (props.authorized === true && props.userData.user && props.userData.user.type === 'C')) &&
-                                <Button variant='contained' className='add-to-event-button' onClick={handleAddToEvent}>Add to event</Button>
-                            }
-                            {props.authorized === true && props.userData.user && props.userData.user.type === 'B' &&
-                                <Button variant='contained' className='add-to-event-button' onClick={() => { history.push(`/AddBusinessPage/${typeOfItem}/${id}`) }}>{`Edit ${typeOfItem}`}</Button>
-                            }
                         </>}
-                        {typeOfItem === 'Event' && <>
-                            {props.authorized === true && props.userData.user && props.userData.user.type === 'C' &&
-                                <input type='button' className='add-to-event-button' value='Edit event' onClick={() => history.push(`/EventDetailsPage/${id}`)} />
-                            }
+                    </div>
+                    <div className='item-contact-rect'>
+                        {!open && <>
+                            <div className='contact-acc-info'>
+                                <div>
+                                    {itemDetails["phoneNumber"] && <><span style={{ fontSize: '12pt' }}>Phone number: </span> {itemDetails["phoneNumber"]}<br /></>}
+                                    <span style={{ fontSize: '12pt' }}>Email: </span> {itemDetails["email"]}<br />
+                                    {typeOfItem === "Venue" && <>
+                                        <span style={{ fontSize: '12pt' }}>Address: </span> {itemDetails.address && <>{itemDetails.address.streetName + ' ' + itemDetails.address.streetNumber + ', ' + itemDetails.address.city}</>}<br />
+                                        {itemDetails["dailyRentCost"] !== '0.00' && <><span style={{ fontSize: '12pt' }}>Cost: </span> {itemDetails["dailyRentCost"]} pln/day<br /></>}
+                                    </>}
+                                    {typeOfItem === "Catering" && <>
+                                        <span style={{ fontSize: '12pt' }}>Service cost: </span> {itemDetails["serviceCost"]} pln
+                                    </>}
+                                    {typeOfItem === "Service" && <>
+                                        <span style={{ fontSize: '12pt' }}>Service cost: </span> {itemDetails["serviceCost"]} pln
+                                    </>}
+
+                                </div>
+                            </div>
+                            {typeOfItem !== 'Event' && <>
+                                {(props.authorized === false || (props.authorized === true && props.userData.user && props.userData.user.type === 'C')) &&
+                                    <Button variant='contained' className='add-to-event-button' onClick={handleAddToEvent}>Add to event</Button>
+                                }
+                                {props.authorized === true && props.userData.user && props.userData.user.type === 'B' &&
+                                    <Button variant='contained' className='add-to-event-button' onClick={() => { history.push(`/AddBusinessPage/${typeOfItem}/${id}`) }}>{`Edit ${typeOfItem}`}</Button>
+                                }
+                            </>}
+                            {typeOfItem === 'Event' && <>
+                                {props.authorized === true && props.userData.user && props.userData.user.type === 'C' &&
+                                    <input type='button' className='add-to-event-button' value='Edit event' onClick={() => history.push(`/EventDetailsPage/${id}`)} />
+                                }
+                            </>}
                         </>}
                     </div>
                 </div>
@@ -423,6 +438,7 @@ export default function ItemDetailsPage(props) {
                 </div>}</>}
                 <div className='block'>
                     <p className='item-info-heading'>Reviews</p>
+                    {reviews.length === 0 && <p style={{textAlign:'center'}}>No reviews yet</p>}
                     {reviews.length > 0 &&
                         reviews.map(r =>
                             <div key={r.id} className='item-review-div'>

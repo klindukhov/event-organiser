@@ -4,7 +4,7 @@ import { useHistory, useParams } from "react-router-dom";
 import apiFetch from "../../api";
 import '../../styles/business/AddBusinessPage.css'
 import TextField from '@mui/material/TextField'
-import { Button, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from "@mui/material";
+import { Backdrop, Button, Checkbox, CircularProgress, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from "@mui/material";
 
 export default function AddBusinessPage(props) {
     const { id } = useParams();
@@ -80,7 +80,7 @@ export default function AddBusinessPage(props) {
                     default:
                         break;
                 }
-
+                setOpen(false);
             }).catch(e => console.log('error', e));
         }
     }, [typeOfBusiness])
@@ -278,12 +278,13 @@ export default function AddBusinessPage(props) {
         temp.splice(temp.indexOf(e), 1);
         setPics(temp);
 
-        if(e.file === 'none'){
+        if (e.file === 'none') {
             setPicsToDelete([...picsToDelete, e.id]);
         }
     }
 
     const handleDeleteBusiness = () => {
+        setOpen(true);
         if (businessType === 'Catering') {
             apiFetch(`caterings/delete?id=${id}`, 'DELETE').then(() => history.push('/ListPage/Caterings')).catch(error => console.log('error', error))
         }
@@ -293,6 +294,7 @@ export default function AddBusinessPage(props) {
     }
 
     const handleSubmitChanges = () => {
+        setOpen(true);
         let body = { ...businessDetails };
         body.email = email;
         body.description = description;
@@ -353,9 +355,18 @@ export default function AddBusinessPage(props) {
             .catch(e => console.log('error', e))
 
     }
+    
+    const [open, setOpen] = useState(false);
+    useEffect(() => {if(id !== undefined){setOpen(true)}}, [])
 
 
     return (<div className="main">
+        <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={open}
+        >
+            <CircularProgress color="inherit" />
+        </Backdrop>
         <div className="block">
 
             <TextField InputLabelProps={id !== undefined ? { shrink: id !== undefined } : ''} margin="dense" size="small" label='Email' style={{ width: '250px' }} value={email} onChange={e => setEmail(e.target.value)} /><br />
