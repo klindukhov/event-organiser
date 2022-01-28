@@ -15,45 +15,13 @@ const Header = (props) => {
   const [accType, setAccType] = useState('');
   const [logoLink, setLogoLink] = useState('/');
   const [avatar, setAvatar] = useState('');
-
-  const [theme, setTheme] = useState('');
+  
   useEffect(() => {
     let r = document.querySelector(':root');
-    if (window.sessionStorage.getItem('theme') !== null) {
-      setTheme(window.sessionStorage.getItem('theme'));
-      if (window.sessionStorage.getItem('theme') === '\u263E') {
-        r.style.setProperty('--bg', '#F2F4F5');
+    r.style.setProperty('--bg', '#F2F4F5');
         r.style.setProperty('--txt', '#47525e');
         r.style.setProperty('--blockbg', 'white');
-      } else if (window.sessionStorage.getItem('theme') === '\u263C') {
-        r.style.setProperty('--bg', 'black');
-        r.style.setProperty('--txt', 'white');
-        r.style.setProperty('--blockbg', '#47525e');
-      }
-    } else {
-      r.style.setProperty('--bg', '#F2F4F5');
-      r.style.setProperty('--txt', '#47525e');
-      r.style.setProperty('--blockbg', 'white');
-      setTheme('\u263E');
-    }
   }, [])
-
-  const handleThemeChange = () => {
-    let r = document.querySelector(':root');
-    if (theme === '\u263C') {
-      r.style.setProperty('--bg', '#F2F4F5');
-      r.style.setProperty('--txt', '#47525e');
-      r.style.setProperty('--blockbg', 'white');
-      setTheme('\u263E');
-      window.sessionStorage.setItem('theme', '\u263E');
-    } else if (theme === '\u263E') {
-      r.style.setProperty('--bg', 'black');
-      r.style.setProperty('--txt', 'white');
-      r.style.setProperty('--blockbg', '#47525e');
-      setTheme('\u263C');
-      window.sessionStorage.setItem('theme', '\u263C');
-    }
-  }
 
 
   useEffect(() => {
@@ -102,7 +70,7 @@ const Header = (props) => {
   return (
     <div className="header-main">
       <header className='header'>
-        <Sidebar props={props.myProps} myAccount={myAccount} avatar={avatar} changeTheme={handleThemeChange} userName={userName} accType={accType} />
+        <Sidebar props={props.myProps} myAccount={myAccount} avatar={avatar} userName={userName} accType={accType} />
         <div className="logo">
           <img alt='logo' src={Logo} className='header-logo' onClick={() => history.push(logoLink)} />
         </div>
