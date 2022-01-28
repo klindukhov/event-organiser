@@ -434,7 +434,7 @@ export default function ListPage(props) {
                         <div className='overlay-listing' >
                             <div className='overlay-listing-left'>
                                 {typeOfList === 'Events' && <>
-                                    {c.name}<br />
+                                    {c.name} <br />
                                     {c.date}, {c.startTime}{c.endTime !== c.startTime && '- ' + c.endTime}
                                 </>}
                                 {typeOfList === "Services" && <>
@@ -444,15 +444,11 @@ export default function ListPage(props) {
                                     {c.name}<br />
                                 </>}
                                 {typeOfList === "Venues" && <>
-                                    {c.name} , {c.address.city}, {c.address.streetName}, {c.address.streetNumber}<br />
+                                    {c.name} {('★').repeat(c.rating)} <br />
                                 </>}
-                                {c.description}
-                                {typeOfList === "Venues" && <>
-                                    {' ' + c.seatingCapacity}
-                                    <AirlineSeatLegroomNormalIcon />
-                                    {' ' + c.standingCapacity}
-                                    <img className='ppl-icon' alt='ppl-icon' src={pplIcon} />
-                                </>}
+                                <div style={{fontSize:'14pt', width:'800px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}>
+                                    {c.description}
+                                </div>
                             </div>
                             <div className='overlay-listing-right'>
                                 {typeOfList === 'Events' && <>
@@ -461,12 +457,18 @@ export default function ListPage(props) {
                                 </>}
                                 {typeOfList === "Services" && <>
                                     Service cost: {c.serviceCost} pln<br />
+                                    {('★').repeat(c.rating)}
                                 </>}
                                 {typeOfList === "Caterings" && <>
                                     Service cost: {c.serviceCost} pln<br />
+                                    {('★').repeat(c.rating)}
                                 </>}
                                 {typeOfList === "Venues" && <>
-                                    From {c.dailyRentCost}pln/day
+                                    From {c.dailyRentCost}pln/day<br />
+                                    {' ' + c.seatingCapacity}
+                                    <AirlineSeatLegroomNormalIcon />
+                                    {' ' + c.standingCapacity}
+                                    <img className='ppl-icon' alt='ppl-icon' src={pplIcon} />
                                 </>}
 
                             </div>

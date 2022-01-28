@@ -25,7 +25,7 @@ export default function ForgotPassword(props) {
     }
 
     return (
-        <div className="signIn-page-content">
+        <div className="main">
 
             <div className="sign-in-rect" style={{height: '300px'}}>
                 <div className="sign-in-h1">

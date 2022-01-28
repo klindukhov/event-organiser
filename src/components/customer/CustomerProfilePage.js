@@ -92,7 +92,7 @@ export default function CustomerProfilePage(props) {
     }
 
     return (
-        <div className='customer-profile-main'>
+        <div className='main'>
             <div className='customer-profile-rect'>
 
                 <div className='customer-pic-and-info'>

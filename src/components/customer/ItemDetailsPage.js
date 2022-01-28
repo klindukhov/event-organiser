@@ -9,6 +9,7 @@ import { Avatar, Backdrop, Button, Checkbox, Chip, CircularProgress, FormControl
 import VeganLogo from '../../images/veganLogo.png'
 import VegetarianLogo from '../../images/vegetarianLogo.png'
 import GlutenFreeLogo from '../../images/glutenFreeLogo.png'
+import AirlineSeatLegroomNormalIcon from '@mui/icons-material/AirlineSeatLegroomNormal';
 
 import pplIcon from '../../images/pplIcon.png';
 
@@ -384,23 +385,27 @@ export default function ItemDetailsPage(props) {
                                         {c.name}<br />
                                     </>}
                                     {aliasItemType === "locations" && <>
-                                        {c.name}, {c.address.city}, {c.address.streetName}, {c.address.streetNumber}<br />
+                                        {c.name}{('★').repeat(c.rating)}<br />
                                     </>}
-                                    {c.description}
-                                    {aliasItemType === "locations" && <>
-                                        <img className='ppl-icon' alt='ppl-icon' src={pplIcon} />
-                                        {c.seatingCapacity}
-                                    </>}
+                                    <div style={{ fontSize: '14pt', width: '800px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                                        {c.description}
+                                    </div>
                                 </div>
                                 <div className='overlay-listing-right'>
                                     {aliasItemType === "services" && <>
                                         Service cost: {c.serviceCost} pln<br />
+                                        {('★').repeat(c.rating)}
                                     </>}
                                     {aliasItemType === "caterings" && <>
                                         Service cost: {c.serviceCost} pln<br />
+                                        {('★').repeat(c.rating)}
                                     </>}
                                     {aliasItemType === "locations" && <>
-                                        From {c.dailyRentCost}pln/day
+                                        From {c.dailyRentCost}pln/day <br />
+                                        {' ' + c.seatingCapacity}
+                                        <AirlineSeatLegroomNormalIcon />
+                                        {' ' + c.standingCapacity}
+                                        <img className='ppl-icon' alt='ppl-icon' src={pplIcon} />
                                     </>}
 
                                 </div>
@@ -424,7 +429,7 @@ export default function ItemDetailsPage(props) {
                 </div>
             }
             {typeOfItem !== 'Event' && <>
-                {itemDetails.businessHours !== null && <> {itemDetails.businessHours !== undefined && <div className='block'>
+                {itemDetails.businessHours !== null && <> {itemDetails.businessHours !== undefined&& itemDetails.businessHours.length > 0 && <div className='block'>
                     <p className='item-info-heading'>Business hours</p>
                     <div className="business-hours">
                         {businessHours.map(d =>
@@ -438,7 +443,7 @@ export default function ItemDetailsPage(props) {
                 </div>}</>}
                 <div className='block'>
                     <p className='item-info-heading'>Reviews</p>
-                    {reviews.length === 0 && <p style={{textAlign:'center'}}>No reviews yet</p>}
+                    {reviews.length === 0 && <p style={{ textAlign: 'center' }}>No reviews yet</p>}
                     {reviews.length > 0 &&
                         reviews.map(r =>
                             <div key={r.id} className='item-review-div'>

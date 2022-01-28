@@ -36,7 +36,7 @@ export default function ResetPasswordPage() {
     const [passButtonText, setPassButtonText] = useState('Show password');
 
     return (
-        <div className="signIn-page-content">
+        <div className="main">
             <div className="sign-in-rect" style={{height: '350px'}}>
                 <div className="sign-in-h1">
                     Reset password

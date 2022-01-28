@@ -101,7 +101,7 @@ function SignUpPageContent(props) {
 
 
     return (
-        <div className="signUp-page-content">
+        <div className="main">
 
             <div className="sign-up-rect">
                 <div className="sign-in-h1">

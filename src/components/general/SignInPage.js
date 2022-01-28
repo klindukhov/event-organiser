@@ -54,7 +54,7 @@ function SignInPageContent(props) {
 
 
     return (
-        <div className="signIn-page-content">
+        <div className="main">
 
             <div className="sign-in-rect" >
                 <div className="sign-in-h1">

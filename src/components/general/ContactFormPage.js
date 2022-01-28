@@ -37,7 +37,7 @@ export default function ContactFormPage(props) {
     }
 
     return (
-        <div className='contact-form-main'>
+        <div className='main'>
             <div className='contact-form-rect'>
                 <p className='contact-form-heading'>Contact-form</p>
 
