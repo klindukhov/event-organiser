@@ -68,7 +68,7 @@ export default function ReservationRequestsPage(props) {
         }
 
         return (<>
-            <Button variant='contained' onClick={() => { setOpen(true) }}>Open order</Button>
+            <Button variant='contained' onClick={() => { setOpen(true) }}>Show order</Button>
         </>)
     }
 
@@ -198,22 +198,23 @@ export default function ReservationRequestsPage(props) {
     function CustomToolbar() {
         return (
             <GridToolbarContainer>
-                <ToggleButtonGroup value={bType} size='small' style={{ marginRight: '20px' }} onChange={handleEvents}>
-                    <ToggleButton style={{ width: '100px' }} value='Caterings'>Caterings</ToggleButton>
-                    <ToggleButton style={{ width: '100px' }} value='Services'>Services</ToggleButton>
-                    <ToggleButton style={{ width: '100px' }} value='Venues'>Venues</ToggleButton>
-                </ToggleButtonGroup>
+                <div>
+                    <ToggleButtonGroup value={bType} size='small' style={{ marginRight: '710px' }} onChange={handleEvents}>
+                        <ToggleButton style={{ width: '200px' }} value='Caterings'>Caterings</ToggleButton>
+                        <ToggleButton style={{ width: '200px' }} value='Services'>Services</ToggleButton>
+                        <ToggleButton style={{ width: '200px' }} value='Venues'>Venues</ToggleButton>
+                    </ToggleButtonGroup>    
 
-                <ToggleButtonGroup value={isRequests ? 'requests' : 'bookings'} size='small' onChange={handleEvents}>
-                    <ToggleButton style={{ width: '100px' }} value={'requests'}>Requests</ToggleButton>
-                    <ToggleButton style={{ width: '100px' }} value={'bookings'}>Bookings</ToggleButton>
-                </ToggleButtonGroup>
-
+                    <ToggleButtonGroup value={isRequests ? 'requests' : 'bookings'} size='small'onChange={handleEvents}>
+                        <ToggleButton style={{ width: '100px' }} value={'requests'}>Requests</ToggleButton>
+                        <ToggleButton style={{ width: '100px' }} value={'bookings'}>Bookings</ToggleButton>
+                    </ToggleButtonGroup>
+                </div>
             </GridToolbarContainer>
         );
     }
 
-    return (<div className='main' style={{padding:'5px'}}>
+    return (<div className='main' style={{ padding: '5px' }}>
         <Dialog
             open={open}
             onClose={handleClose}

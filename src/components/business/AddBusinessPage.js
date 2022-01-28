@@ -217,7 +217,7 @@ export default function AddBusinessPage(props) {
         if (e.target.checked) {
             t.push({ "name": e.target.value });
         } else {
-            t.splice(t.indexOf({ "name": e.target.value }), 1);
+            t.splice(t.indexOf(t.find(el=>el.name===e.target.value)), 1);
         }
         setCuisines(t);
     }
@@ -227,7 +227,7 @@ export default function AddBusinessPage(props) {
         if (e.target.checked) {
             t.push({ "name": e.target.value });
         } else {
-            t.splice(t.indexOf({ "name": e.target.value }), 1);
+            t.splice(t.indexOf(t.find(el=>el.name===e.target.value)), 1);
         }
         setMusicStyles(t);
     }
@@ -237,7 +237,7 @@ export default function AddBusinessPage(props) {
         if (e.target.checked) {
             t.push({ "name": e.target.value });
         } else {
-            t.splice(t.indexOf({ "name": e.target.value }), 1);
+            t.splice(t.indexOf(t.find(el=>el.name===e.target.value)), 1);
         }
         setLanguages(t);
     }
@@ -418,7 +418,7 @@ export default function AddBusinessPage(props) {
                         <div>
                             <TextField InputLabelProps={id !== undefined ? { shrink: id !== undefined } : ''} disabled={id !== undefined} margin="dense" size="small" label='Instrument' style={{ width: '250px' }} value={instrument} onChange={e => setInstrument(e.target.value)} /><br />
                             {availableMusicStyles.map(o => <div key={o}>
-                                <FormControlLabel margin="dense" size="small" disabled={id !== undefined} control={<Checkbox value={o} checked={id !== undefined ? musicStyles.includes(o) : musicStyles.some(c => c.name === o)} onChange={handleMusicStyles} />} label={o} />
+                                <FormControlLabel margin="dense" size="small" disabled={id !== undefined} control={<Checkbox value={o} checked={musicStyles.some(c => c.name === o)} onChange={handleMusicStyles} />} label={o} />
                             </div>)}
                         </div>
                     }
