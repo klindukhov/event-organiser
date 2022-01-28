@@ -2,67 +2,33 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import apiFetch from '../../api';
 import '../../styles/business/ReservationRequestsPage.css'
-import { Accordion, AccordionDetails, AccordionSummary, Button, ListItem, Typography } from '@mui/material';
-import { ExpandMore } from '@mui/icons-material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, ListItem, ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material';
+import { DataGrid, GridToolbarContainer } from '@mui/x-data-grid'
 
 export default function ReservationRequestsPage(props) {
     const history = useHistory();
     // eslint-disable-next-line
     useEffect(() => { props.setHeaderMessage('Reservation Requests') }, [])
 
+    const [columns, setColumns] = useState([]);
+    const [rows, setRows] = useState([]);
+
     const [bType, setBType] = useState('Services');
     const [iType, setIType] = useState('service');
     const [isRequests, setIsRequests] = useState(true);
-
-    const [eventPastColor, setEventPastColor] = useState('#47525e');
-    const [eventFutureColor, setEventFutureColor] = useState('#47525e');
-    const [bookingsColor, setBookingsColor] = useState('#47525e');
-    const [eventAllColor, setEventAllColor] = useState('white');
-    const [requestsColor, setRequestsColor] = useState('white');
-    const [eventPastBackColor, setEventPastBackColor] = useState('#F2F4F5');
-    const [eventFutureBackColor, setEventFutureBackColor] = useState('#F2F4F5');
-    const [bookingsBackColor, setBookingsBackColor] = useState('#F2F4F5');
-    const [eventAllBackColor, setEventAllBackrColor] = useState('#47525e');
-    const [requestsBackColor, setRequestsBackColor] = useState('#47525e');
     const handleEvents = (e) => {
         if (e.target.value === "Services") {
-            setEventPastColor('#47525e');
-            setEventFutureColor('#47525e');
-            setEventAllColor('white');
-            setEventPastBackColor('#F2F4F5');
-            setEventFutureBackColor('#F2F4F5');
-            setEventAllBackrColor('#47525e');
             setIType('service');
             setBType('Services')
         } else if (e.target.value === "Caterings") {
-            setEventPastColor('white');
-            setEventFutureColor('#47525e');
-            setEventAllColor('#47525e');
-            setEventPastBackColor('#47525e');
-            setEventFutureBackColor('#F2F4F5');
-            setEventAllBackrColor("#F2F4F5");
             setIType('catering')
             setBType('Caterings')
         } else if (e.target.value === "Venues") {
-            setEventPastColor('#47525e');
-            setEventFutureColor('white');
-            setEventAllColor('#47525e');
-            setEventPastBackColor('#F2F4F5');
-            setEventFutureBackColor('#47525e');
-            setEventAllBackrColor('#F2F4F5');
             setIType('location')
             setBType('Venues')
         } else if (e.target.value === "requests") {
-            setRequestsColor('white');
-            setRequestsBackColor('#47525e')
-            setBookingsBackColor('#F2F4F5')
-            setBookingsColor('#47525e')
             setIsRequests(true);
         } else if (e.target.value === "bookings") {
-            setRequestsColor('#47525e');
-            setRequestsBackColor('#F2F4F5')
-            setBookingsBackColor('#47525e')
-            setBookingsColor('white')
             setIsRequests(false);
         }
     }
@@ -72,9 +38,139 @@ export default function ReservationRequestsPage(props) {
     // eslint-disable-next-line
     useEffect(() => { getItems() }, [bType, isRequests])
 
+    const getActions = i => {
+        if (isRequests) {
+            return (
+                <>
+                    <Button variant='contained' style={{ marginRight: '20px' }} onClick={() => handleConfirm(i)}>Confirm</Button>
+                    <Button variant='contained' onClick={() => handleReject(i)}>Reject</Button>
+                </>
+            )
+        }
+    }
+
+    const [open, setOpen] = useState(false);
+    const handleClose = () => { setOpen(false) }
+    const [orderContent, setOrderContent] = useState('');
+    const [orderConfirmButton, setOrderConfirmButton] = useState('');
+
+    const getOrder = i => {
+        setOrderContent(
+            <div style={{ width: '400px', height: '500px', overflow: 'auto' }}>
+                {i.order.map(o => <ListItem>{o.amount + ' x ' + o.item.name}</ListItem>)}
+                {i.order.length === 0 && "ⓘ No order has been made yet"}
+            </div>
+        );
+        if (!i.isOrderConfirmed && i.order.length > 0 && !isRequests) {
+            setOrderConfirmButton(
+                <Button variant='contained' size='small' margin='dense' onClick={() => handleConfirmOrder(i.id)} >Confirm order</Button>
+            )
+        }
+
+        return (<>
+            <Button variant='contained' onClick={() => { setOpen(true) }}>Open order</Button>
+        </>)
+    }
+
     const getItems = () => {
         apiFetch(`event/${iType}/business/status?status=${isRequests ? 'NOT_CONFIRMED' : 'CONFIRMED'}&businessId=${props.userId}`)
-            .then(res => setItems(res)).catch(e => console.log('error', e));
+            .then(res => {
+                setItems(res);
+                if (res.length > 0) {
+                    switch (iType) {
+                        case 'location':
+                            setColumns([
+                                { 'field': 'id' },
+                                { 'field': 'Venue', renderCell: (params) => params.value },
+                                { 'field': 'Date' },
+                                { 'field': 'Time from' },
+                                { 'field': 'Time to' },
+                                { 'field': 'Guests' },
+                                isRequests && { 'field': 'actions', renderCell: (params) => params.value, width: 200 }
+                            ]);
+                            setRows(res.map(e => {
+                                return {
+                                    id: e.id,
+                                    venueId: e.location.id,
+                                    Venue: <Tooltip style={{ cursor: 'pointer' }} placement='bottom-start' title='details'><div>{e.location.name}</div></Tooltip>,
+                                    Date: e.date,
+                                    'Time from': e.timeFrom,
+                                    'Time to': e.timeTo,
+                                    Guests: e.guestCount,
+                                    actions: getActions(e)
+                                }
+                            }));
+                            break;
+                        case 'catering':
+                            setColumns([
+                                { 'field': 'id' },
+                                { 'field': 'Catering', renderCell: (params) => params.value },
+                                { 'field': 'Date' },
+                                { 'field': 'Time' },
+                                { 'field': 'Guests' },
+                                { 'field': 'Venue', renderCell: (params) => params.value },
+                                { 'field': 'Comment', renderCell: (params) => params.value, width: 300 },
+                                { 'field': isRequests ? 'actions' : 'Order status', renderCell: (params) => params.value, width: 200 },
+                                !isRequests && { 'field': 'Order', renderCell: (params) => params.value, width: 200 }
+                            ]);
+                            setRows(res.map(e => {
+                                return {
+                                    id: e.id,
+                                    venueId: e.catering.id,
+                                    locationId: e.eventLocation.location.id,
+                                    Catering: <Tooltip style={{ cursor: 'pointer' }} placement='bottom-start' title='details'><div>{e.catering.name}</div></Tooltip>,
+                                    Date: e.eventLocation.date,
+                                    Guests: e.eventLocation.guestCount,
+                                    Comment: <Tooltip placement='bottom-start' title={e.comment}><div>{e.comment}</div></Tooltip>,
+                                    'Time': e.time,
+                                    Venue: <Tooltip style={{ cursor: 'pointer' }} placement='bottom-start' title='details'><div>{e.eventLocation.location.name}</div></Tooltip>,
+                                    actions: getActions(e),
+                                    Order: getOrder(e),
+                                    'Order status': e.isOrderConfirmed ? 'Confirmed' : 'Not confirmed'
+                                }
+                            }));
+                            break;
+                        case 'service':
+                            setColumns([
+                                { 'field': 'id', width: 50 },
+                                { 'field': 'Service', renderCell: (params) => params.value },
+                                { 'field': 'Alias', renderCell: (params) => params.value },
+                                { 'field': 'Name', renderCell: (params) => params.value },
+                                { 'field': 'Surname', renderCell: (params) => params.value },
+                                { 'field': 'Comment', renderCell: (params) => params.value, width: 200 },
+                                { 'field': 'Venue', renderCell: (params) => params.value },
+                                { 'field': 'Date' },
+                                { 'field': 'Time from' },
+                                { 'field': 'Time to' },
+                                { 'field': 'Guests' },
+                                isRequests && { 'field': 'actions', renderCell: (params) => params.value, width: 200 }]);
+                            setRows(res.map(e => {
+                                return {
+                                    id: '3  ',
+                                    venueId: e.optionalService.id,
+                                    locationId: e.locationForEvent.location.id,
+                                    Service: <Tooltip style={{ cursor: 'pointer' }} placement='bottom-start' title='details'><div>{e.optionalService.type}</div></Tooltip>,
+                                    Alias: <Tooltip style={{ cursor: 'pointer' }} placement='bottom-start' title='details'><div>{e.optionalService.alias}</div></Tooltip>,
+                                    Name: <Tooltip style={{ cursor: 'pointer' }} placement='bottom-start' title='details'><div>{e.optionalService.firstName}</div></Tooltip>,
+                                    Surname: <Tooltip style={{ cursor: 'pointer' }} placement='bottom-start' title='details'><div>{e.optionalService.lastName}</div></Tooltip>,
+                                    Comment: <Tooltip placement='bottom-start' title={e.comment}><div>{e.comment}</div></Tooltip>,
+                                    Date: e.locationForEvent.date,
+                                    'Time from': e.timeFrom,
+                                    'Time to': e.timeFrom,
+                                    Venue: <Tooltip style={{ cursor: 'pointer' }} placement='bottom-start' title='details'><div>{e.locationForEvent.location.name}</div></Tooltip>,
+                                    Guests: e.locationForEvent.guestCount,
+                                    actions: getActions(e)
+                                }
+                            }));
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    setColumns([]);
+                    setRows([]);
+                }
+            }).catch(e => console.log('error', e));
     }
     useEffect(() => { console.log(items) }, [items])
 
@@ -90,60 +186,60 @@ export default function ReservationRequestsPage(props) {
         apiFetch(`event/catering/order/confirm?reservationId=${id}`, "PUT").then(res => window.location.reload()).catch(e => console.log("error", e));
     }
 
-    return (<div className='main'>
-        <div className='block' style={{ textAlign: 'center' }}>
-            <Button className='e-c-button-l' value='Caterings' onClick={handleEvents} style={{ color: eventPastColor, backgroundColor: eventPastBackColor }}>Caterings</Button>
-            <Button className='e-c-button-c' value='Services' onClick={handleEvents} style={{ color: eventAllColor, backgroundColor: eventAllBackColor }}>Services</Button>
-            <Button className='e-c-button-r' value='Venues' onClick={handleEvents} style={{ color: eventFutureColor, backgroundColor: eventFutureBackColor }}>Venues</Button>
-            <br />
-            <br />
-            <Button className='e-c-button-l' value='requests' onClick={handleEvents} style={{ color: requestsColor, backgroundColor: requestsBackColor }}>requests</Button>
-            <Button className='e-c-button-r' value='bookings' onClick={handleEvents} style={{ color: bookingsColor, backgroundColor: bookingsBackColor }}>bookings</Button>
-        </div>
-
-        {items && items.length > 0 && items.map(i =>
-            <div className='block' key={i.id}>
-                {isRequests ? 'REQUEST:' : 'BOOKING:'} {i.id}<br />
-                {bType.substring(0, bType.length - 1)}: {i[iType] && i[iType].name} {bType === 'Services' && i.optionalService && i.optionalService.firstName + i.optionalService.firstName} <Button
-                    variant='contained'
-                    onClick={() => history.push(`/ItemDetails/${bType.substring(0, bType.length - 1)}/${bType === 'Services' ? i.optionalService.id : i[iType].id}`)}>{`${bType.substring(0, bType.length - 1)} details`}</Button>
-                <br />
-                {bType === 'Venues' && <>
-                    Date: {i.date} ({i.timeFrom}-{i.timeTo})<br />
-                    Guests: {i.guestCount}<br />
-                </>}
-                {bType === 'Services' && i.locationForEvent && <>
-                    Date: {i.locationForEvent.date} ({i.timeFrom}-{i.timeTo})<br />
-                    Comment:
-                    "{i.comment}"<br />
-                </>}
-                {bType === 'Caterings' && <>
-                    Time: {i.time}<br />
-                    Comment:
-                    "{i.comment}"<br />
-                    {!isRequests && <Accordion style={{ width: '300px' }} margin='dense'>
-                        <AccordionSummary
-                            expandIcon={<ExpandMore />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                        >
-                            <Typography>Order </Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Typography>
-                                {i.order && i.order.map(o => <ListItem>{o.amount + ' x ' + o.item.name}</ListItem>)}
-                            </Typography>
-                        </AccordionDetails>
-                    </Accordion>}
-                    {!i.isOrderConfirmed && !isRequests && <Button variant='contained' size='small' margin='dense' onClick={() => handleConfirmOrder(i.id)} >Confirm order</Button>}
-                </>}
-                {isRequests && <Button variant='contained' onClick={() => handleConfirm(i)}>Confirm</Button>}{" "}
-                {isRequests && <Button variant='contained' onClick={() => handleReject(i)}>Reject</Button>}
-
-            </div>)
+    const handleCellClick = e => {
+        if (e.field === bType.substring(0, bType.length - 1) || e.field === 'Alias' || e.field === 'Name' || e.field === 'Surname') {
+            history.push(`/ItemDetails/${bType.substring(0, bType.length - 1)}/${e.row.venueId}`)
         }
+        if (e.field === 'Venue' && bType !== 'Venues') {
+            history.push(`/ItemDetails/Venue/${e.row.locationId}`)
+        }
+    }
 
+    function CustomToolbar() {
+        return (
+            <GridToolbarContainer>
+                <ToggleButtonGroup value={bType} size='small' style={{ marginRight: '20px' }} onChange={handleEvents}>
+                    <ToggleButton style={{ width: '100px' }} value='Caterings'>Caterings</ToggleButton>
+                    <ToggleButton style={{ width: '100px' }} value='Services'>Services</ToggleButton>
+                    <ToggleButton style={{ width: '100px' }} value='Venues'>Venues</ToggleButton>
+                </ToggleButtonGroup>
 
+                <ToggleButtonGroup value={isRequests ? 'requests' : 'bookings'} size='small' onChange={handleEvents}>
+                    <ToggleButton style={{ width: '100px' }} value={'requests'}>Requests</ToggleButton>
+                    <ToggleButton style={{ width: '100px' }} value={'bookings'}>Bookings</ToggleButton>
+                </ToggleButtonGroup>
+
+            </GridToolbarContainer>
+        );
+    }
+
+    return (<div className='main' style={{padding:'5px'}}>
+        <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <DialogTitle id="alert-dialog-title">
+                {"Order"}
+            </DialogTitle>
+            <DialogContent>
+                {orderContent}
+            </DialogContent>
+            <DialogActions>
+                {orderConfirmButton}
+                <Button onClick={handleClose} autoFocus>
+                    Close
+                </Button>
+            </DialogActions>
+        </Dialog>
+        <DataGrid
+            components={{ Toolbar: CustomToolbar }}
+            onCellDoubleClick={handleCellClick}
+            style={{ height: 'calc(100vh - 180px)', width: '1520px', backgroundColor: 'white' }}
+            columns={columns}
+            rows={rows}
+        />
     </div>)
 }
 

@@ -29,9 +29,9 @@ export default function ContactFormPage(props) {
 
         apiFetch(`problems?userId=${props.userId}`, "POST", raw).then(() => {
             setDescription('');
+            setOpen(true);
         }).catch(error => console.log('error', error));
         
-        setOpen(true);
 
 
     }

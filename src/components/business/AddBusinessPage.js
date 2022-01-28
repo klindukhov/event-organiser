@@ -190,13 +190,13 @@ export default function AddBusinessPage(props) {
     const [cuisines, setCuisines] = useState([]);
     const [availableCuisines, setAvailableCuisines] = useState([]);
     const [businessHours, setBusinessHours] = useState([
-        { "day": "MONDAY", "timeFrom": "00:00", "timeTo": "00:00" },
-        { "day": "TUESDAY", "timeFrom": "00:00", "timeTo": "00:00" },
-        { "day": "WEDNESDAY", "timeFrom": "00:00", "timeTo": "00:00" },
-        { "day": "THURSDAY", "timeFrom": "00:00", "timeTo": "00:00" },
-        { "day": "FRIDAY", "timeFrom": "00:00", "timeTo": "00:00" },
-        { "day": "SATURDAY", "timeFrom": "00:00", "timeTo": "00:00" },
-        { "day": "SUNDAY", "timeFrom": "00:00", "timeTo": "00:00" }
+        { "day": "MONDAY", "timeFrom": "08:00", "timeTo": "23:59" },
+        { "day": "TUESDAY", "timeFrom": "08:00", "timeTo": "23:59" },
+        { "day": "WEDNESDAY", "timeFrom": "08:00", "timeTo": "23:59" },
+        { "day": "THURSDAY", "timeFrom": "08:00", "timeTo": "23:59" },
+        { "day": "FRIDAY", "timeFrom": "08:00", "timeTo": "23:59" },
+        { "day": "SATURDAY", "timeFrom": "08:00", "timeTo": "23:59" },
+        { "day": "SUNDAY", "timeFrom": "08:00", "timeTo": "23:59" }
     ]);
     const [pics, setPics] = useState([]);
     const [picsToDelete, setPicsToDelete] = useState([]);
