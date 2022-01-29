@@ -36,6 +36,7 @@
     text-decoration: none;
     display: grid;
     justify-content: center;
+    justify-items: center;
     width: 200px;
   }
   .theme-button{

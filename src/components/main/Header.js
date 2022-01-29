@@ -24,6 +24,8 @@ const Header = (props) => {
     r.style.setProperty('--blockbg', 'white');
     if ((props.myProps.authorized === true && props.myProps.userData.user && props.myProps.userData.user.type === 'C') || props.myProps.authorized === false) {
       r.style.setProperty('--bgimg', `url(${bgimg})`)
+    }else{
+      r.style.setProperty('--bgimg', `var(--bg)`)
     }
     //eslint-disable-next-line
   }, [props.myProps.authorized])
