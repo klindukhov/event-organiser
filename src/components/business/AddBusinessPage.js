@@ -478,8 +478,8 @@ export default function AddBusinessPage(props) {
                 {['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'].map(d =>
                     <div key={d}>
                         {d}<br />
-                        <TextField InputLabelProps={{ shrink: true }} disabled={id !== undefined} margin="dense" size="small" label='From' type='time' id={d} value={businessHours.find(b => b.day === d).timeFrom} onChange={handleOpenTime} />
-                        <TextField InputLabelProps={{ shrink: true }} disabled={id !== undefined} margin="dense" size="small" label='To' type='time' id={d} value={businessHours.find(b => b.day === d).timeTo} onChange={handleCloseTime} />
+                        <TextField InputLabelProps={{ shrink: true }} disabled={id !== undefined} margin="dense" size="small" label='From' type='time' id={d} value={businessHours.find(b => b.day === d) && businessHours.find(b => b.day === d).timeFrom} onChange={handleOpenTime} />
+                        <TextField InputLabelProps={{ shrink: true }} disabled={id !== undefined} margin="dense" size="small" label='To' type='time' id={d} value={businessHours.find(b => b.day === d) && businessHours.find(b => b.day === d).timeTo} onChange={handleCloseTime} />
                     </div>)}
             </div>}
             <p style={{ textAlign: 'center' }}>Images </p>
