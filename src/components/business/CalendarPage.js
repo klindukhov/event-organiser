@@ -21,18 +21,17 @@ export default function BusinessCalendar(props) {
 
 
     const onEventResize = (data) => {
-        let t = new Array(...events);
-        t.find(e => e.id === data.event.id).start = data.start;
-        t.find(e => e.id === data.event.id).end = data.end;
-        let raw = [{
-            date: moment(data.start).format('YYYY-MM-DD'),
-            timeFrom: moment(data.start).format('HH:mm:ss'),
-            timeTo: moment(data.end).format('HH:mm:ss')
-        }];
+        if (data.event.title !== 'BOOKED') {
+            let raw = [{
+                date: moment(data.start).format('YYYY-MM-DD'),
+                timeFrom: moment(data.start).format('HH:mm:ss'),
+                timeTo: moment(data.end).format('HH:mm:ss')
+            }];
 
-        apiFetch(`availability/${businessType.substring(0, businessType.length - 1)}?id=${id}`, "POST", JSON.stringify(raw))
-            .then(() => { setBopen(true); getEvents(); })
-            .catch(e => console.log('error', e))
+            apiFetch(`availability/${businessType.substring(0, businessType.length - 1)}?id=${id}`, "POST", JSON.stringify(raw))
+                .then(() => { setBopen(true); getEvents(); })
+                .catch(e => console.log('error', e))
+        }
     };
 
     const getEvents = () => {
@@ -91,7 +90,7 @@ export default function BusinessCalendar(props) {
     const handleSelectSlot = (data) => {
         let isDayEmpty = true;
         events.forEach(e => {
-            if(moment(e.start).format('YYYY-MM-DD') === moment(data.start).format('YYYY-MM-DD')){
+            if (moment(e.start).format('YYYY-MM-DD') === moment(data.start).format('YYYY-MM-DD')) {
                 isDayEmpty = false;
             }
         });
