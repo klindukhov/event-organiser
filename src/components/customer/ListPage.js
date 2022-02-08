@@ -163,7 +163,7 @@ export default function ListPage(props) {
     useEffect(() => {
         apiFetch(`locations/allowed/cities`).then(result => setCities(result)).catch(error => console.log('error', error));
         if (typeOfList === "Venues") {
-            apiFetch('location_description/allowed/all').then(res => setAvailableDescriptions(res)).catch(e => console.log('error', e));
+            apiFetch('location_description/allowed/all').then(res => { setAvailableDescriptions(res) }).catch(e => console.log('error', e));
             try {
                 setLocation(JSON.parse(window.sessionStorage.getItem('filters')).location);
                 setGuestNum(JSON.parse(window.sessionStorage.getItem('filters')).guestNum);
@@ -319,7 +319,7 @@ export default function ListPage(props) {
                 {typeOfList !== "Events" &&
                     <div className="block">
                         <FormControl margin="dense">
-                            <InputLabel id="select-city-label">City</InputLabel>
+                            <InputLabel id="select-city-label" size="small">City</InputLabel>
                             <Select labelId="select-city-label" value={location} style={{ width: '200px' }} size="small" label="City" onChange={e => setLocation(e.target.value)}>
                                 {cities.map(c => <MenuItem value={c} key={c}>{c}</MenuItem>)}
                             </Select>
@@ -336,12 +336,12 @@ export default function ListPage(props) {
                                     <InputAdornment position="start">
                                         zł
                                     </InputAdornment>
-                            }} className='venue-input-number' label='From' type="number" onChange={e => setLowestPriceFilter(e.target.value)} /> _ <TextField margin="dense" size="small" InputLabelProps={{ shrink: true }} InputProps={{
+                            }} label='From' type="number" style={{width: '100px'}} onChange={e => setLowestPriceFilter(e.target.value)} /> _ <TextField margin="dense" size="small" InputLabelProps={{ shrink: true }} InputProps={{
                                 startAdornment:
                                     <InputAdornment position="start">
                                         zł
                                     </InputAdornment>
-                            }} label='To' className='venue-input-number' type="number" onChange={e => setHighestPriceFilter(e.target.value)} />
+                            }} label='To' type="number" style={{width: '100px'}} onChange={e => setHighestPriceFilter(e.target.value)} />
                         </div>
 
                         <div className="event-date">
@@ -389,8 +389,10 @@ export default function ListPage(props) {
                                 Must have:
                                 <br />
                                 <div className="must-haves">
-                                    {availableDescriptions.map(d => <div key={d}>
-                                        <FormControlLabel control={<Checkbox value={d} onChange={handleDescriptions} />} label={d} />
+                                    {availableDescriptions.map(d => <div key={d.id}>
+                                        <Tooltip title={d.description}>
+                                            <FormControlLabel control={<Checkbox value={d.id} onChange={handleDescriptions} />} label={d.id} />
+                                        </Tooltip>
                                     </div>)}
                                 </div>
                             </>
@@ -428,9 +430,9 @@ export default function ListPage(props) {
                 </div>
             </div>}
             {props.authorized === true && props.userData.user.type === 'B' && props.userData.verificationStatus === "VERIFIED" &&
-                <div className='block' style={{ textAlign: 'center'}} >
+                <div className='block' style={{ textAlign: 'center' }} >
                     <Button variant='outlined' size='medium' onClick={() => history.push('/AddBusinessPage/' + typeOfList.substring(0, typeOfList.length - 1))}>
-                    Add new +
+                        Add new +
                     </Button>
                 </div>
             }
