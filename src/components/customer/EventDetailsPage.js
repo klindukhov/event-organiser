@@ -6,8 +6,12 @@ import { useHistory } from 'react-router';
 import pplIcon from '../../images/pplIcon.png';
 import { useParams } from 'react-router-dom';
 import apiFetch from '../../api';
-import { TextField, Button, IconButton, Select, FormControl, InputLabel, MenuItem } from '@mui/material'
+import { TextField, Button, IconButton, Select, FormControl, InputLabel, MenuItem, Tooltip } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete';
+
+import VeganLogo from '../../images/veganLogo.png'
+import VegetarianLogo from '../../images/vegetarianLogo.png'
+import GlutenFreeLogo from '../../images/glutenFreeLogo.png'
 
 
 
@@ -43,7 +47,7 @@ export default function EventDetailsPage(props) {
     const [isEventCancelled, setIsEventCancelled] = useState('');
     useEffect(() => {
         let userId = props.userId;
-        if(props.userData && props.userData.type && props.userData.type === 'A'){userId=adminUserId}
+        if (props.userData && props.userData.type && props.userData.type === 'A') { userId = adminUserId }
         if (!isNew) {
             apiFetch(`events/detail?eventId=${id}&customerId=${userId}`).then(res => {
                 props.setHeaderMessage(res.eventStatus === "READY" ? res.name + '(READY)' : res.eventStatus === "CANCELLED" ? res.name + '(CANCELLED)' : res.name);
@@ -378,11 +382,14 @@ export default function EventDetailsPage(props) {
                 catStatus = false;
             }
         })
-        bookedServices.forEach(e => {
-            if (e.confirmationStatus === "NOT_CONFIRMED") {
-                serStatus = false;
-            }
-        })
+        if (bookedServices !== null) {
+            bookedServices.forEach(e => {
+                if (e.confirmationStatus === "NOT_CONFIRMED") {
+                    serStatus = false;
+                }
+            })
+        }
+
         if (locStatus === "CONFIRMED" && catStatus && serStatus) {
             return true;
         } else {
@@ -397,19 +404,23 @@ export default function EventDetailsPage(props) {
     }
 
     const bookVenue = () => {
-        console.log(JSON.parse(window.localStorage.getItem('locationDetails')).id);
-        apiFetch(`locations/allowed/available?locationId=${JSON.parse(window.localStorage.getItem('locationDetails')).id}&date=${eDate}&timeFrom=${eStart}&timeTo=${eEnd}`).then(res => {
-            if (res === true) {
-                apiFetch(`event/location?customerId=${props.userId}&eventId=${id}&locationId=${JSON.parse(window.localStorage.getItem('locationDetails')).id}`, "POST",
-                    JSON.stringify({ "timeFrom": eStart, "timeTo": eEnd, "guestCount": guestNum }))
-                    .then(() => {
-                        window.location.reload();
-                    })
-                    .catch(error => console.log('error', error));
-            } else {
-                alert('Chosen location unavaliable for dates of event');
-            }
-        })
+        if (props.authorized) {
+            apiFetch(`locations/allowed/available?locationId=${JSON.parse(window.localStorage.getItem('locationDetails')).id}&date=${eDate}&timeFrom=${eStart}&timeTo=${eEnd}`).then(res => {
+                if (res === true) {
+                    apiFetch(`event/location?customerId=${props.userId}&eventId=${id}&locationId=${JSON.parse(window.localStorage.getItem('locationDetails')).id}`, "POST",
+                        JSON.stringify({ "timeFrom": eStart, "timeTo": eEnd, "guestCount": guestNum }))
+                        .then(() => {
+                            window.location.reload();
+                        })
+                        .catch(error => console.log('error', error));
+                } else {
+                    alert('Chosen location unavaliable for dates of event');
+                }
+            })
+        } else {
+            history.push('/SignIn');
+        }
+
     }
 
     const cancelEvent = () => {
@@ -480,7 +491,7 @@ export default function EventDetailsPage(props) {
                         {locStatus === '' &&
                             <Button style={{ fontSize: '30pt' }} onClick={() => history.push(`/ListPage/Venues/${id}`)} >+</Button>
                         }
-                        {locStatus === 'NOT_CONFIRMED' && <><br/>ⓘ You will be able to pick caterigs, services, and invite guests to your event after the reservation is confirmed by venue provider</>}
+                        {locStatus === 'NOT_CONFIRMED' && <><br />ⓘ You will be able to pick caterigs, services, and invite guests to your event after the reservation is confirmed by venue provider</>}
                     </p>
                 }
                 {(!isLocPicked || JSON.parse(window.localStorage.getItem('locationDetails')) === null) &&
@@ -551,13 +562,22 @@ export default function EventDetailsPage(props) {
                                                 {cateringItemTypes[c.catering.id] && cateringItemTypes[c.catering.id].map(t => <div key={t}>
                                                     <p className='item-info-heading'>{t}s</p>
                                                     {c.catering.cateringItems.filter(l => l.type === t).map(item => <div className="catering-menu-item" key={item.id}>
-                                                        <div className="menu-item-left">{item.name}<br />
+                                                        <div className="menu-item-left"><span style={{ fontWeight: 'bold' }}>{item.name}</span><br />
                                                             {item.description}<br />
                                                         </div>
-                                                        <div className="menu-item-right">{item.servingPrice}
+                                                        <div className="menu-item-right"><span style={{ fontWeight: 'bold' }}>{item.servingPrice}</span>
                                                             <TextField size='small' label='Quantity' InputLabelProps={{ shrink: true }} type='number' style={{ width: '100px' }} onChange={e => handleOrderEdit(c.id, item.id, e.target.value)} />
                                                             <br />
-                                                            {Object.keys(item).filter(k => item[k] === true).map(i => '"' + i + '" ')}<br />
+                                                            {item.isVegan && <Tooltip title='vegan'>
+                                                                <img alt='vegan' src={VeganLogo} style={{ height: '30px', width: '30px' }} />
+                                                            </Tooltip>}
+                                                            {item.isVegetarian && <Tooltip title='vegetarian'>
+                                                                <img alt='vegan' src={VegetarianLogo} style={{ height: '30px', width: '30px' }} />
+                                                            </Tooltip>}
+                                                            {item.isGlutenFree && <Tooltip title='gluten free'>
+                                                                <img alt='vegan' src={GlutenFreeLogo} style={{ height: '30px', width: '30px' }} />
+                                                            </Tooltip>}
+                                                            <br />
                                                         </div>
                                                     </div>)}
                                                 </div>)}

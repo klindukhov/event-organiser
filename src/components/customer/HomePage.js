@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import '../../styles/customer/HomePage.css';
 import venues from '../../images/venues.png';
 import entertainment from '../../images/entertainment.png';
@@ -7,6 +7,7 @@ import catering from '../../images/catering.png';
 import { useEffect } from 'react';
 import { useState } from 'react/cjs/react.development';
 import apiFetch from '../../api';
+import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
 
 export default function HomePage(props) {
@@ -27,7 +28,7 @@ export default function HomePage(props) {
       .then(result => setCities(result))
       .catch(error => console.log('error', error));
 
-      apiFetch(`events/types/allowed/all`)
+    apiFetch(`events/types/allowed/all`)
       .then(result => setEventTypes(result))
       .catch(error => console.log('error', error));
   }, [])
@@ -56,25 +57,33 @@ export default function HomePage(props) {
         <br />
         <br />
         <br />
-        <select name="Event type" id="event-type" className='HP-input' onChange={(event) => setEventType(event.target.value)}>
-          <option value=" ">Event type</option>
-          {eventTypes.map(t => <option value={t.type} key={t.type}>{t.type}</option>)}
-        </select>
-        <input placeholder="Number of guests" className='HP-input' onChange={(event) => setGuestNum(event.target.value)} />
-        <select name="City" id="city-select" className='HP-input' onChange={(event) => setLocation(event.target.value)}>
-          <option value=" ">City</option>
-          {cities.map(c => <option value={c} key={c}>{c}</option>)}
-        </select>
-        <input type="date" placeholder="dd/mm/yyyy" className='HP-input' onChange={(event) => setDate(event.target.value)} />
+        <FormControl className='HP-input' size='small' style={{marginRight: '10px', backgroundColor: 'white', borderRadius:'5px'}}>
+          <InputLabel id='event-type-label'>Event type</InputLabel>
+          <Select labelId='event-type-label' label="Event type" size='small'  onChange={(event) => setEventType(event.target.value)}>
+            {eventTypes.map(t => <MenuItem value={t.type} key={t.type}>{t.type}</MenuItem>)}
+          </Select>
+        </FormControl>
+
+        <TextField label="Number of guests" size='small' className='HP-input' style={{marginRight: '10px', backgroundColor: 'white', borderRadius:'5px'}} onChange={(event) => setGuestNum(event.target.value)} />
+        <FormControl className='HP-input' size='small' style={{marginRight: '10px', backgroundColor: 'white', borderRadius:'5px'}} >
+          <InputLabel id='city-input'>City</InputLabel>
+          <Select label="City" labelId='city-input' id="city-select" size='small'  onChange={(event) => setLocation(event.target.value)}>
+          {cities.map(c => <MenuItem value={c} key={c}>{c}</MenuItem>)}
+        </Select>
+        </FormControl>
+        
+        <TextField type="date" label="date" style={{ backgroundColor: 'white', borderRadius:'5px'}} InputLabelProps={{ shrink: true }} size='small' className='HP-input' onChange={(event) => setDate(event.target.value)} />
         <br />
         <br />
 
-        <Link to='/ListPage/Venues'>
-          <button className="new-event-button"
-            onClick={handleSearch}>
-            Search
-          </button>
-        </Link>
+        <Button className="new-event-button"
+          variant='contained'
+          onClick={() => {
+            handleSearch();
+            history.push('/ListPage/Venues');
+          }}>
+          Search
+        </Button>
       </div>
       <br />
       <br />

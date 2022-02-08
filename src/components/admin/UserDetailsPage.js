@@ -128,7 +128,7 @@ export default function UserDetailsPage(props) {
             <span style={{fontSize:'12pt'}}>Verification: </span>{details.business.verificationStatus} {details.business.verificationStatus !== 'VERIFIED' && <Button variant='contained' size='small' onClick={handleVerify}>Mark verified</Button>}<br />
             <span style={{fontSize:'12pt'}}>Address: </span>{details.business.address.streetName} {details.business.address.streetNumber}, {details.business.address.city}, {details.business.address.zipCode},  {details.business.address.country}<br />
             </>}
-            <span style={{fontSize:'12pt'}}>Active: </span>{'' + details.active} {details.active && <Button variant='contained' size='small' value='Deactivate' onClick={handleBan}>Deactivate</Button>}
+           {details.active && <Button variant='contained' size='small' value='Deactivate' onClick={handleBan}>Deactivate</Button>}
         </div>
         {details.type === 'C' &&
             <div className="block">

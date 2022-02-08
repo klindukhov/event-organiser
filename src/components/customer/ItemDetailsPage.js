@@ -5,7 +5,7 @@ import '../../styles/customer/ItemDetailsPage.css'
 import 'react-slideshow-image/dist/styles.css'
 import { Slide } from 'react-slideshow-image';
 import StarRatings from 'react-star-ratings';
-import { Avatar, Backdrop, Button, Checkbox, Chip, CircularProgress, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField, Tooltip } from '@mui/material'
+import { Avatar, Backdrop, Button, Checkbox, Chip, CircularProgress, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Skeleton, TextField, Tooltip } from '@mui/material'
 import VeganLogo from '../../images/veganLogo.png'
 import VegetarianLogo from '../../images/vegetarianLogo.png'
 import GlutenFreeLogo from '../../images/glutenFreeLogo.png'
@@ -61,6 +61,7 @@ export default function ItemDetailsPage(props) {
                     setOpen(false);
                     apiFetch(`${aliasItemType}/allowed/${itemType.substring(0, itemType.length - 1)}?${itemType === 'locations' ? 'id' : 'cateringId'}=${id}`).then(res => {
                         setAliasItemTypeDetails(res);
+                        setIsLoading(false);
                     }).catch(e => console.log('error', e))
                 })
                 .catch(error => { console.log('error', error); setItemDetails({}); setSlideImages([]); });
@@ -110,7 +111,7 @@ export default function ItemDetailsPage(props) {
                 "dailyRentCost": itemDetails.dailyRentCost
             };
             window.localStorage.setItem('locationDetails', JSON.stringify(temp));
-            history.push(`/EventDetailsPage/${forEventId}`);
+            history.push(`/EventDetailsPage/${forEventId === undefined ? 'new' : forEventId}`);
         } else if (typeOfItem === "Catering") {
             if (forEventId === undefined) {
                 alert('You have to pick venue first');
@@ -214,7 +215,10 @@ export default function ItemDetailsPage(props) {
 
     const [open, setOpen] = useState(false);
 
-    useEffect(() => { setOpen(true) }, [])
+    useEffect(() => { setOpen(true) }, [typeOfItem])
+
+    const [isLoading, setIsLoading] = useState(true);
+    useEffect(() => { setIsLoading(true) }, [typeOfItem])
 
 
     return (
@@ -333,9 +337,9 @@ export default function ItemDetailsPage(props) {
                         {cateringItemTypes.map(t => <div key={t}>
                             <p className='item-info-heading'>{t}s</p>
                             {itemDetails.cateringItems.filter(l => l.type === t).map(c => <div className="catering-menu-item" key={c.id}>
-                                <div className="menu-item-left">{c.name}{isMenuEdited && <input type='button' class='x-button' value='x' onClick={() => handleDeleteMenuItem(c.id)} />}<br />
+                                <div className="menu-item-left"><span style={{ fontWeight: 'bold' }}>{c.name}</span>{isMenuEdited && <input type='button' class='x-button' value='x' onClick={() => handleDeleteMenuItem(c.id)} />}<br />
                                     {c.description}<br /></div>
-                                <div className="menu-item-right">{c.servingPrice}<br />
+                                <div className="menu-item-right"><span style={{ fontWeight: 'bold' }}>{c.servingPrice}</span><br />
                                     {c.isVegan && <Tooltip title='vegan'>
                                         <img alt='vegan' src={VeganLogo} style={{ height: '30px', width: '30px' }} />
                                     </Tooltip>}
@@ -345,7 +349,8 @@ export default function ItemDetailsPage(props) {
                                     {c.isGlutenFree && <Tooltip title='gluten free'>
                                         <img alt='vegan' src={GlutenFreeLogo} style={{ height: '30px', width: '30px' }} />
                                     </Tooltip>}
-                                    <br /></div>
+                                    <br />
+                                </div>
                             </div>)}
                         </div>)}
                         {isMenuEdited &&
@@ -371,10 +376,25 @@ export default function ItemDetailsPage(props) {
                             </>}
                     </div>}
             </>}
+            {typeOfItem !== 'Event' && itemDetails.businessHours !== null && <> {itemDetails.businessHours !== undefined && itemDetails.businessHours.length > 0 && <div className='block'>
+                <p className='item-info-heading'>Business hours</p>
+                <div className="business-hours">
+                    {businessHours.map(d =>
+                        <div key={d}>
+                            <span style={{fontWeight:'bold'}}>{d.day}</span><br />
+                            {d.timeFrom}<br />
+                            {d.timeTo}<br />
+                        </div>)}
+                </div>
+            </div>}
+            </>}
             {(typeOfItem === "Venue" || typeOfItem === "Catering") &&
                 <div className='block' style={{ height: '700px', overflow: 'auto' }}>
                     <p className='item-info-heading'>Available {aliasItemType}</p>
-                    {aliasItemTypeDetails && aliasItemTypeDetails.map(c => <div key={c.id} className='list-element' style={{ width: '1420px', marginBottom: '30px' }} onClick={() => handleAliasItemChoice(c.id)}>
+                    {isLoading &&
+                        <Skeleton variant='rectangular' width={1420} height={400} ></Skeleton>
+                    }
+                    {aliasItemTypeDetails && !isLoading && aliasItemTypeDetails.map(c => <div key={c.id} className='list-element' style={{ width: '1420px', marginBottom: '30px' }} onClick={() => handleAliasItemChoice(c.id)}>
                         <div className='list-item' style={{ width: '1420px' }}>
                             <div className='overlay-listing' style={{ width: '1420px' }}>
                                 <div className='overlay-listing-left'>
@@ -429,18 +449,6 @@ export default function ItemDetailsPage(props) {
                 </div>
             }
             {typeOfItem !== 'Event' && <>
-                {itemDetails.businessHours !== null && <> {itemDetails.businessHours !== undefined&& itemDetails.businessHours.length > 0 && <div className='block'>
-                    <p className='item-info-heading'>Business hours</p>
-                    <div className="business-hours">
-                        {businessHours.map(d =>
-                            <div key={d}>
-                                {d.day}<br />
-                                {d.timeFrom}<br />
-                                {d.timeTo}<br />
-                            </div>)}
-                    </div>
-
-                </div>}</>}
                 <div className='block'>
                     <p className='item-info-heading'>Reviews</p>
                     {reviews.length === 0 && <p style={{ textAlign: 'center' }}>No reviews yet</p>}
@@ -448,7 +456,7 @@ export default function ItemDetailsPage(props) {
                         reviews.map(r =>
                             <div key={r.id} className='item-review-div'>
                                 <div className='reviewer-info'>
-                                    <Avatar alt={r.customer.firstName} src={'data:image/png;base64,' + (r.customer.avatar ? r.customer.avatar.encodedImage : '')} style={{ height: '80px', width: '80px' }} />
+                                    <Avatar alt={r.customer.firstName} src={'data:image/png;base64,' + (r.customer.avatar?.encodedImage)} style={{ height: '80px', width: '80px' }} />
                                     <p className='reviewer-name'> {r.customer.firstName} {r.customer.lastName} <br /> "{r.title}" {'\u{2605}'.repeat(r.starRating)} </p>
                                 </div>
                                 <div className='item-review-text'>
@@ -458,7 +466,7 @@ export default function ItemDetailsPage(props) {
                         )}
                     {props.authorized === true && props.userData.user && props.userData.user.type === "C" && <>
                         <div className='reviewer-info'>
-                            <Avatar alt='acc-pic' src={'data:image/png;base64,' + props.userData.avatar.encodedImage} style={{ height: '100px', width: '100px' }} />
+                            <Avatar alt='acc-pic' src={'data:image/png;base64,' + props.userData?.avatar?.encodedImage} style={{ height: '100px', width: '100px' }} />
                             <div className='reviewer-name'> {props.userData && props.userData.firstName + " " + props.userData.lastName} <br /> <input className='write-title-div' placeholder='Write a title here' onChange={e => setTitle(e.target.value)} />
                                 <StarRatings
                                     rating={rating}

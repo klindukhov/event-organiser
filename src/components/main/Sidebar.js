@@ -3,6 +3,17 @@ import { slide as Menu } from 'react-burger-menu';
 import '../../styles/general/Sidebar.css';
 import { useEffect, useState } from 'react/cjs/react.development';
 import { Avatar } from '@mui/material';
+import addEvent from '../../images/add event.png';
+import guestBook from '../../images/guest book.png';
+import home from '../../images/home.png';
+import Event from '../../images/event.png';
+import problem from '../../images/problem.png';
+import request from '../../images/request.png';
+import services from '../../images/services.png';
+import venue from '../../images/venue.png';
+import {Restaurant} from "@mui/icons-material";
+
+
 
 export default function Sidebar(props) {
   const [logout, setLogout] = useState('');
@@ -29,7 +40,7 @@ export default function Sidebar(props) {
       </div>
       {props.accType === 'C' &&
         <a className="menu-item" href="/">
-          Home
+          <img alt='' src={home} style={{height: '16px'}}></img> Home
         </a>
       }
       {props.accType === 'C' &&
@@ -41,49 +52,49 @@ export default function Sidebar(props) {
           window.localStorage.removeItem('eventName');
         }
         }>
-          New event
+          <img alt='' src={addEvent} style={{height: '16px'}}></img> New event
         </a>
       }
       {
         props.accType === 'C' &&
         <a className="menu-item" href="/ListPage/Events">
-          My events
+          <img alt='' src={Event} style={{height: '16px'}}></img> My events
         </a>
       }
       {
         props.accType === 'C' &&
         <a className="menu-item" href="/GuestBookPage">
-          Guest book
+          <img alt='' src={guestBook} style={{height: '16px'}}></img> Guest book
         </a>
       }
       {
         props.accType === 'B' &&
         <a className="menu-item" href="/ReservationRequestsPage">
-          Reservation requests
+          <img alt='' src={request} style={{height: '16px'}}></img> Requests
         </a>
       }
       {
         props.accType === 'B' &&
         <a className="menu-item" href="/ListPage/Caterings">
-          My caterings
+          <Restaurant style={{width: '16px'}} /> My caterings
         </a>
       }
       {
         props.accType === 'B' &&
         <a className="menu-item" href="/ListPage/Venues">
-          My locations
+          <img alt='' src={venue} style={{height: '16px'}}></img> My locations
         </a>
       }
       {
         props.accType === 'B' &&
         <a className="menu-item" href="/ListPage/Services">
-          My services
+          <img alt='' src={services} style={{height: '16px'}}></img> My services
         </a>
       }
       {
         (props.accType === 'B' || props.accType === 'C') &&
         <a className="menu-item" href="/ContactFormPage">
-          Report a problem
+          <img alt='' src={problem} style={{height: '16px'}}></img> Report a problem
         </a>
       }
       {

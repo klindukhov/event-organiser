@@ -4,7 +4,8 @@ import { useHistory, useParams } from "react-router-dom";
 import apiFetch from "../../api";
 import '../../styles/business/AddBusinessPage.css'
 import TextField from '@mui/material/TextField'
-import { Backdrop, Button, Checkbox, CircularProgress, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from "@mui/material";
+import { Backdrop, Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from "@mui/material";
+import { Cancel, Delete } from "@mui/icons-material";
 
 export default function AddBusinessPage(props) {
     const { id } = useParams();
@@ -61,7 +62,7 @@ export default function AddBusinessPage(props) {
                         setDailyRentCost(res.serviceCost)
                         setOutsideCatering(res.offersOutsideCatering)
                         setPhoneNumber(res.phoneNumber)
-                        setCuisines(res.cuisines.map(c => c.name))
+                        setCuisines(res.cuisines.map(c => {return {name: c.name}}))
                         break;
                     case 'Service':
                         setDailyRentCost(res.serviceCost)
@@ -217,7 +218,7 @@ export default function AddBusinessPage(props) {
         if (e.target.checked) {
             t.push({ "name": e.target.value });
         } else {
-            t.splice(t.indexOf(t.find(el=>el.name===e.target.value)), 1);
+            t.splice(t.indexOf(t.find(el => el.name === e.target.value)), 1);
         }
         setCuisines(t);
     }
@@ -227,7 +228,7 @@ export default function AddBusinessPage(props) {
         if (e.target.checked) {
             t.push({ "name": e.target.value });
         } else {
-            t.splice(t.indexOf(t.find(el=>el.name===e.target.value)), 1);
+            t.splice(t.indexOf(t.find(el => el.name === e.target.value)), 1);
         }
         setMusicStyles(t);
     }
@@ -237,7 +238,7 @@ export default function AddBusinessPage(props) {
         if (e.target.checked) {
             t.push({ "name": e.target.value });
         } else {
-            t.splice(t.indexOf(t.find(el=>el.name===e.target.value)), 1);
+            t.splice(t.indexOf(t.find(el => el.name === e.target.value)), 1);
         }
         setLanguages(t);
     }
@@ -303,6 +304,7 @@ export default function AddBusinessPage(props) {
             case 'Venue':
                 body.name = name;
                 body.phoneNumber = phoneNumber;
+                body.descriptions = descriptions;
                 body.dailyRentCost = dailyRentCost;
                 body.seatingCapacity = seatingCap;
                 body.standingCapacity = standingCap;
@@ -311,6 +313,7 @@ export default function AddBusinessPage(props) {
                 body.name = name;
                 body.phoneNumber = phoneNumber;
                 body.serviceCost = dailyRentCost;
+                body.cuisines = cuisines;
                 break;
             case 'Service':
                 body.firstName = name;
@@ -355,12 +358,47 @@ export default function AddBusinessPage(props) {
             .catch(e => console.log('error', e))
 
     }
-    
+
     const [open, setOpen] = useState(false);
-    useEffect(() => {if(id !== undefined){setOpen(true)}}, [])
+    useEffect(() => { if (id !== undefined) { setOpen(true) } }, [])
+
+    const [isDialog, setIsDialog] = useState(false);
+    const [dialogContent, setDialogContent] = useState('');
+    const [dialogConfirm, setDialogConfirm] = useState('');
+
 
 
     return (<div className="main">
+        <Dialog
+            open={isDialog}
+            onClose={() => setIsDialog(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <DialogTitle id="alert-dialog-title">
+                {"Confirm action"}
+            </DialogTitle>
+            <DialogContent>
+                <div style={{ width: '400px', height: '200px', display: 'grid' }}>
+                    <span style={{ alignSelf: 'center', justifySelf: 'center' }}>{dialogContent}</span>
+                </div>
+            </DialogContent>
+            <DialogActions>
+                {dialogConfirm === 'cancel' &&
+                    <Button onClick={() => history.push(`/ListPage/${businessType}s`)} >
+                        Confirm
+                    </Button>
+                }
+                {dialogConfirm === 'delete' &&
+                    <Button onClick={handleDeleteBusiness} >
+                        Confirm
+                    </Button>
+                }
+                <Button onClick={() => setIsDialog(false)} >
+                    <Cancel />Cancel
+                </Button>
+            </DialogActions>
+        </Dialog>
         <Backdrop
             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
             open={open}
@@ -459,9 +497,9 @@ export default function AddBusinessPage(props) {
                 </>}
             {businessType === 'Venue' &&
                 <>
-                    <p style={{ textAlign: 'center' }}>Descriptions </p>
+                    <p style={{ textAlign: 'center' }}><br />Descriptions </p>
                     {descriptionOptions.map(o => <div key={o}>
-                        <FormControlLabel margin="dense" size="small" disabled={id !== undefined} control={<Checkbox value={o} checked={descriptions.includes(o)} onChange={handleDescriptions} />} label={o} />
+                        <FormControlLabel margin="dense" size="small" control={<Checkbox value={o} checked={descriptions.includes(o)} onChange={handleDescriptions} />} label={o} />
                     </div>)}
                 </>
             }
@@ -469,11 +507,11 @@ export default function AddBusinessPage(props) {
                 <>
                     <p style={{ textAlign: 'center' }}>Cuisines </p>
                     {availableCuisines.map(o => <div key={o.name}>
-                        <FormControlLabel margin="dense" size="small" disabled={id !== undefined} control={<Checkbox value={o.name} checked={id !== undefined ? cuisines.includes(o.name) : cuisines.some(c => c.name === o.name)} onChange={handleCuisines} />} label={o.name} />
+                        <FormControlLabel margin="dense" size="small"  control={<Checkbox value={o.name} checked={ cuisines.some(c => c.name === o.name)} onChange={handleCuisines} />} label={o.name} />
                     </div>)}
                 </>
             }
-            <div style={{ textAlign: 'center' }}>Business Hours {id !== undefined && businessType !== "Catering" && <><br /><Button variant='contained' onClick={() => history.push(`/BusinessCalendar/${typeOfBusiness}/${id}`)}>Edit availability slots</Button></>}</div>
+            <div style={{ textAlign: 'center' }}><br />Business Hours </div>
             {businessHours !== '' && <div className="business-hours">
                 {['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'].map(d =>
                     <div key={d}>
@@ -482,6 +520,7 @@ export default function AddBusinessPage(props) {
                         <TextField InputLabelProps={{ shrink: true }} disabled={id !== undefined} margin="dense" size="small" label='To' type='time' id={d} value={businessHours.find(b => b.day === d) && businessHours.find(b => b.day === d).timeTo} onChange={handleCloseTime} />
                     </div>)}
             </div>}
+            {id !== undefined && businessType !== "Catering" && <div style={{ textAlign: 'center' }}><br /><Button variant='contained' onClick={() => history.push(`/BusinessCalendar/${typeOfBusiness}/${id}`)}>Edit availability slots</Button><br /><br /></div>}
             <p style={{ textAlign: 'center' }}>Images </p>
             <div className="business-images">
                 {pics.map(p =>
@@ -507,9 +546,17 @@ export default function AddBusinessPage(props) {
         }
         {id !== undefined &&
             <div className="block" style={{ display: 'grid', gridTemplateColumns: 'auto auto auto', justifyItems: 'center' }}>
-                <Button variant='contained' margin="dense" size="small" value='Cancel' onClick={() => history.push(`/ListPage/${businessType}s`)}>Cancel</Button>
-                <Button variant='contained' margin="dense" size="small" value='Submit changes' onClick={handleSubmitChanges}>Submit Canges</Button>
-                <Button variant='contained' margin="dense" size="small" value={'Delete' + businessType} onClick={handleDeleteBusiness} >Delete</Button>
+                <Button variant='contained' margin="dense" size="small" onClick={() => {
+                    setIsDialog(true);
+                    setDialogConfirm('cancel');
+                    setDialogContent('Discard changes?')
+                }}><Cancel /> Cancel</Button>
+                <Button variant='contained' margin="dense" size="medium" onClick={handleSubmitChanges}>Submit Changes</Button>
+                <Button variant='contained' margin="dense" size="small" onClick={() => {
+                    setIsDialog(true);
+                    setDialogConfirm('delete');
+                    setDialogContent('Delete business?')
+                }} ><Delete /> Delete</Button>
             </div>
         }
 

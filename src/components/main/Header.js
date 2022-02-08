@@ -6,7 +6,6 @@ import { useState } from 'react/cjs/react.development';
 import apiFetch from '../../api';
 import Logo from '../../images/Logo.png'
 import { Avatar, Tooltip } from '@mui/material'
-import bgimg from '../../images/bg-4.jpg'
 
 const Header = (props) => {
   const history = useHistory();
@@ -23,9 +22,11 @@ const Header = (props) => {
     r.style.setProperty('--txt', '#47525e');
     r.style.setProperty('--blockbg', 'white');
     if ((props.myProps.authorized === true && props.myProps.userData.user && props.myProps.userData.user.type === 'C') || props.myProps.authorized === false) {
-      r.style.setProperty('--bgimg', `url(${bgimg})`)
-    }else{
-      r.style.setProperty('--bgimg', `var(--bg)`)
+      r.style.setProperty('--bg', `#fdc690`)
+    } else if (props.myProps.authorized === true && props.myProps.userData.user && props.myProps.userData.user.type === 'B') {
+      r.style.setProperty('--bg', `#feeac9 `)
+    } else {
+      r.style.setProperty('--bg', '#F2F4F5');
     }
     //eslint-disable-next-line
   }, [props.myProps.authorized])

@@ -7,7 +7,7 @@ import AirlineSeatLegroomNormalIcon from '@mui/icons-material/AirlineSeatLegroom
 import pplIcon from '../../images/pplIcon.png';
 import apiFetch from "../../api";
 
-import { TextField, Button, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Checkbox, InputAdornment, Pagination } from '@mui/material'
+import { TextField, Button, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Checkbox, InputAdornment, Pagination, Skeleton } from '@mui/material'
 
 
 
@@ -34,7 +34,7 @@ export default function ListPage(props) {
 
     const getAllEvents = () => {
         apiFetch(`events/customer?customerId=${props.userId}&tab=${eventsTab}`)
-            .then(result => setItems(result))
+            .then(result => {setItems(result); setIsLoading(false)})
             .catch(error => console.log('error', error));
     }
 
@@ -44,6 +44,7 @@ export default function ListPage(props) {
     const [sortBy, setSortBy] = useState('');
     const [order, setOrder] = useState('');
     const getItemsWithFilters = (sorting) => {
+        setIsLoading(true);
         let body = {};
         let forLocationId = '';
         if (forEventId) {
@@ -109,6 +110,7 @@ export default function ListPage(props) {
                 }
 
                 setItems(result.items);
+                setIsLoading(false);
                 setTotalRes(result.meta.total);
                 setPageSize(null);
             })
@@ -118,12 +120,13 @@ export default function ListPage(props) {
     const getList = () => {
         if (props.userData && props.userData.user.type === 'B') {
             apiFetch(`${listType}/business?id=${props.userId}`)
-                .then(result => setItems(result))
+                .then(result => {setItems(result); setIsLoading(false);})
                 .catch(error => console.log('error', error));
         } else {
             apiFetch(`${listType}/allowed/all?sortBy=${sortBy === "" ? 'id' : sortBy}&order=${order === '' ? 'acs' : order}&pageNo=${pageNo === '' ? 0 : pageNo}&pageSize=${pageSize === '' ? 5 : pageSize}`)
                 .then(result => {
                     setItems(result.items);
+                    setIsLoading(false);
                     setPageSize(result.meta.pageSize);
                     setTotalRes(result.meta.total);
                     setPageNo(result.meta.pageNo);
@@ -307,6 +310,8 @@ export default function ListPage(props) {
         }
     }
 
+    const [isLoading, setIsLoading] = useState(true);
+
     return (
         <div className="main">
             {(props.authorized === false || (props.authorized === true && props.userData.user.type === 'C')) && <>
@@ -322,7 +327,7 @@ export default function ListPage(props) {
                         <br />
                         <div className="guests-choice">
                             {typeOfList === "Venues" && <>
-                                <TextField type="number" label="Guests" size='small' margin="dense" InputLabelProps={{ shrink: true }} style={{ width: '200px' }} defaultValue={guestNum} onChange={e => setGuestNum(e.target.value)} />{'  '}
+                                <TextField type="number" label="Guests" size='small' margin="dense" InputLabelProps={{ shrink: true }} style={{ width: '200px' }} value={guestNum} onChange={e => setGuestNum(e.target.value)} />{'  '}
                                 <FormControlLabel margin="dense" control={<Checkbox onChange={e => setSeatedOnly(e.target.checked)} />} label={'Seated only'} /><br /></>
                             }
                             <TextField size="small" margin="dense" InputLabelProps={{ shrink: true }} InputProps={{
@@ -428,7 +433,10 @@ export default function ListPage(props) {
                     <Button type='button' className='e-c-button-c' value='all' onClick={handleEvents} style={{ color: eventAllColor, backgroundColor: eventAllBackColor }}>all</Button>
                 </div>
             }
-            {items.length > 0 && (items[0].address || listType === 'services' || listType === 'events') && <>
+            {isLoading &&
+            <Skeleton variant='rectangular' width={1520} height={400}></Skeleton>
+            }
+            {items.length > 0 && (items[0].address || listType === 'services' || listType === 'events') && !isLoading &&<>
                 {items.map(c => <div key={c.id} className='list-element' onClick={() => handleItemChoice(c.id)}>
                     <div className='list-item' >
                         <div className='overlay-listing' >
@@ -446,7 +454,7 @@ export default function ListPage(props) {
                                 {typeOfList === "Venues" && <>
                                     {c.name} {('★').repeat(c.rating)} <br />
                                 </>}
-                                <div style={{fontSize:'14pt', width:'800px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}>
+                                <div style={{ fontSize: '14pt', width: '800px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                                     {c.description}
                                 </div>
                             </div>

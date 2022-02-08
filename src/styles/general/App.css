@@ -4,7 +4,6 @@
 
 .main{
     background-color: var(--bg);
-    background: var(--bgimg);
     background-attachment: fixed;
     min-height: calc(100vh - 170px);
     display: grid;
