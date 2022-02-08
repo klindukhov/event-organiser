@@ -93,17 +93,17 @@ export default function HomePage(props) {
         <br />
         <br />
         <div className="explore-grid">
-          <div onClick={() => history.push('/ListPage/Venues')}>
+          <div className='exp-div' onClick={() => history.push('/ListPage/Venues')}>
             <p className="Explore-subheading">Venues</p>
             <img src={venues} alt="venuesPic" className="explore-imgs" />
             <p className="Explore-par">Find an ideal place to celebrate birthdays, weddings, important <br /> milestones or educate yourself and/or your colleagues.</p>
           </div>
-          <div onClick={() => history.push('/ListPage/Caterings')}>
+          <div className='exp-div' onClick={() => history.push('/ListPage/Caterings')}>
             <p className="Explore-subheading">Catering</p>
             <img src={catering} alt="venuesPic" className="explore-imgs" />
             <p className="Explore-par">Order or get delivered the meals <br />from thousands of restaurants in <br />the area</p>
           </div>
-          <div onClick={() => history.push('/ListPage/Services')}>
+          <div className='exp-div' onClick={() => history.push('/ListPage/Services')}>
             <p className="Explore-subheading">Entertainment&other</p>
             <img src={entertainment} alt="venuesPic" className="explore-imgs" />
             <p className="Explore-par">Invite entertainers like DJs, musicians to help create an unique <br />atmosphere at your event as well as important additions to your <br />seminars llike enterpreters or DI’s </p>

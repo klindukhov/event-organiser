@@ -82,7 +82,7 @@ export default function Sidebar(props) {
       {
         props.accType === 'B' &&
         <a className="menu-item" href="/ListPage/Venues">
-          <img alt='' src={venue} style={{height: '16px'}}></img> My locations
+          <img alt='' src={venue} style={{height: '16px'}}></img> My venues
         </a>
       }
       {

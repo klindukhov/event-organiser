@@ -3,11 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useParams, useHistory, Link } from "react-router-dom";
 import '../../styles/customer/ListPage.css'
 import AirlineSeatLegroomNormalIcon from '@mui/icons-material/AirlineSeatLegroomNormal';
+import addEvent from '../../images/add event.png';
 
 import pplIcon from '../../images/pplIcon.png';
 import apiFetch from "../../api";
 
-import { TextField, Button, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Checkbox, InputAdornment, Pagination, Skeleton } from '@mui/material'
+import { TextField, Button, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Checkbox, InputAdornment, Pagination, Skeleton, Tooltip } from '@mui/material'
 
 
 
@@ -34,7 +35,7 @@ export default function ListPage(props) {
 
     const getAllEvents = () => {
         apiFetch(`events/customer?customerId=${props.userId}&tab=${eventsTab}`)
-            .then(result => {setItems(result); setIsLoading(false)})
+            .then(result => { setItems(result); setIsLoading(false) })
             .catch(error => console.log('error', error));
     }
 
@@ -120,7 +121,7 @@ export default function ListPage(props) {
     const getList = () => {
         if (props.userData && props.userData.user.type === 'B') {
             apiFetch(`${listType}/business?id=${props.userId}`)
-                .then(result => {setItems(result); setIsLoading(false);})
+                .then(result => { setItems(result); setIsLoading(false); })
                 .catch(error => console.log('error', error));
         } else {
             apiFetch(`${listType}/allowed/all?sortBy=${sortBy === "" ? 'id' : sortBy}&order=${order === '' ? 'acs' : order}&pageNo=${pageNo === '' ? 0 : pageNo}&pageSize=${pageSize === '' ? 5 : pageSize}`)
@@ -426,17 +427,47 @@ export default function ListPage(props) {
                     </FormControl>
                 </div>
             </div>}
-            {listType === "events" &&
-                <div className='block' style={{ textAlign: 'center' }}>
-                    <Button type='button' className='e-c-button-l' value='past' onClick={handleEvents} style={{ color: eventPastColor, backgroundColor: eventPastBackColor }}>past</Button>
-                    <Button type='button' className='e-c-button-r' value='future' onClick={handleEvents} style={{ color: eventFutureColor, backgroundColor: eventFutureBackColor }}>future</Button>
-                    <Button type='button' className='e-c-button-c' value='all' onClick={handleEvents} style={{ color: eventAllColor, backgroundColor: eventAllBackColor }}>all</Button>
+            {props.authorized === true && props.userData.user.type === 'B' && props.userData.verificationStatus === "VERIFIED" &&
+                <div className='block' style={{ textAlign: 'center'}} >
+                    <Button variant='outlined' size='medium' onClick={() => history.push('/AddBusinessPage/' + typeOfList.substring(0, typeOfList.length - 1))}>
+                    Add new +
+                    </Button>
                 </div>
             }
-            {isLoading &&
-            <Skeleton variant='rectangular' width={1520} height={400}></Skeleton>
+            {listType === "events" &&
+                <>
+                    <div className='block' style={{ textAlign: 'center' }}>
+                        <Button type='button' className='e-c-button-l' value='past' onClick={handleEvents} style={{ color: eventPastColor, backgroundColor: eventPastBackColor }}>past</Button>
+                        <Button type='button' className='e-c-button-r' value='future' onClick={handleEvents} style={{ color: eventFutureColor, backgroundColor: eventFutureBackColor }}>future</Button>
+                        <Button type='button' className='e-c-button-c' value='all' onClick={handleEvents} style={{ color: eventAllColor, backgroundColor: eventAllBackColor }}>all</Button>
+                    </div>
+                    {props.authorized === true && props.userData.user.type === 'C' && typeOfList === 'Events' &&
+                        <Tooltip title={'Create ' + typeOfList.substring(0, typeOfList.length - 1)}>
+                            <img
+                                style={{
+                                    cursor: 'pointer',
+                                    height: '50px',
+                                    position: 'relative',
+                                    top: '-110px',
+                                    left: '700px'
+                                }}
+                                onClick={() => {
+                                    window.localStorage.removeItem('locationDetails');
+                                    window.localStorage.removeItem('eStart');
+                                    window.localStorage.removeItem('eEnd');
+                                    window.sessionStorage.setItem('filters', JSON.stringify({ "guestNum": '', "date": '', "eventType": '' }));
+                                    window.localStorage.removeItem('eventName');
+                                    history.push('/EventDetailsPage/new');
+                                }} alt='add-event' src={addEvent} />
+                        </Tooltip>
+                    }
+                </>
+
             }
-            {items.length > 0 && (items[0].address || listType === 'services' || listType === 'events') && !isLoading &&<>
+            {isLoading &&
+                <Skeleton variant='rectangular' width={1520} height={400}></Skeleton>
+            }
+            {items.length > 0 && (items[0].address || listType === 'services' || listType === 'events') && !isLoading && <>
                 {items.map(c => <div key={c.id} className='list-element' onClick={() => handleItemChoice(c.id)}>
                     <div className='list-item' >
                         <div className='overlay-listing' >
@@ -492,30 +523,11 @@ export default function ListPage(props) {
                     </div>
                 </div>)}
             </>}
-
-
-            {props.authorized === true && props.userData.user.type === 'B' && props.userData.verificationStatus === "VERIFIED" &&
-                <div className='block' style={{ textAlign: 'center', cursor: 'pointer' }} onClick={() => history.push('/AddBusinessPage/' + typeOfList.substring(0, typeOfList.length - 1))}>
-                    Add {typeOfList.substring(0, typeOfList.length - 1)}
-                </div>
-            }
             {props.authorized === true && props.userData.user.type === 'B' && props.userData.verificationStatus === "NOT_VERIFIED" &&
                 <div className='block' style={{ textAlign: 'center' }} >
                     ⓘ You will be able to add businesses to the website after verification.<br />
                     If it doesn't happen within 4 business days, please contact us throught the
                     <Link to="/ContactFormPage"> form</Link>.
-                </div>
-            }
-            {props.authorized === true && props.userData.user.type === 'C' && typeOfList === 'Events' &&
-                <div className='block' style={{ textAlign: 'center', cursor: 'pointer' }} onClick={() => {
-                    window.localStorage.removeItem('locationDetails');
-                    window.localStorage.removeItem('eStart');
-                    window.localStorage.removeItem('eEnd');
-                    window.sessionStorage.setItem('filters', JSON.stringify({ "guestNum": '', "date": '', "eventType": '' }));
-                    window.localStorage.removeItem('eventName');
-                    history.push('/EventDetailsPage/new');
-                }}>
-                    Add {typeOfList.substring(0, typeOfList.length - 1)}
                 </div>
             }
             {((props.authorized === true && props.userData.user.type === 'C' && typeOfList !== 'Events' && pageSize !== null) || (props.authorized === false && typeOfList !== 'Events' && pageSize !== null)) &&

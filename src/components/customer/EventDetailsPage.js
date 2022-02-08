@@ -6,7 +6,7 @@ import { useHistory } from 'react-router';
 import pplIcon from '../../images/pplIcon.png';
 import { useParams } from 'react-router-dom';
 import apiFetch from '../../api';
-import { TextField, Button, IconButton, Select, FormControl, InputLabel, MenuItem, Tooltip } from '@mui/material'
+import { TextField, Button, IconButton, Select, FormControl, InputLabel, MenuItem, Tooltip, Dialog, DialogContent, DialogActions } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import VeganLogo from '../../images/veganLogo.png'
@@ -227,7 +227,7 @@ export default function EventDetailsPage(props) {
                         .catch(error => console.log('error', error));
                     setFormError(false);
                 } else {
-                    alert('Chosen location unavaliable for dates of event');
+                    setIsDialog(true);
                 }
             })
         } else {
@@ -414,7 +414,7 @@ export default function EventDetailsPage(props) {
                         })
                         .catch(error => console.log('error', error));
                 } else {
-                    alert('Chosen location unavaliable for dates of event');
+                    setIsDialog(true);
                 }
             })
         } else {
@@ -427,8 +427,25 @@ export default function EventDetailsPage(props) {
         apiFetch(`events/cancel?id=${id}`, "DELETE").then(() => history.push('/ListPage/Events')).catch(e => console.log('error' + e));
     }
 
+    const [isDialog, setIsDialog] = useState(false);
+
     return (
         <div className='main'>
+            <Dialog
+                open={isDialog}
+                onClose={() => setIsDialog(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogContent style={{ width: '400px', height: '250px', display: 'grid', justifyContent: 'center', alignContent: "center", fontSize: '18pt', textAlign: 'center' }}>
+                    Chosen venue unavaliable for the dates of event
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => history.push('/ListPage/Venues')} autoFocus>
+                        OK
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <div className='block'>
                 <TextField size='small' margin='dense' label='Event name' InputLabelProps={!isNew ? { shrink: !isNew } : ''} style={{ width: '250px' }} value={eventName} onChange={e => setEventName(e.target.value)} disabled={!isNew} /><br />
                 <TextField size='small' margin='dense' label='Guests' InputLabelProps={!isNew ? { shrink: !isNew } : ''} style={{ width: '250px' }} type='number' value={guestNum} onChange={e => setGuestNum(e.target.value)} disabled={!isNew} /><br />

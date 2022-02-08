@@ -5,7 +5,7 @@ import '../../styles/customer/ItemDetailsPage.css'
 import 'react-slideshow-image/dist/styles.css'
 import { Slide } from 'react-slideshow-image';
 import StarRatings from 'react-star-ratings';
-import { Avatar, Backdrop, Button, Checkbox, Chip, CircularProgress, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Skeleton, TextField, Tooltip } from '@mui/material'
+import { Avatar, Backdrop, Button, Checkbox, Chip, CircularProgress, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Skeleton, TextField, Tooltip } from '@mui/material'
 import VeganLogo from '../../images/veganLogo.png'
 import VegetarianLogo from '../../images/vegetarianLogo.png'
 import GlutenFreeLogo from '../../images/glutenFreeLogo.png'
@@ -114,8 +114,7 @@ export default function ItemDetailsPage(props) {
             history.push(`/EventDetailsPage/${forEventId === undefined ? 'new' : forEventId}`);
         } else if (typeOfItem === "Catering") {
             if (forEventId === undefined) {
-                alert('You have to pick venue first');
-                history.push('/ListPage/Venues');
+                setIsDialog(true);
             } else {
                 let temp = {
                     "id": itemDetails.id,
@@ -142,8 +141,7 @@ export default function ItemDetailsPage(props) {
             }
         } else if (typeOfItem === "Service") {
             if (forEventId === undefined) {
-                alert('You have to pick venue first');
-                history.push('/ListPage/Venues');
+                setIsDialog(true);
             } else {
                 if (window.localStorage.getItem('serviceInfo') !== null && window.localStorage.getItem('serviceInfo') !== undefined) {
                     let t = JSON.parse(window.localStorage.getItem('serviceInfo'));
@@ -214,11 +212,13 @@ export default function ItemDetailsPage(props) {
     }
 
     const [open, setOpen] = useState(false);
+    const [isDialog, setIsDialog] = useState(false);
 
     useEffect(() => { setOpen(true) }, [typeOfItem])
 
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => { setIsLoading(true) }, [typeOfItem])
+
 
 
     return (
@@ -229,6 +229,21 @@ export default function ItemDetailsPage(props) {
             >
                 <CircularProgress color="inherit" />
             </Backdrop>
+            <Dialog
+                open={isDialog}
+                onClose={() => setIsDialog(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogContent style={{ width: '400px', height: '250px', display: 'grid', justifyContent: 'center', alignContent: "center", fontSize:'18pt' }}>
+                    You have to pick venue first!
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => history.push('/ListPage/Venues')} autoFocus>
+                        OK
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <div className='gallery-info-div'>
                 <div className='item-gallery-rect'>
                     <div>
@@ -381,7 +396,7 @@ export default function ItemDetailsPage(props) {
                 <div className="business-hours">
                     {businessHours.map(d =>
                         <div key={d}>
-                            <span style={{fontWeight:'bold'}}>{d.day}</span><br />
+                            <span style={{ fontWeight: 'bold' }}>{d.day}</span><br />
                             {d.timeFrom}<br />
                             {d.timeTo}<br />
                         </div>)}

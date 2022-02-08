@@ -41,9 +41,11 @@ export default function GuestBook(props) {
 
     return (
         <div className="main">
-            {guests.map(guest => <div className="block" key={guest.id}>
-                {guest.firstName + " " + guest.lastName + " (" + guest.email + ')'}
-                <IconButton onClick={() => deleteGuest(guest.id)}>
+            {guests.map(guest => <div className="block" style={{ display: 'grid', gridTemplateColumns: 'auto auto' }} key={guest.id}>
+                <span style={{justifySelf:'start'}}>
+                    {guest.firstName + " " + guest.lastName + " (" + guest.email + ')'}
+                </span>
+                <IconButton style={{justifySelf:'end'}} onClick={() => deleteGuest(guest.id)}>
                     <DeleteIcon />
                 </IconButton>
             </div>)}

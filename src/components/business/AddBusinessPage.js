@@ -62,7 +62,7 @@ export default function AddBusinessPage(props) {
                         setDailyRentCost(res.serviceCost)
                         setOutsideCatering(res.offersOutsideCatering)
                         setPhoneNumber(res.phoneNumber)
-                        setCuisines(res.cuisines.map(c => {return {name: c.name}}))
+                        setCuisines(res.cuisines.map(c => { return { name: c.name } }))
                         break;
                     case 'Service':
                         setDailyRentCost(res.serviceCost)
@@ -447,21 +447,25 @@ export default function AddBusinessPage(props) {
                     {type === 'MUSIC BAND' &&
                         <div>
                             <TextField InputLabelProps={id !== undefined ? { shrink: id !== undefined } : ''} disabled={id !== undefined} margin="dense" size="small" label='Number of people' style={{ width: '250px' }} value={bandPeople} onChange={e => setBandPeople(e.target.value)} /><br />
-                            {availableMusicStyles.map(o => <div key={o}>
-                                <FormControlLabel margin="dense" size="small" disabled={id !== undefined} control={<Checkbox value={o} checked={id !== undefined ? musicStyles.includes(o) : musicStyles.some(c => c.name === o)} onChange={handleMusicStyles} />} label={o} />
-                            </div>)}
+                            <div style={{ display: 'grid', gridTemplateColumns: 'auto auto auto' }}>
+                                {availableMusicStyles.map(o => <div key={o}>
+                                    <FormControlLabel margin="dense" size="small" disabled={id !== undefined} control={<Checkbox value={o} checked={id !== undefined ? musicStyles.includes(o) : musicStyles.some(c => c.name === o)} onChange={handleMusicStyles} />} label={o} />
+                                </div>)}
+                            </div>
                         </div>
                     }
                     {type === 'MUSICIAN' &&
                         <div>
                             <TextField InputLabelProps={id !== undefined ? { shrink: id !== undefined } : ''} disabled={id !== undefined} margin="dense" size="small" label='Instrument' style={{ width: '250px' }} value={instrument} onChange={e => setInstrument(e.target.value)} /><br />
-                            {availableMusicStyles.map(o => <div key={o}>
-                                <FormControlLabel margin="dense" size="small" disabled={id !== undefined} control={<Checkbox value={o} checked={musicStyles.some(c => c.name === o)} onChange={handleMusicStyles} />} label={o} />
-                            </div>)}
+                            <div style={{ display: 'grid', gridTemplateColumns: 'auto auto auto' }}>
+                                {availableMusicStyles.map(o => <div key={o}>
+                                    <FormControlLabel margin="dense" size="small" disabled={id !== undefined} control={<Checkbox value={o} checked={musicStyles.some(c => c.name === o)} onChange={handleMusicStyles} />} label={o} />
+                                </div>)}
+                            </div>
                         </div>
                     }
                     {(type === 'SINGER' || type === "DJ") &&
-                        <div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'auto auto auto' }}>
                             {availableMusicStyles.map(o => <div key={o}>
                                 <FormControlLabel margin="dense" size="small" disabled={id !== undefined} control={<Checkbox value={o} checked={id !== undefined ? musicStyles.includes(o) : musicStyles.some(c => c.name === o)} onChange={handleMusicStyles} />} label={o} />
                             </div>)}
@@ -498,17 +502,21 @@ export default function AddBusinessPage(props) {
             {businessType === 'Venue' &&
                 <>
                     <p style={{ textAlign: 'center' }}><br />Descriptions </p>
-                    {descriptionOptions.map(o => <div key={o}>
-                        <FormControlLabel margin="dense" size="small" control={<Checkbox value={o} checked={descriptions.includes(o)} onChange={handleDescriptions} />} label={o} />
-                    </div>)}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'auto auto' }}>
+                        {descriptionOptions.map(o => <div key={o}>
+                            <FormControlLabel margin="dense" size="small" control={<Checkbox value={o} checked={descriptions.includes(o)} onChange={handleDescriptions} />} label={o} />
+                        </div>)}
+                    </div>
                 </>
             }
             {businessType === 'Catering' &&
                 <>
                     <p style={{ textAlign: 'center' }}>Cuisines </p>
-                    {availableCuisines.map(o => <div key={o.name}>
-                        <FormControlLabel margin="dense" size="small"  control={<Checkbox value={o.name} checked={ cuisines.some(c => c.name === o.name)} onChange={handleCuisines} />} label={o.name} />
-                    </div>)}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'auto auto auto' }}>
+                        {availableCuisines.map(o => <div key={o.name}>
+                            <FormControlLabel margin="dense" size="small" control={<Checkbox value={o.name} checked={cuisines.some(c => c.name === o.name)} onChange={handleCuisines} />} label={o.name} />
+                        </div>)}
+                    </div>
                 </>
             }
             <div style={{ textAlign: 'center' }}><br />Business Hours </div>
@@ -520,7 +528,7 @@ export default function AddBusinessPage(props) {
                         <TextField InputLabelProps={{ shrink: true }} disabled={id !== undefined} margin="dense" size="small" label='To' type='time' id={d} value={businessHours.find(b => b.day === d) && businessHours.find(b => b.day === d).timeTo} onChange={handleCloseTime} />
                     </div>)}
             </div>}
-            {id !== undefined && businessType !== "Catering" && <div style={{ textAlign: 'center' }}><br /><Button variant='contained' onClick={() => history.push(`/BusinessCalendar/${typeOfBusiness}/${id}`)}>Edit availability slots</Button><br /><br /></div>}
+            {id !== undefined && businessType !== "Catering" && <div style={{ textAlign: 'center' }}><br /><Button variant='contained' onClick={() => history.push(`/BusinessCalendar/${typeOfBusiness}/${id}`)}>Manage calendar</Button><br /><br /></div>}
             <p style={{ textAlign: 'center' }}>Images </p>
             <div className="business-images">
                 {pics.map(p =>
@@ -555,7 +563,7 @@ export default function AddBusinessPage(props) {
                 <Button variant='contained' margin="dense" size="small" onClick={() => {
                     setIsDialog(true);
                     setDialogConfirm('delete');
-                    setDialogContent('Delete business?')
+                    setDialogContent('Are you sure you want to delete this ' + businessType.toLowerCase() + '?')
                 }} ><Delete /> Delete</Button>
             </div>
         }
