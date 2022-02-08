@@ -29,6 +29,16 @@ export default function EventDetailsPage(props) {
         }
     }, []);
 
+    const [locationImages, setLocationImages] = useState([]);
+
+
+
+    useEffect(() => {
+        apiFetch(`locations/allowed?id=${JSON.parse(window.localStorage.getItem('locationDetails'))?.id}`).then(res => {
+            setLocationImages(res.images);
+        }).catch(e => console.log('error', e));
+    }, [])
+
     const history = useHistory();
 
     const [isLocPicked, setIsLocPicked] = useState(false);
@@ -489,7 +499,7 @@ export default function EventDetailsPage(props) {
                                 </div>
                             </div>
                             <div className='list-item-pics' style={{ width: '1420px' }}>
-                                {JSON.parse(window.localStorage.getItem('locationDetails')).images.map(i => <div key={i.name}>
+                                {locationImages.map(i => <div key={i.name}>
                                     <img alt={i.encodedImage} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
                                 </div>)}
                             </div>

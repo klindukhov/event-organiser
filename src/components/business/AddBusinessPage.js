@@ -4,7 +4,7 @@ import { useHistory, useParams } from "react-router-dom";
 import apiFetch from "../../api";
 import '../../styles/business/AddBusinessPage.css'
 import TextField from '@mui/material/TextField'
-import { Backdrop, Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from "@mui/material";
+import { Backdrop, Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Tooltip } from "@mui/material";
 import { Cancel, Delete } from "@mui/icons-material";
 
 export default function AddBusinessPage(props) {
@@ -503,8 +503,10 @@ export default function AddBusinessPage(props) {
                 <>
                     <p style={{ textAlign: 'center' }}><br />Descriptions </p>
                     <div style={{ display: 'grid', gridTemplateColumns: 'auto auto' }}>
-                        {descriptionOptions.map(o => <div key={o}>
-                            <FormControlLabel margin="dense" size="small" control={<Checkbox value={o} checked={descriptions.includes(o)} onChange={handleDescriptions} />} label={o} />
+                        {descriptionOptions.map(o => <div key={o.id}>
+                            <Tooltip title={o.description}>
+                                <FormControlLabel margin="dense" size="small" control={<Checkbox value={o.id} checked={descriptions.includes(o.id)} onChange={handleDescriptions} />} label={o.id} />
+                            </Tooltip>
                         </div>)}
                     </div>
                 </>

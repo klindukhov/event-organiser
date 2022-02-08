@@ -104,7 +104,6 @@ export default function ItemDetailsPage(props) {
         if (typeOfItem === "Venue") {
             let temp = {
                 "id": itemDetails.id,
-                "images": itemDetails.images,
                 "name": itemDetails.name,
                 "address": itemDetails.address,
                 "description": itemDetails.description,
