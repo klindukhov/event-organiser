@@ -29,7 +29,7 @@ export default function BusinessCalendar(props) {
             }];
 
             events.forEach(e => {
-                if (moment(e.start).format('YYYY-MM-DD') === moment(data.start).format('YYYY-MM-DD') && e.id !== data.event.id && e.title==="AVAILABLE") {
+                if (moment(e.start).format('YYYY-MM-DD') === moment(data.start).format('YYYY-MM-DD') && e.id !== data.event.id && e.title === "AVAILABLE") {
                     console.log(e)
                     console.log(data)
                     raw.push({
@@ -39,7 +39,7 @@ export default function BusinessCalendar(props) {
                     })
                 }
             });
-            
+
             apiFetch(`availability/${businessType.substring(0, businessType.length - 1)}?id=${id}`, "POST", JSON.stringify(raw))
                 .then(() => { setBopen(true); getEvents(); })
                 .catch(e => console.log('error', e))
@@ -107,7 +107,7 @@ export default function BusinessCalendar(props) {
                 timeTo: moment(data.end).add(30, 'minute').format('HH:mm:ss')
             }];
             events.forEach(e => {
-                if (moment(e.start).format('YYYY-MM-DD') === moment(data.start).format('YYYY-MM-DD') && e.title==="AVAILABLE") {
+                if (moment(e.start).format('YYYY-MM-DD') === moment(data.start).format('YYYY-MM-DD') && e.title === "AVAILABLE") {
                     raw.push({
                         date: moment(e.start).format('YYYY-MM-DD'),
                         timeFrom: moment(e.start).format('HH:mm:ss'),
@@ -151,6 +151,13 @@ export default function BusinessCalendar(props) {
             </Dialog>
             <div className='block' style={{ height: 'calc(100vh - 180px)' }}>
                 <DnDCalendar
+                    eventPropGetter={event => ({
+                        style: {
+                            backgroundColor: event.title === 'BOOKED'
+                                ? "#f16868"
+                                : "#9fcb6c",
+                        }
+                    })}
                     selectable={true}
                     onSelectSlot={handleSelectSlot}
                     defaultDate={moment().toDate()}

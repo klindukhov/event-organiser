@@ -549,9 +549,11 @@ export default function AddBusinessPage(props) {
 
         </div>
         {id === undefined &&
-            <div className="block" onClick={handleCreateBusiness} style={{ cursor: 'pointer', textAlign: 'center' }}>
-                Add {businessType}<br />
-                {formErrorMessage && <p style={{ color: 'red' }}>Please fill all the form fields</p>}
+            <div className="block"  style={{ textAlign: 'center' }}>
+                <Button variant='outlined' onClick={handleCreateBusiness}>
+                    Add {businessType}
+                </Button>                
+                {formErrorMessage && <p style={{ color: 'red', fontSize:'12pt' }}>Please fill all the form fields</p>}
             </div>
         }
         {id !== undefined &&

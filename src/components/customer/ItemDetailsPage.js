@@ -234,7 +234,7 @@ export default function ItemDetailsPage(props) {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogContent style={{ width: '400px', height: '250px', display: 'grid', justifyContent: 'center', alignContent: "center", fontSize:'18pt' }}>
+                <DialogContent style={{ width: '400px', height: '250px', display: 'grid', justifyContent: 'center', alignContent: "center", fontSize: '18pt' }}>
                     You have to pick venue first!
                 </DialogContent>
                 <DialogActions>
@@ -271,39 +271,39 @@ export default function ItemDetailsPage(props) {
                             </div>
                             <br />
                             <div className='item-description-p'>
-                                <span style={{ fontSize: '12pt' }}>
-                                    Description: </span>
-                                {itemDetails["description"]} <br />
+                                Description: <span style={{ fontWeight: 'lighter' }}>
+                                    {itemDetails["description"]} <br />
+                                </span>
                                 {typeOfItem === "Venue" && <>
-                                    <span style={{ fontSize: '12pt' }}>
-                                        Seats: </span>
-                                    {itemDetails["seatingCapacity"]} people<br />
-                                    <span style={{ fontSize: '12pt' }}>
-                                        Standing capacity: </span>
-                                    {itemDetails["seatingCapacity"]} people<br />
-                                    <span style={{ fontSize: '12pt' }}>
-                                        Square meters: </span>
-                                    {itemDetails["sizeInSqMeters"]}<br />
-                                    <span style={{ fontSize: '12pt' }}>
-                                        Features: </span>
-                                    {itemDetails["descriptions"] && itemDetails["descriptions"].map(d => <Chip key={d} label={d} style={{ marginRight: '5px' }} />)}
+                                    Seats: <span style={{ fontWeight: 'lighter' }}>
+                                        {itemDetails["seatingCapacity"]} people<br />
+                                    </span>
+                                    Standing capacity: <span style={{ fontWeight: 'lighter' }}>
+                                        {itemDetails["seatingCapacity"]} people<br />
+                                    </span>
+                                    Square meters: <span style={{ fontWeight: 'lighter' }}>
+                                        {itemDetails["sizeInSqMeters"]}<br />
+                                    </span>
+                                    Features: <span style={{ fontWeight: 'lighter' }}>
+                                        {itemDetails["descriptions"] && itemDetails["descriptions"].map(d => <Chip key={d} label={d} style={{ marginRight: '5px' }} />)}
+                                    </span>
                                 </>}
                                 {typeOfItem === "Catering" && <>
                                     {itemDetails.cuisines !== null && itemDetails.cuisines !== undefined && <>
-                                        <span style={{ fontSize: '12pt' }}>
-                                            Cuisines: </span> {itemDetails.cuisines.map(l => <Chip label={l.name} style={{ marginRight: '5px' }} />)}<br /></>}
-                                    <span style={{ fontSize: '12pt' }}>
-                                        City: </span>
-                                    {itemDetails.address && itemDetails.address.city}
+                                        Cuisines: <span style={{ fontWeight: 'lighter' }}>
+                                            {itemDetails.cuisines.map(l => <Chip label={l.name} style={{ marginRight: '5px' }} />)}<br /></span></>}
+                                    City: <span style={{ fontWeight: 'lighter' }}>
+                                        {itemDetails.address && itemDetails.address.city}
+                                    </span>
                                 </>}
                                 {typeOfItem === "Service" && <>
-                                    {itemDetails.translationLanguages !== null && <>{itemDetails.translationLanguages !== undefined && <><span style={{ fontSize: '12pt' }}>Languages: </span>{itemDetails.translationLanguages.map(l => <Chip label={l.name} style={{ marginRight: '5px' }} />)}<br /></>}</>}
-                                    {itemDetails.musicStyle !== null && <>{itemDetails.musicStyle !== undefined && <><span style={{ fontSize: '12pt' }}>Styles: </span> {itemDetails.musicStyle.map(l => <Chip label={l.name} style={{ marginRight: '5px' }} />)}<br /></>}</>}
-                                    {itemDetails.instrument !== null && <><span style={{ fontSize: '12pt' }}>Instrument: </span> {itemDetails.instrument}<br /></>}
-                                    {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo !== itemDetails.kidAgeFrom && <><span style={{ fontSize: '12pt' }}>Ages: </span> {itemDetails.kidAgeFrom + '-' + itemDetails.kidAgeTo}</>}<br /></>}
-                                    {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo === itemDetails.kidAgeFrom && <><span style={{ fontSize: '12pt' }}>Ages: </span> {itemDetails.kidAgeFrom}</>}<br /></>}
-                                    {itemDetails.kidAgeFrom === null && <>{itemDetails.kidAgeTo !== null && <><span style={{ fontSize: '12pt' }}>Ages: </span> {0 + '-' + itemDetails.kidAgeTo}</>}<br /></>}
-                                    {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo === null && <><span style={{ fontSize: '12pt' }}>Ages: </span> {itemDetails.kidAgeFrom + '+'}</>}<br /></>}
+                                    {itemDetails.translationLanguages !== null && <>{itemDetails.translationLanguages !== undefined && <>Languages: <span style={{ fontWeight: 'lighter' }}>{itemDetails.translationLanguages.map(l => <Chip label={l.name} style={{ marginRight: '5px' }} />)}</span><br /></>}</>}
+                                    {itemDetails.musicStyle !== null && <>{itemDetails.musicStyle !== undefined && <>Styles: <span style={{ fontWeight: 'lighter' }}> {itemDetails.musicStyle.map(l => <Chip label={l.name} style={{ marginRight: '5px' }} />)}</span><br /></>}</>}
+                                    {itemDetails.instrument !== null && <>Instrument: <span style={{ fontWeight: 'lighter' }}> {itemDetails.instrument}<br /></span></>}
+                                    {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo !== itemDetails.kidAgeFrom && <>Ages: <span style={{ fontWeight: 'lighter' }}> {itemDetails.kidAgeFrom + '-' + itemDetails.kidAgeTo}</span></>}<br /></>}
+                                    {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo === itemDetails.kidAgeFrom && <>Ages: <span style={{ fontWeight: 'lighter' }}>{itemDetails.kidAgeFrom}</span> </>}<br /></>}
+                                    {itemDetails.kidAgeFrom === null && <>{itemDetails.kidAgeTo !== null && <>Ages: <span style={{ fontWeight: 'lighter' }}> {0 + '-' + itemDetails.kidAgeTo}</span></>}<br /></>}
+                                    {itemDetails.kidAgeFrom !== null && <>{itemDetails.kidAgeTo === null && <>Ages: <span style={{ fontWeight: 'lighter' }}> {itemDetails.kidAgeFrom + '+'}</span></>}<br /></>}
                                 </>}
                             </div>
                         </>}
@@ -312,17 +312,17 @@ export default function ItemDetailsPage(props) {
                         {!open && <>
                             <div className='contact-acc-info'>
                                 <div>
-                                    {itemDetails["phoneNumber"] && <><span style={{ fontSize: '12pt' }}>Phone number: </span> {itemDetails["phoneNumber"]}<br /></>}
-                                    <span style={{ fontSize: '12pt' }}>Email: </span> {itemDetails["email"]}<br />
+                                    {itemDetails["phoneNumber"] && <>Phone number: <span style={{ fontWeight: 'lighter' }}> {itemDetails["phoneNumber"]}<br /></span></>}
+                                    Email: <span style={{ fontWeight: 'lighter' }}> {itemDetails["email"]}<br /></span>
                                     {typeOfItem === "Venue" && <>
-                                        <span style={{ fontSize: '12pt' }}>Address: </span> {itemDetails.address && <>{itemDetails.address.streetName + ' ' + itemDetails.address.streetNumber + ', ' + itemDetails.address.city}</>}<br />
-                                        {itemDetails["dailyRentCost"] !== '0.00' && <><span style={{ fontSize: '12pt' }}>Cost: </span> {itemDetails["dailyRentCost"]} pln/day<br /></>}
+                                        Address: <span style={{ fontWeight: 'lighter' }}> {itemDetails.address && <>{itemDetails.address.streetName + ' ' + itemDetails.address.streetNumber + ', ' + itemDetails.address.city}</>}<br /></span>
+                                        {itemDetails["dailyRentCost"] !== '0.00' && <>Cost: <span style={{ fontWeight: 'lighter' }}> {itemDetails["dailyRentCost"]} pln/day<br /></span></>}
                                     </>}
                                     {typeOfItem === "Catering" && <>
-                                        <span style={{ fontSize: '12pt' }}>Service cost: </span> {itemDetails["serviceCost"]} pln
+                                        Service cost: <span style={{ fontWeight: 'lighter' }}>{itemDetails["serviceCost"]} pln</span>
                                     </>}
                                     {typeOfItem === "Service" && <>
-                                        <span style={{ fontSize: '12pt' }}>Service cost: </span> {itemDetails["serviceCost"]} pln
+                                        Service cost: <span style={{ fontWeight: 'lighter' }}> {itemDetails["serviceCost"]} pln</span>
                                     </>}
 
                                 </div>

@@ -28,17 +28,19 @@ export default function ProblemDetailsPage() {
     return (<div className="problem-details-main">
         <div className="problem-rect">
             <div className="problem-heading">Problem information</div>
-            <span style={{fontSize:'12pt'}}>Problem id: </span>{details.id}<br />
-            <span style={{fontSize:'12pt'}}>Created at: </span>{details.createdAt}<br />
-            <span style={{fontSize:'12pt'}}>Concern: </span>"{details.concern}"<br />
-            <span style={{fontSize:'12pt'}}>Description: </span>"{details.description}"<br />            
-            <p className="problem-heading">User information <Button size='small' variant='contained'
-            onClick={() => history.push(`/UserDetailsPage${details.user.id}`)}
-            >User details</Button></p>
-            <span style={{fontSize:'12pt'}}>User id: </span>{details.user && details.user.id}<br />
-            <span style={{fontSize:'12pt'}}>User type: </span>{details.user && details.user.type}<br />
-            <span style={{fontSize:'12pt'}}>User email: </span>{details.user && details.user.email}<br />
-            <Button size='medium' variant='contained'  onClick={handleResolve}>Mark as resolved</Button>
+            Problem id:<span style={{ fontWeight: 'lighter' }}> {details.id}<br /></span>
+            Created at:<span style={{ fontWeight: 'lighter' }}> {details.createdAt}<br /></span>
+            Concern:<span style={{ fontWeight: 'lighter' }}> "{details.concern}"<br /></span>
+            Description:<span style={{ fontWeight: 'lighter' }}> "{details.description}"<br />  </span>
+            <p className="problem-heading"><Button size='medium' variant='outlined'
+                onClick={() => history.push(`/UserDetailsPage${details.user.id}`)}
+            >User Information</Button></p>
+            User id:<span style={{ fontWeight: 'lighter' }}> {details.user && details.user.id}<br /></span>
+            User type:<span style={{ fontWeight: 'lighter' }}> {details.user && details.user.type}<br /></span>
+            User email:<span style={{ fontWeight: 'lighter' }}> {details.user && details.user.email}<br /></span>
+            <p style={{textAlign: 'center'}}>
+                <Button size='medium' variant='contained' onClick={handleResolve}>Mark as resolved</Button>
+            </p>
         </div>
     </div>)
 }

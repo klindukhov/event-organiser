@@ -511,7 +511,7 @@ export default function EventDetailsPage(props) {
                         {(locStatus === 'CONFIRMED' || locStatus === 'NOT_CONFIRMED') && !isEventReady && <Button variant='contained' size='small' className='button' onClick={() => handleCancel('location', locResId)}>
                             Cancel request
                         </Button>}
-                        {locationCancellationMessage !== '' && <p style={{ color: 'red', fontSize: '12pt' }}>{locationCancellationMessage}</p>}
+                        {locationCancellationMessage !== '' && <p style={{ color: 'red', fontWeight: 'lighter' }}>{locationCancellationMessage}</p>}
                         {(locStatus === '') && <Button variant='contained' size='small' className='button' onClick={() => bookVenue('location', locResId)}>
                             Book venue
                         </Button>}
@@ -556,33 +556,40 @@ export default function EventDetailsPage(props) {
                                     <div>
                                         <br />
                                         <div style={{ display: 'grid', gridTemplateColumns: 'auto auto', justifyContent: 'start', columnGap: '10px', alignItems: 'end' }}>
-                                            <span style={{ fontSize: '12pt', justifySelf: 'start' }}>
-                                                Message: </span>
-                                            "{c.comment}"<br />
-                                            <span style={{ fontSize: '12pt' }}>
-                                                Serving time: </span>
-                                            {c.time}<br />
-                                            <span style={{ fontSize: '12pt' }}>
-                                                Status: </span>
-                                            {c.confirmationStatus}<br />
-                                            <span style={{ fontSize: '12pt' }}>
-                                                Order status: </span>
-                                            {c.isOrderConfirmed ? 'Confirmed' : 'Not confirmed'}<br />
+                                            Message:
+                                            <span style={{ fontWeight: 'lighter', justifySelf: 'start' }}>
+                                                "{c.comment}"<br />
+                                            </span>
+                                            Serving time:
+                                            <span style={{ fontWeight: 'lighter' }}>
+                                                {c.time}<br />
+                                            </span>
+                                            Status:
+                                            <span style={{ fontWeight: 'lighter' }}>
+                                                {c.confirmationStatus}<br />
+                                            </span>
+                                            Order status:
+                                            <span style={{ fontWeight: 'lighter' }}>
+                                                {c.isOrderConfirmed ? 'Confirmed' : 'Not confirmed'}<br />
+                                            </span>
                                         </div>
                                         <br />
                                         {!isEventReady && <Button variant='contained' size='small' className='button' onClick={() => handleCancel('catering', c.id)}>
                                             Cancel request
                                         </Button>}<br />
-                                        {c.confirmationStatus === "NOT_CONFIRMED" && <p style={{ fontSize: '12pt' }}>
+                                        {c.confirmationStatus === "NOT_CONFIRMED" && <p style={{ fontWeight: 'lighter' }}>
                                             ⓘ You will be able to make an order after the reservation is confirmed by catering provider
                                         </p>
                                         }
                                         {c.confirmationStatus === "CONFIRMED" && c.order.length === 0 && !menuEditing.value &&
                                             <Button className='button' onClick={() => setMenuEditing({ 'value': true, 'id': c.id })}>Open menu</Button>
                                         }
-                                        {c.order.length > 0 && <span style={{ fontSize: '12pt' }}>
-                                            Order: </span>}
-                                        {c.order.length > 0 && c.order.map(item => <li key={item.id}>{item.amount} x {item.item.name}</li>)}
+                                        {c.order.length > 0 && <span>
+                                            Order:
+                                        </span>}
+                                        <span style={{ fontWeight: 'lighter' }}>
+                                            {c.order.length > 0 && c.order.map(item => <li key={item.id}>{item.amount} x {item.item.name}</li>)}
+                                        </span>
                                         {menuEditing.value && menuEditing.id === c.id &&
                                             <div>
                                                 {cateringItemTypes[c.catering.id] && <p className='item-review-heading'>Menu</p>}
@@ -689,22 +696,22 @@ export default function EventDetailsPage(props) {
                                     <div>
                                         <br />
                                         <div style={{ display: 'grid', gridTemplateColumns: 'auto auto', justifyContent: 'start', columnGap: '10px', alignItems: 'end' }}>
-                                            <span style={{ fontSize: '12pt', justifySelf: 'start' }}>
-                                                Message: </span>
+                                            Message: <span style={{ fontWeight: 'lighter', justifySelf: 'start' }}>
                                             "{c.comment}"<br />
-                                            <span style={{ fontSize: '12pt' }}>
-                                                Serving time: </span>
-                                            {c.timeFrom + " - " + c.timeTo}<br />
-                                            <span style={{ fontSize: '12pt' }}>
-                                                Status: </span>
+                                                </span>
+                                            <span style={{ fontWeight: 'lighter' }}>
+                                            Serving time: {c.timeFrom + " - " + c.timeTo}<br />
+                                                </span>
+                                            Status: <span style={{ fontWeight: 'lighter' }}>
                                             {c.confirmationStatus}<br />
+                                                </span>
                                         </div>
                                         <br />
                                         {!isEventReady && <><Button variant='contained' size='small' className='button' onClick={() => handleCancel('service', c.id)}>
                                             Cancel request
                                         </Button><br /></>}
                                         {c.confirmationStatus === "NOT_CONFIRMED" &&
-                                            <p style={{ fontSize: '12pt' }}>
+                                            <p style={{ fontWeight: 'lighter' }}>
                                                 ⓘ You will be able to finalise event planning after the reservation is confirmed by service provider
                                             </p>
                                         }
@@ -786,13 +793,17 @@ export default function EventDetailsPage(props) {
             }
 
             {isLocPicked && isNew &&
-                <div className='block' onClick={handleCreateEvent} style={{ textAlign: 'center', cursor: 'pointer' }}>
-                    Create event and request location booking <br />
+                <div className='block' style={{ textAlign: 'center' }}>
+                    <Button variant='outlined' onClick={handleCreateEvent}>
+                        Create event and request location booking
+                    </Button>
                 </div>
             }
             {isFinal() && !isEventReady &&
-                <div className='block' onClick={handleEventReady} style={{ textAlign: 'center', cursor: 'pointer' }}>
-                    Confirm all bookings and send invitations to guests <br />
+                <div className='block' style={{ textAlign: 'center' }}>
+                    <Button variant='outlined' onClick={handleEventReady}>
+                        Confirm all bookings and send invitations to guests
+                    </Button>
                 </div>
             }
             {!isFinal() && !isEventReady && isLocPicked && !isNew &&
