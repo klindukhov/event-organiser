@@ -28,6 +28,18 @@ export default function BusinessCalendar(props) {
                 timeTo: moment(data.end).format('HH:mm:ss')
             }];
 
+            events.forEach(e => {
+                if (moment(e.start).format('YYYY-MM-DD') === moment(data.start).format('YYYY-MM-DD') && e.id !== data.event.id && e.title==="AVAILABLE") {
+                    console.log(e)
+                    console.log(data)
+                    raw.push({
+                        date: moment(e.start).format('YYYY-MM-DD'),
+                        timeFrom: moment(e.start).format('HH:mm:ss'),
+                        timeTo: moment(e.end).format('HH:mm:ss')
+                    })
+                }
+            });
+            
             apiFetch(`availability/${businessType.substring(0, businessType.length - 1)}?id=${id}`, "POST", JSON.stringify(raw))
                 .then(() => { setBopen(true); getEvents(); })
                 .catch(e => console.log('error', e))
@@ -88,18 +100,21 @@ export default function BusinessCalendar(props) {
     }
 
     const handleSelectSlot = (data) => {
-        let isDayEmpty = true;
-        events.forEach(e => {
-            if (moment(e.start).format('YYYY-MM-DD') === moment(data.start).format('YYYY-MM-DD')) {
-                isDayEmpty = false;
-            }
-        });
-        if (data.action === 'doubleClick' && !moment(data.start).fromNow().includes('ago') && isDayEmpty) {
+        if (data.action === 'doubleClick' && !moment(data.start).fromNow().includes('ago')) {
             let raw = [{
                 date: moment(data.start).format('YYYY-MM-DD'),
                 timeFrom: moment(data.start).format('HH:mm:ss'),
                 timeTo: moment(data.end).add(30, 'minute').format('HH:mm:ss')
             }];
+            events.forEach(e => {
+                if (moment(e.start).format('YYYY-MM-DD') === moment(data.start).format('YYYY-MM-DD') && e.title==="AVAILABLE") {
+                    raw.push({
+                        date: moment(e.start).format('YYYY-MM-DD'),
+                        timeFrom: moment(e.start).format('HH:mm:ss'),
+                        timeTo: moment(e.end).format('HH:mm:ss')
+                    })
+                }
+            });
 
             apiFetch(`availability/${businessType.substring(0, businessType.length - 1)}?id=${id}`, "POST", JSON.stringify(raw))
                 .then(() => { setBopen(true); getEvents(); })
