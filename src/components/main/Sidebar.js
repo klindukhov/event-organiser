@@ -11,7 +11,8 @@ import problem from '../../images/problem.png';
 import request from '../../images/request.png';
 import services from '../../images/services.png';
 import venue from '../../images/venue.png';
-import {Restaurant} from "@mui/icons-material";
+import verifiedBusiness from '../../images/veriied business.png'
+import {PeopleAlt, Restaurant} from "@mui/icons-material";
 
 
 
@@ -100,19 +101,19 @@ export default function Sidebar(props) {
       {
         props.accType === 'A' &&
         <a className="menu-item" href="/ProblemsPage">
-          Problems
+          <img alt='' src={problem} style={{height: '16px'}}></img> Problem reports
         </a>
       }
       {
         props.accType === 'A' &&
         <a className="menu-item" href="/UsersPage">
-          Users
+          <PeopleAlt style={{width: '16px'}} /> Users
         </a>
       }
       {
         props.accType === 'A' &&
         <a className="menu-item" href="/VerificationRequestsPage">
-          Verification requests
+          <img alt='' src={verifiedBusiness} style={{height: '16px'}}></img> Verification requests
         </a>
       }
 

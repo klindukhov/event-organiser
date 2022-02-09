@@ -151,7 +151,7 @@ export default function UserDetailsPage(props) {
                             </div>
                         </div>
                         <div className='list-item-pics' style={{ width: '1420px' }}>
-                            {c.location[0].location.images && c.location[0].location.images.map(i => <div key={i.encodedImage}>
+                            {c.location[0]?.location.images && c.location[0]?.location.images.map(i => <div key={i.encodedImage}>
                                 <img alt={i.name} className='list-item-pic' src={'data:image/png;base64,' + i.encodedImage} />
                             </div>)}
                         </div>
