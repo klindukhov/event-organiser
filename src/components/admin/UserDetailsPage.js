@@ -73,6 +73,9 @@ export default function UserDetailsPage(props) {
     const handleBan = () => {
         apiFetch(`${id}/block`, "POST").then(() => history.push('UsersPage')).catch(error => console.log('error', error));
     }
+    const handleActivate = () => {
+        apiFetch(`${id}/activate`, "POST").then(() => window.location.reload()).catch(error => console.log('error', error));
+    }
 
     const [eventPastColor, setEventPastColor] = useState('#47525e');
     const [eventFutureColor, setEventFutureColor] = useState('#47525e');
@@ -128,7 +131,8 @@ export default function UserDetailsPage(props) {
             Verification: <span style={{fontWeight: 'lighter'}}>{details.business.verificationStatus} {details.business.verificationStatus !== 'VERIFIED' && <Button variant='contained' size='small' onClick={handleVerify}>Mark verified</Button>}<br /> </span>
             Address: <span style={{fontWeight: 'lighter'}}>{details.business.address.streetName} {details.business.address.streetNumber}, {details.business.address.city}, {details.business.address.zipCode},  {details.business.address.country}<br /> </span>
             </>}
-           {details.active && <Button variant='contained' size='small' value='Deactivate' onClick={handleBan}>Deactivate</Button>}
+           {details.active && <Button variant='contained' size='small' onClick={handleBan}>Deactivate</Button>}
+           {!details.active && <Button variant='contained' size='small' onClick={handleActivate}>Activate</Button>}
         </div>
         {details.type === 'C' &&
             <div className="block">

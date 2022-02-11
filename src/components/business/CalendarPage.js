@@ -156,6 +156,7 @@ export default function BusinessCalendar(props) {
                             backgroundColor: event.title === 'BOOKED'
                                 ? "#f16868"
                                 : "#9fcb6c",
+                            fontSize: '16pt'
                         }
                     })}
                     selectable={true}
@@ -168,7 +169,7 @@ export default function BusinessCalendar(props) {
                     onEventDrop={onEventResize}
                     onEventResize={onEventResize}
                     resizable
-                    style={{ height: "calc(100vh - 240px)" }}
+                    style={{ height: "calc(100vh - 240px)", fontSize:'12pt'}}
                 />
             </div>
 

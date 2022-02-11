@@ -6,12 +6,13 @@ import { useHistory } from 'react-router';
 import pplIcon from '../../images/pplIcon.png';
 import { useParams } from 'react-router-dom';
 import apiFetch from '../../api';
-import { TextField, Button, IconButton, Select, FormControl, InputLabel, MenuItem, Tooltip, Dialog, DialogContent, DialogActions } from '@mui/material'
+import { TextField, Button, IconButton, Select, FormControl, InputLabel, MenuItem, Tooltip, Dialog, DialogContent, DialogActions, Backdrop, CircularProgress } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import VeganLogo from '../../images/veganLogo.png'
 import VegetarianLogo from '../../images/vegetarianLogo.png'
 import GlutenFreeLogo from '../../images/glutenFreeLogo.png'
+import { Cancel } from "@mui/icons-material";
 
 
 
@@ -30,14 +31,11 @@ export default function EventDetailsPage(props) {
     }, []);
 
     const [locationImages, setLocationImages] = useState([]);
-
-
-
     useEffect(() => {
         apiFetch(`locations/allowed?id=${JSON.parse(window.localStorage.getItem('locationDetails'))?.id}`).then(res => {
             setLocationImages(res.images);
         }).catch(e => console.log('error', e));
-    }, [])
+    }, [id])
 
     const history = useHistory();
 
@@ -371,7 +369,10 @@ export default function EventDetailsPage(props) {
             .then(res => { setOrder({}); window.location.reload(); }).catch(e => { console.log('error', e); setOrder({}) });
     }
 
+    const [backdrop, setBackdrop] = useState(false);
+
     const handleEventReady = () => {
+        setBackdrop(true);
         let body = [];
         guestList.forEach(g => body.push(g.id));
         apiFetch(`customers/guests/invite?customerId=${props.userId}&eventId=${id}&guestIds=${JSON.stringify(body).substring(1, JSON.stringify(body).length - 1)}`, 'PUT')
@@ -441,6 +442,12 @@ export default function EventDetailsPage(props) {
 
     return (
         <div className='main'>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={backdrop}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <Dialog
                 open={isDialog}
                 onClose={() => setIsDialog(false)}
@@ -525,7 +532,7 @@ export default function EventDetailsPage(props) {
                     <Button style={{ fontSize: '30pt' }} onClick={() => history.push(`/ListPage/Venues/${id}`)} >+</Button>
                 }
             </div>}
-            {isLocPicked && !isNew && locStatus === 'CONFIRMED' &&
+            {isLocPicked && !isNew && locStatus === 'CONFIRMED' && !(isEventReady && bookedCats?.length === 0) &&
                 <div className='block'>
                     <p className='venue-choice-heading'>Caterings</p>
                     {bookedCats.length > 0 &&
@@ -566,23 +573,23 @@ export default function EventDetailsPage(props) {
                                             </span>
                                             Status:
                                             <span style={{ fontWeight: 'lighter' }}>
-                                                {c.confirmationStatus}<br />
+                                                {c.confirmationStatus}  {!isEventReady && <Button variant='contained' size='small' onClick={() => handleCancel('catering', c.id)}>
+                                                    Cancel request
+                                                </Button>}<br />
                                             </span>
                                             Order status:
                                             <span style={{ fontWeight: 'lighter' }}>
                                                 {c.isOrderConfirmed ? 'Confirmed' : 'Not confirmed'}<br />
                                             </span>
                                         </div>
-                                        <br />
-                                        {!isEventReady && <Button variant='contained' size='small' className='button' onClick={() => handleCancel('catering', c.id)}>
-                                            Cancel request
-                                        </Button>}<br />
                                         {c.confirmationStatus === "NOT_CONFIRMED" && <p style={{ fontWeight: 'lighter' }}>
                                             ⓘ You will be able to make an order after the reservation is confirmed by catering provider
                                         </p>
                                         }
                                         {c.confirmationStatus === "CONFIRMED" && c.order.length === 0 && !menuEditing.value &&
-                                            <Button className='button' onClick={() => setMenuEditing({ 'value': true, 'id': c.id })}>Open menu</Button>
+                                            <div style={{ textAlign: 'center' }}>
+                                                <Button className='button' variant='outlined' onClick={() => setMenuEditing({ 'value': true, 'id': c.id })}>Open menu</Button>
+                                            </div>
                                         }
                                         {c.order.length > 0 && <span>
                                             Order:
@@ -619,8 +626,10 @@ export default function EventDetailsPage(props) {
                                                     Leave your order here<br />
                                                     <textarea /><br />
                                                 </>}
-                                                <Button variant='contained' size='medium' margin='dense' onClick={() => { setMenuEditing({ 'value': false, 'id': c.id }); handleOrderSubmit(c.id) }}>Confirm order</Button><br />
-                                                <Button variant='contained' size='small' margin='dense' onClick={() => setMenuEditing({ 'value': false, 'id': c.id })}>Cancel</Button>
+                                                <div style={{ display: 'grid', gridTemplateColumns: 'auto auto', justifyItems: 'center' }}>
+                                                    <Button variant='contained' size='medium' margin='dense' onClick={() => { setMenuEditing({ 'value': false, 'id': c.id }); handleOrderSubmit(c.id) }}>Confirm order</Button>
+                                                    <Button variant='contained' size='small' margin='dense' onClick={() => setMenuEditing({ 'value': false, 'id': c.id })}><Cancel />Cancel</Button>
+                                                </div>
                                             </div>
                                         }
                                     </div>
@@ -666,7 +675,7 @@ export default function EventDetailsPage(props) {
 
                 </div>
             }
-            {isLocPicked && !isNew && locStatus === 'CONFIRMED' &&
+            {isLocPicked && !isNew && locStatus === 'CONFIRMED' && !(isEventReady && bookedServices?.length === 0) && 
                 <div className="block">
                     <p className="venue-choice-heading">Services</p>
                     {bookedServices && bookedServices.length > 0 &&
@@ -697,19 +706,20 @@ export default function EventDetailsPage(props) {
                                         <br />
                                         <div style={{ display: 'grid', gridTemplateColumns: 'auto auto', justifyContent: 'start', columnGap: '10px', alignItems: 'end' }}>
                                             Message: <span style={{ fontWeight: 'lighter', justifySelf: 'start' }}>
-                                            "{c.comment}"<br />
-                                                </span>
+                                                "{c.comment}"<br />
+                                            </span>
+                                            Serving time:
                                             <span style={{ fontWeight: 'lighter' }}>
-                                            Serving time: {c.timeFrom + " - " + c.timeTo}<br />
-                                                </span>
+                                                {c.timeFrom + " - " + c.timeTo}<br />
+                                            </span>
                                             Status: <span style={{ fontWeight: 'lighter' }}>
-                                            {c.confirmationStatus}<br />
-                                                </span>
+                                                {c.confirmationStatus} {!isEventReady && <><Button variant='contained' size='small' onClick={() => handleCancel('service', c.id)}>
+                                                    Cancel request
+                                                </Button></>}
+                                            </span>
                                         </div>
                                         <br />
-                                        {!isEventReady && <><Button variant='contained' size='small' className='button' onClick={() => handleCancel('service', c.id)}>
-                                            Cancel request
-                                        </Button><br /></>}
+
                                         {c.confirmationStatus === "NOT_CONFIRMED" &&
                                             <p style={{ fontWeight: 'lighter' }}>
                                                 ⓘ You will be able to finalise event planning after the reservation is confirmed by service provider

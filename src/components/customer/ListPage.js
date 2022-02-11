@@ -50,7 +50,7 @@ export default function ListPage(props) {
         let forLocationId = '';
         if (forEventId) {
             setDate(JSON.parse(window.sessionStorage.filters).date);
-            body.date = JSON.parse(window.sessionStorage.filters).date;
+            if(JSON.parse(window.sessionStorage.filters).date !== '') {body.date = JSON.parse(window.sessionStorage.filters).date};
 
             setLocation(JSON.parse(window.sessionStorage.filters).location);
             body.city = JSON.parse(window.sessionStorage.filters).location;
