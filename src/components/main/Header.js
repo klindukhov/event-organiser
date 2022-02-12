@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom'
 import Sidebar from './Sidebar';
 import '../../styles/general/Header.css';
-import { useState } from 'react/cjs/react.development';
 import apiFetch from '../../api';
 import Logo from '../../images/Logo.png'
 import { Avatar, Tooltip } from '@mui/material'

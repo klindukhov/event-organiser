@@ -1,7 +1,7 @@
 import React from 'react';
 import { slide as Menu } from 'react-burger-menu';
 import '../../styles/general/Sidebar.css';
-import { useEffect, useState } from 'react/cjs/react.development';
+import { useEffect, useState } from 'react';
 import { Avatar } from '@mui/material';
 import addEvent from '../../images/add event.png';
 import guestBook from '../../images/guest book.png';

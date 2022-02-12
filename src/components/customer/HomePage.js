@@ -4,8 +4,7 @@ import '../../styles/customer/HomePage.css';
 import venues from '../../images/venues.png';
 import entertainment from '../../images/entertainment.png';
 import catering from '../../images/catering.png';
-import { useEffect } from 'react';
-import { useState } from 'react/cjs/react.development';
+import { useEffect, useState } from 'react';
 import apiFetch from '../../api';
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 

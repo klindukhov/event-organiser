@@ -1,6 +1,6 @@
 import { Alert, Button, Snackbar } from "@mui/material";
 import React from "react";
-import { useEffect, useState } from "react/cjs/react.development";
+import { useEffect, useState } from "react";
 import apiFetch from "../../api";
 import "../../styles/general/ContactFormPage.css"
 

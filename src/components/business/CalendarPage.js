@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
-import { useEffect, useState } from "react/cjs/react.development";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import apiFetch from "../../api";
 import { Calendar, momentLocalizer } from "react-big-calendar";
