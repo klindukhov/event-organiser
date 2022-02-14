@@ -407,12 +407,12 @@ export default function AddBusinessPage(props) {
         </Backdrop>
         <div className="block">
 
-            <TextField InputLabelProps={id !== undefined ? { shrink: id !== undefined } : ''} margin="dense" size="small" label='Email' style={{ width: '250px' }} value={email} onChange={e => setEmail(e.target.value)} /><br />
-            <TextField InputLabelProps={id !== undefined ? { shrink: id !== undefined } : ''} margin="dense" size="small" label='Name' style={{ width: '250px' }} value={name} onChange={e => setName(e.target.value)} /><br />
+            <TextField InputLabelProps={id !== undefined ? { shrink: id !== undefined } : ''} margin="dense" size="small" label='Email' style={{ width: '250px' }} value={email} onChange={e => setEmail(e.target.value.replace(/ *$/, ''))} /><br />
+            <TextField InputLabelProps={id !== undefined ? { shrink: id !== undefined } : ''} margin="dense" size="small" label='Name' style={{ width: '250px' }} value={name} onChange={e => setName(e.target.value.replace(/ *$/, ''))} /><br />
             {businessType === "Service" &&
                 <>
-                    <TextField InputLabelProps={id !== undefined ? { shrink: id !== undefined } : ''} margin="dense" size="small" label='Surname' style={{ width: '250px' }} value={surname} onChange={e => setSurname(e.target.value)} /><br />
-                    <TextField InputLabelProps={id !== undefined ? { shrink: id !== undefined } : ''} margin="dense" size="small" label='Alias' style={{ width: '250px' }} value={alias} onChange={e => setAlias(e.target.value)} /><br />
+                    <TextField InputLabelProps={id !== undefined ? { shrink: id !== undefined } : ''} margin="dense" size="small" label='Surname' style={{ width: '250px' }} value={surname} onChange={e => setSurname(e.target.value.replace(/ *$/, ''))} /><br />
+                    <TextField InputLabelProps={id !== undefined ? { shrink: id !== undefined } : ''} margin="dense" size="small" label='Alias' style={{ width: '250px' }} value={alias} onChange={e => setAlias(e.target.value.replace(/ *$/, ''))} /><br />
                     <FormControl margin="dense" size="small">
                         <InputLabel id='service-type-label'>Type</InputLabel>
                         <Select style={{ width: '250px' }} label='Type' disabled={id !== undefined} value={type} onChange={e => setType(e.target.value)}>
@@ -456,7 +456,7 @@ export default function AddBusinessPage(props) {
                     }
                     {type === 'MUSICIAN' &&
                         <div>
-                            <TextField InputLabelProps={id !== undefined ? { shrink: id !== undefined } : ''} disabled={id !== undefined} margin="dense" size="small" label='Instrument' style={{ width: '250px' }} value={instrument} onChange={e => setInstrument(e.target.value)} /><br />
+                            <TextField InputLabelProps={id !== undefined ? { shrink: id !== undefined } : ''} disabled={id !== undefined} margin="dense" size="small" label='Instrument' style={{ width: '250px' }} value={instrument} onChange={e => setInstrument(e.target.value.replace(/ *$/, ''))} /><br />
                             <div style={{ display: 'grid', gridTemplateColumns: 'auto auto auto' }}>
                                 {availableMusicStyles.map(o => <div key={o}>
                                     <FormControlLabel margin="dense" size="small" disabled={id !== undefined} control={<Checkbox value={o} checked={musicStyles.some(c => c.name === o)} onChange={handleMusicStyles} />} label={o} />
@@ -475,7 +475,7 @@ export default function AddBusinessPage(props) {
             }
             {businessType !== 'Service' &&
                 <>
-                    <TextField InputLabelProps={id !== undefined ? { shrink: id !== undefined } : ''} margin="dense" size="small" label='Phone number' style={{ width: '250px' }} value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} /><br />
+                    <TextField InputLabelProps={id !== undefined ? { shrink: id !== undefined } : ''} margin="dense" size="small" label='Phone number' style={{ width: '250px' }} value={phoneNumber} onChange={e => setPhoneNumber(e.target.value.replace(/ *$/, ''))} /><br />
                 </>
             }
             {businessType === "Venue" &&

@@ -53,9 +53,9 @@ export default function GuestBook(props) {
                 <p>Your guest book is empty</p>
             }
             <div className="block">
-                <TextField size='small' style={{ width: '250px', marginRight: '20px' }} label="Name" onChange={e => setName(e.target.value)} />
-                <TextField size='small' style={{ width: '250px', marginRight: '20px' }} label="Surname" onChange={e => setSurname(e.target.value)} />
-                <TextField size='small' style={{ width: '250px', marginRight: '20px' }} label="Email" onChange={e => setEmail(e.target.value)} />
+                <TextField size='small' style={{ width: '250px', marginRight: '20px' }} label="Name" onChange={e => setName(e.target.value.replace(/ *$/, ''))} />
+                <TextField size='small' style={{ width: '250px', marginRight: '20px' }} label="Surname" onChange={e => setSurname(e.target.value.replace(/ *$/, ''))} />
+                <TextField size='small' style={{ width: '250px', marginRight: '20px' }} label="Email" onChange={e => setEmail(e.target.value.replace(/ *$/, ''))} />
                 <Button variant='contained' style={{ width: '250px', marginRight: '20px' }} value='Add guest' onClick={handleAddGuest}>Add guest</Button>
             </div>
 

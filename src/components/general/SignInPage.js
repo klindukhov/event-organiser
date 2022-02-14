@@ -60,9 +60,9 @@ function SignInPageContent(props) {
                 <div className="sign-in-h1">
                     Sign in
                 </div>
-                <TextField margin="dense" size="small" label='Email' className="input-login" type="text" onKeyPress={e => { if (e.key === 'Enter') { document.querySelector('input[name=passwordField]').focus(); } }} onChange={handleLoginInput} />
+                <TextField error={loginMessage !== ' '} margin="dense" size="small" label='Email' className="input-login" type="text" onKeyPress={e => { if (e.key === 'Enter') { document.querySelector('input[name=passwordField]').focus(); } }} onChange={handleLoginInput} />
                 <br />
-                <TextField margin="dense" size="small" label='Password' className="input-login" InputProps={{
+                <TextField error={loginMessage !== ' '} margin="dense" size="small" label='Password' className="input-login" InputProps={{
                     endAdornment:
                         <InputAdornment position="end">
                             <IconButton

@@ -103,13 +103,13 @@ export default function BusinessProfilePage(props) {
                     </div>
                     <div className='fields-right'>
                         <p className='business-info-heading'>User information</p>   
-                        <TextField className='customer-profile-field-input' margin='normal' size="small" label='Name' InputLabelProps={{ shrink: true }} type='text' value={name} onChange={e => { setName(e.target.value); handleInput() }} /><br />
-                        <TextField className='customer-profile-field-input' margin="normal" size="small" label='Surname' InputLabelProps={{ shrink: true }} type='text' value={surname} onChange={e => { setSurname(e.target.value); handleInput() }} /><br />
-                        <TextField className='customer-profile-field-input' margin="normal" size="small" label='Phone number' InputLabelProps={{ shrink: true }} type='text' value={phoneNumber} onChange={e => { setPhoneNumber(e.target.value); handleInput() }} /><br />
+                        <TextField className='customer-profile-field-input' margin='normal' size="small" label='Name' InputLabelProps={{ shrink: true }} type='text' value={name} onChange={e => { setName(e.target.value.replace(/ *$/, '')); handleInput() }} /><br />
+                        <TextField className='customer-profile-field-input' margin="normal" size="small" label='Surname' InputLabelProps={{ shrink: true }} type='text' value={surname} onChange={e => { setSurname(e.target.value.replace(/ *$/, '')); handleInput() }} /><br />
+                        <TextField className='customer-profile-field-input' margin="normal" size="small" label='Phone number' InputLabelProps={{ shrink: true }} type='text' value={phoneNumber} onChange={e => { setPhoneNumber(e.target.value.replace(/ *$/, '')); handleInput() }} /><br />
                         <br/> 
-                        <TextField className='customer-profile-field-input' size="small" margin='dense' type='password' onChange={e => setPassword(e.target.value)} label='Password' /><br />
-                        <TextField className='customer-profile-field-input' size="small" margin='dense' type='password' onChange={e => setNewPassword(e.target.value)} label='New password' /><br />
-                        <TextField className='customer-profile-field-input' size="small" margin='dense' type='password' onChange={e => setConfirmPassword(e.target.value)} label='Confirm password' /><br /><br />
+                        <TextField className='customer-profile-field-input' size="small" margin='dense' type='password' onChange={e => setPassword(e.target.value.replace(/ *$/, ''))} label='Password' /><br />
+                        <TextField className='customer-profile-field-input' size="small" margin='dense' type='password' onChange={e => setNewPassword(e.target.value.replace(/ *$/, ''))} label='New password' /><br />
+                        <TextField className='customer-profile-field-input' size="small" margin='dense' type='password' onChange={e => setConfirmPassword(e.target.value.replace(/ *$/, ''))} label='Confirm password' /><br /><br />
                         <Button className='customer-profile-field-input' variant='contained' size="small" onClick={handlePasswordSubmit} value='Change password'>Change password</Button>
                         <p style={{ color: passwordMessageColor, justifySelf: 'center' }}>{passwordMessage}</p>
                     </div>

@@ -13,6 +13,7 @@ import VeganLogo from '../../images/veganLogo.png'
 import VegetarianLogo from '../../images/vegetarianLogo.png'
 import GlutenFreeLogo from '../../images/glutenFreeLogo.png'
 import { Cancel } from "@mui/icons-material";
+import moment from 'moment';
 
 
 
@@ -29,6 +30,8 @@ export default function EventDetailsPage(props) {
             setIsNew(false);
         }
     }, []);
+
+    const [isCancellable, setIsCancellable] = useState('');
 
     const [locationImages, setLocationImages] = useState([]);
     useEffect(() => {
@@ -184,11 +187,17 @@ export default function EventDetailsPage(props) {
 
 
     const [eventName, setEventName] = useState('');
-    useEffect(() => { if (eventName !== '') { window.localStorage.setItem('eventName', eventName) } else { setEventName(window.localStorage.getItem('eventName') === null ? '' : window.localStorage.getItem('eventName')) } }, [eventName])
+    useEffect(() => { if (eventName !== '') { window.localStorage.setItem('eventName', eventName) } else { setEventName(window.localStorage.getItem('eventName') === null ? '' : window.localStorage.getItem('eventName')) } }, [])
+    useEffect(() => { window.localStorage.setItem('eventName', eventName) }, [eventName])
     const [guestNum, setGuestNum] = useState('');
     useEffect(() => { if (guestNum !== '') { let t = JSON.parse(window.sessionStorage.getItem('filters')); t.guestNum = guestNum; window.sessionStorage.setItem('filters', JSON.stringify(t)) } }, [guestNum])
     const [eDate, setEDate] = useState('');
     useEffect(() => { if (eDate !== '') { let t = JSON.parse(window.sessionStorage.getItem('filters')); t.date = eDate; window.sessionStorage.setItem('filters', JSON.stringify(t)) } }, [eDate])
+    useEffect(() => {
+        if (!isNew) {
+            setIsCancellable(moment(eDate).diff(moment(), 'days') > 5);
+        }
+    }, [eDate])
     const [eStart, setEStart] = useState('');
     useEffect(() => { if (eStart !== '') { window.localStorage.setItem('eStart', eStart) } else { setEStart(window.localStorage.getItem('eStart')) } }, [eStart])
     const [eEnd, setEEnd] = useState('');
@@ -476,7 +485,7 @@ export default function EventDetailsPage(props) {
                     </Select>
                 </FormControl>
                 <br />
-                {!isNew && !isEventCancelled && <Button variant='contained' onClick={cancelEvent}>Cancel event</Button>}
+                {!isNew && !isEventCancelled && isCancellable && <Button variant='contained' onClick={cancelEvent}>Cancel event</Button>}
                 {formError && <p style={{ color: 'red', textAlign: 'center' }}><br />Please fill in all the fields</p>}
             </div>
             {!isEventCancelled && <div className='block'>
@@ -515,7 +524,7 @@ export default function EventDetailsPage(props) {
                 }
                 {isLocPicked && !isNew && JSON.parse(window.localStorage.getItem('locationDetails')) !== null &&
                     <p style={{ fontSize: '14pt' }}>{locStatus !== '' && <><br />Status: {locStatus}<br /><br /></>}
-                        {(locStatus === 'CONFIRMED' || locStatus === 'NOT_CONFIRMED') && !isEventReady && <Button variant='contained' size='small' className='button' onClick={() => handleCancel('location', locResId)}>
+                        {(locStatus === 'CONFIRMED' || locStatus === 'NOT_CONFIRMED') && !isEventReady && isCancellable && <Button variant='contained' size='small' className='button' onClick={() => handleCancel('location', locResId)}>
                             Cancel request
                         </Button>}
                         {locationCancellationMessage !== '' && <p style={{ color: 'red', fontWeight: 'lighter' }}>{locationCancellationMessage}</p>}
@@ -573,7 +582,7 @@ export default function EventDetailsPage(props) {
                                             </span>
                                             Status:
                                             <span style={{ fontWeight: 'lighter' }}>
-                                                {c.confirmationStatus}  {!isEventReady && <Button variant='contained' size='small' onClick={() => handleCancel('catering', c.id)}>
+                                                {c.confirmationStatus}  {!isEventReady && isCancellable && <Button variant='contained' size='small' onClick={() => handleCancel('catering', c.id)}>
                                                     Cancel request
                                                 </Button>}<br />
                                             </span>
@@ -675,7 +684,7 @@ export default function EventDetailsPage(props) {
 
                 </div>
             }
-            {isLocPicked && !isNew && locStatus === 'CONFIRMED' && !(isEventReady && bookedServices?.length === 0) && 
+            {isLocPicked && !isNew && locStatus === 'CONFIRMED' && !(isEventReady && bookedServices?.length === 0) &&
                 <div className="block">
                     <p className="venue-choice-heading">Services</p>
                     {bookedServices && bookedServices.length > 0 &&
@@ -713,7 +722,7 @@ export default function EventDetailsPage(props) {
                                                 {c.timeFrom + " - " + c.timeTo}<br />
                                             </span>
                                             Status: <span style={{ fontWeight: 'lighter' }}>
-                                                {c.confirmationStatus} {!isEventReady && <><Button variant='contained' size='small' onClick={() => handleCancel('service', c.id)}>
+                                                {c.confirmationStatus} {!isEventReady && isCancellable && <><Button variant='contained' size='small' onClick={() => handleCancel('service', c.id)}>
                                                     Cancel request
                                                 </Button></>}
                                             </span>

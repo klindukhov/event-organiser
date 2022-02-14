@@ -26,7 +26,7 @@ function SignUpPageContent(props) {
     const [house, setHouse] = useState(' ');
     const [zip, setZip] = useState(' ');
 
-    const [errorMessage, setErrorMessage] = useState();
+    const [errorMessage, setErrorMessage] = useState('');
 
 
     const [passwordConf, setPasswordConf] = useState('');
@@ -50,31 +50,32 @@ function SignUpPageContent(props) {
         } else {
             setAccDetails(
                 <div>
-                    <TextField size='small' margin='dense' label='Business name' style={{ marginTop: '30px', width: '250px' }} type="text" onChange={(event) => setBName(event.target.value)}>
+                    <TextField  required error={errorMessage!==''}  size='small' margin='dense' label='Business name' style={{ marginTop: '30px', width: '250px' }} type="text" onChange={(event) => setBName(event.target.value)}>
                     </TextField><br />
-                    <TextField size='small' margin='dense' label='Country' style={{ marginRight: '10px' }} type="text" onChange={(event) => setCountry(event.target.value)}>
+                    <TextField  required error={errorMessage!==''}  size='small' margin='dense' label='Country' style={{ marginRight: '10px' }} type="text" onChange={(event) => setCountry(event.target.value)}>
                     </TextField>
-                    <TextField size='small' margin='dense' label='City' type="text" onChange={(event) => setCity(event.target.value)}>
+                    <TextField  required error={errorMessage!==''}  size='small' margin='dense' label='City' type="text" onChange={(event) => setCity(event.target.value)}>
                     </TextField><br />
-                    <TextField size='small' margin='dense' label='Street' style={{ marginRight: '10px' }} type="text" onChange={(event) => setStreet(event.target.value)}>
+                    <TextField  required error={errorMessage!==''}  size='small' margin='dense' label='Street' style={{ marginRight: '10px' }} type="text" onChange={(event) => setStreet(event.target.value)}>
                     </TextField>
-                    <TextField size='small' margin='dense' label='Number' style={{ marginRight: '10px', width: '13%' }} type="text" onChange={(event) => setHouse(event.target.value)}>
+                    <TextField  required error={errorMessage!==''}  size='small' margin='dense' label='Number' style={{ marginRight: '10px', width: '13%' }} type="text" onChange={(event) => setHouse(event.target.value)}>
                     </TextField>
-                    <TextField size='small' margin='dense' label='Zip-code' style={{ width: '15%' }} type="text" onChange={(event) => setZip(event.target.value)}>
+                    <TextField  required error={errorMessage!==''}  size='small' margin='dense' label='Zip-code' style={{ width: '15%' }} type="text" onChange={(event) => setZip(event.target.value)}>
                     </TextField>
                 </div>
             )
         }
+        // eslint-disable-next-line
     }, [accType]);
 
     const createUser = () => {
         let raw;
         let accT;
         if (accType === 'C') {
-            raw = JSON.stringify({ "email": email, "password": password, "firstName": uName, "lastName": uSurname, "birthdate": uBirthdate, "phoneNumber": uPhoneNum, "address": { "country": country, "city": city, "streetName": street, "streetNumber": house, "zipCode": zip } });
+            raw = JSON.stringify({ "email": email.replace(/ *$/, ''), "password": password.replace(/ *$/, ''), "firstName": uName.replace(/ *$/, ''), "lastName": uSurname.replace(/ *$/, ''), "birthdate": uBirthdate, "phoneNumber": uPhoneNum.replace(/ *$/, ''), "address": { "country": country.replace(/ *$/, ''), "city": city.replace(/ *$/, ''), "streetName": street.replace(/ *$/, ''), "streetNumber": house.replace(/ *$/, ''), "zipCode": zip.replace(/ *$/, '') } });
             accT = 'customer';
         } else {
-            raw = JSON.stringify({ "email": email, "password": password, "firstName": uName, "lastName": uSurname, "businessName": bName, "phoneNumber": uPhoneNum, "address": { "country": country, "city": city, "streetName": street, "streetNumber": house, "zipCode": zip } });
+            raw = JSON.stringify({ "email": email.replace(/ *$/, ''), "password": password.replace(/ *$/, ''), "firstName": uName.replace(/ *$/, ''), "lastName": uSurname.replace(/ *$/, ''), "businessName": bName.replace(/ *$/, ''), "phoneNumber": uPhoneNum.replace(/ *$/, ''), "address": { "country": country.replace(/ *$/, ''), "city": city.replace(/ *$/, ''), "streetName": street.replace(/ *$/, ''), "streetNumber": house.replace(/ *$/, ''), "zipCode": zip.replace(/ *$/, '') } });
             accT = 'business';
         }
         apiFetch(`register/${accT}`, "POST", raw)
@@ -122,13 +123,13 @@ function SignUpPageContent(props) {
                 </ToggleButtonGroup>
                 <br />
                 <br />
-                <TextField size='small' margin='dense' label='Email' style={{width: '250px'}} type="text" onChange={(event) => setEmail(event.target.value)}>
+                <TextField helperText={errorMessage==='' ? '' : 'Email should be between 5 and 100 characters'} required error={errorMessage!==''}  size='small' margin='dense' label='Email' style={{width: '250px'}} type="text" onChange={(event) => setEmail(event.target.value)}>
                 </TextField>
                 <br />
-                <TextField size='small' margin='dense' label='Phone number' style={{width: '250px'}} type="text" onChange={(event) => setUPhoneNum(event.target.value)}>
+                <TextField helperText={errorMessage==='' ? '' : 'Phone number should be 9 characters long'} required error={errorMessage!==''}  size='small' margin='dense' label='Phone number' style={{width: '250px'}} type="text" onChange={(event) => setUPhoneNum(event.target.value)}>
                 </TextField>
                 <br />
-                <TextField size='small' style={{width: '250px'}} margin='dense' label='Password' InputProps={{
+                <TextField helperText={(errorMessage!=='' || passwordConf!=='')? 'Password must match and contain at least one digit, one uppercase letter and a special character' : ''}   error={errorMessage!=='' || passwordConf!==''}  size='small' style={{width: '250px'}} margin='dense' label='Password' InputProps={{
                     endAdornment:
                         <InputAdornment position="end">
                             <IconButton
@@ -142,7 +143,7 @@ function SignUpPageContent(props) {
                 }} type={isPassShow ? "text" : "password"} onChange={(event) => setPassword(event.target.value)}>
                 </TextField>
                 <br />
-                <TextField size='small' style={{width: '250px'}} margin='dense' label='Confirm password' InputProps={{
+                <TextField helperText= {(errorMessage!=='' || passwordConf!=='')? 'Password must match and contain at least one digit, one uppercase letter and a special character' : ''}  error={errorMessage!=='' || passwordConf!==''}  size='small' style={{width: '250px'}} margin='dense' label='Confirm password' InputProps={{
                     endAdornment:
                         <InputAdornment position="end">
                             <IconButton
@@ -155,15 +156,14 @@ function SignUpPageContent(props) {
                         </InputAdornment>
                 }} type={isCPassShow ? "text" : "password"} onChange={(event) => setConfirmPassword(event.target.value)}>
                 </TextField>
-                <p className='passwords-dont-match'>{passwordConf}</p>
                 <br />
-                <TextField size='small' margin='dense' style={{width: '250px'}} label='Name' type="text" onChange={(event) => setUName(event.target.value)}>
+                <TextField   error={errorMessage!==''} required size='small' margin='dense' style={{width: '250px'}} label='Name' type="text" onChange={(event) => setUName(event.target.value)}>
                 </TextField>
                 <br />
-                <TextField size='small' margin='dense' style={{width: '250px'}} label='Surname' type="text" onChange={(event) => setUSurname(event.target.value)}>
+                <TextField   error={errorMessage!==''} required size='small' margin='dense' style={{width: '250px'}} label='Surname' type="text" onChange={(event) => setUSurname(event.target.value)}>
                 </TextField>
                 <br />
-                <TextField size='small' margin='dense' label='Birthdate' InputLabelProps={{ shrink: true }} type="date" onChange={(event) => setUBirthdate(event.target.value)}>
+                <TextField helperText={errorMessage==='' ? '' : 'Birthdate is mandatory'} required error={errorMessage!==''}  size='small' margin='dense' label='Birthdate' InputLabelProps={{ shrink: true }} type="date" onChange={(event) => setUBirthdate(event.target.value)}>
                 </TextField>
                 <br />
                 {accDetails}
