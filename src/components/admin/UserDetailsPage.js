@@ -115,24 +115,27 @@ export default function UserDetailsPage(props) {
     return (<div className="main">
         <div className="block">
             <p className="problem-heading">User information</p>
-            User id: <span style={{fontWeight: 'lighter'}}>{details.id}<br /> </span>
-            User type: <span style={{fontWeight: 'lighter'}}>{details.type}<br /> </span>
-            User email: <span style={{fontWeight: 'lighter'}}>{details.email}<br /> </span>
-            User Name: <span style={{fontWeight: 'lighter'}}>{details.type === 'C' && details.customer.firstName} {details.type === 'B' && details.business.firstName}<br /> </span>
-            User Surname: <span style={{fontWeight: 'lighter'}}>{details.type === 'C' && details.customer.lastName} {details.type === 'B' && details.business.lastName}<br /> </span>
-            {details.type === 'C' && <>
-            Birthdate: <span style={{fontWeight: 'lighter'}}>{details.customer.birthdate}<br /> </span>
-            Phone number: <span style={{fontWeight: 'lighter'}}>{details.customer.phoneNumber}<br /> </span>
-            </>
-            }
-            {details.type === 'B' && <>
-            Business name: <span style={{fontWeight: 'lighter'}}>{details.business.businessName}<br /> </span>
-            Phone number: <span style={{fontWeight: 'lighter'}}>{details.business.phoneNumber}<br /> </span>
-            Verification: <span style={{fontWeight: 'lighter'}}>{details.business.verificationStatus} {details.business.verificationStatus !== 'VERIFIED' && <Button variant='contained' size='small' onClick={handleVerify}>Mark verified</Button>}<br /> </span>
-            Address: <span style={{fontWeight: 'lighter'}}>{details.business.address.streetName} {details.business.address.streetNumber}, {details.business.address.city}, {details.business.address.zipCode},  {details.business.address.country}<br /> </span>
-            </>}
-           {details.active && <Button variant='contained' size='small' onClick={handleBan}>Deactivate</Button>}
-           {!details.active && <Button variant='contained' size='small' onClick={handleActivate}>Activate</Button>}
+            <div style={{display: 'grid', gridTemplateColumns: 'auto auto', justifyContent: 'start', columnGap: '20px'}}>
+                User id: <span style={{ fontWeight: 'lighter' }}>{details.id}<br /> </span>
+                User type: <span style={{ fontWeight: 'lighter' }}>{details.type}<br /> </span>
+                User email: <span style={{ fontWeight: 'lighter' }}>{details.email}<br /> </span>
+                User Name: <span style={{ fontWeight: 'lighter' }}>{details.type === 'C' && details.customer.firstName} {details.type === 'B' && details.business.firstName}<br /> </span>
+                User Surname: <span style={{ fontWeight: 'lighter' }}>{details.type === 'C' && details.customer.lastName} {details.type === 'B' && details.business.lastName}<br /> </span>
+                {details.type === 'C' && <>
+                    Birthdate: <span style={{ fontWeight: 'lighter' }}>{details.customer.birthdate}<br /> </span>
+                    Phone number: <span style={{ fontWeight: 'lighter' }}>{details.customer.phoneNumber}<br /> </span>
+                </>
+                }
+                {details.type === 'B' && <>
+                    Business name: <span style={{ fontWeight: 'lighter' }}>{details.business.businessName}<br /> </span>
+                    Phone number: <span style={{ fontWeight: 'lighter' }}>{details.business.phoneNumber}<br /> </span>
+                    Verification: <span style={{ fontWeight: 'lighter' }}>{details.business.verificationStatus} {details.business.verificationStatus !== 'VERIFIED' && <Button variant='contained' size='small' onClick={handleVerify}>Mark verified</Button>}<br /> </span>
+                    Address: <span style={{ fontWeight: 'lighter' }}>{details.business.address.streetName} {details.business.address.streetNumber}, {details.business.address.city}, {details.business.address.zipCode},  {details.business.address.country}<br /> </span>
+                </>}
+                {details.active && <Button variant='contained' size='small' onClick={handleBan}>Deactivate</Button>}
+                {!details.active && <Button variant='contained' size='small' onClick={handleActivate}>Activate</Button>}
+            </div>
+
         </div>
         {details.type === 'C' &&
             <div className="block">
